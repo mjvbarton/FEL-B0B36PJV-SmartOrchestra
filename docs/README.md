@@ -1,0 +1,1 @@
+V tomto adresáři naleznete dokumentaci k projektu.
