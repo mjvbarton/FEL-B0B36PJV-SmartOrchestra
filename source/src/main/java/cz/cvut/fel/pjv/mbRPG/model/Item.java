@@ -5,7 +5,9 @@
  */
 package cz.cvut.fel.pjv.mbRPG.model;
 
+import cz.cvut.fel.pjv.mbRPG.model.livingEntities.Player;
 import javafx.geometry.Dimension2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 
 /**
@@ -13,7 +15,7 @@ import javafx.scene.image.Image;
  * @author Matěj Bartoň
  * @param <T> the entity affected by the item
  */
-public abstract class Item<T> extends Entity{
+public abstract class Item<T> extends Entity implements ItemButtonable, Collidable<Player>{
     private boolean used = false;
     private boolean visible = true;
     
@@ -36,5 +38,25 @@ public abstract class Item<T> extends Entity{
      */
     public void hide() {
         
-    }   
+    }
+    
+    @Override
+    public Image getImage(){
+        return image;
+    }
+    
+    /**
+     * Checks the collision with the player
+     * @param player
+     * @return true if collides
+     */
+    @Override
+    public boolean checkCollision(Player player){
+        return false;
+    }
+    
+    @Override
+    public Rectangle2D getBoundary(){
+        return null;
+    }
 }

@@ -7,17 +7,18 @@ package cz.cvut.fel.pjv.mbRPG.model;
 
 import cz.cvut.fel.pjv.mbRPG.Constants.Move;
 import javafx.geometry.Dimension2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 
 /**
  *
  * @author Matěj Bartoň
  */
-public abstract class LivingEntity<T> extends Entity implements Fallable{
+public abstract class LivingEntity<T> extends Entity implements Fallable, Collidable<Collidable>{
     
-    private int damage;
-    private int lives;
-    private int maxLives;
+    protected int damage;
+    protected int lives;
+    protected int maxLives;
     private boolean isAlive = true;
     
     public static final double SIZE_X = 0;
@@ -51,5 +52,15 @@ public abstract class LivingEntity<T> extends Entity implements Fallable{
     @Override
     public void jump() {
        
+    }
+    
+    @Override
+    public boolean checkCollision(Collidable obj){
+        return false;
+    }
+    
+    @Override
+    public Rectangle2D getBoundary(){
+        return null;
     }
 }

@@ -3,25 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package cz.cvut.fel.pjv.mbRPG.model;
 
-import javafx.geometry.Dimension2D;
 import javafx.scene.image.Image;
 
 /**
- *
+ * Enables items to have a item button in inventory in GUI
  * @author Matěj Bartoň
  */
-public class Entity{
-    Dimension2D position;
-    Dimension2D size;
-    Image image;
+public interface ItemButtonable {
+    public abstract Image getImage();
     
-    
-    public Entity(Dimension2D position, Dimension2D size, Image image){
-        this.position = position;
-        this.image = image;
-        this.size = size;
-    }
 }
