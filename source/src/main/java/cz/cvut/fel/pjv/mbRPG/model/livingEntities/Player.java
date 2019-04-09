@@ -19,6 +19,7 @@ import javafx.scene.image.Image;
 public class Player extends LivingEntity<Monster>{
     private Weapon activeWeapon;
     private Inventory inventory;
+    private int score;
     
     public Player(Dimension2D position, Image image) {
         super(position, image);
@@ -49,6 +50,19 @@ public class Player extends LivingEntity<Monster>{
      */
     public boolean useItem(ItemType itemType){
         return false;
+    }
+    
+    /**
+     * updates player's score after killing a monster
+     */
+    private void updateScore(){}
+
+    public int getMaxLives() {
+        return maxLives;
+    }
+
+    public int getScore() {
+        return score;
     }
         
 }

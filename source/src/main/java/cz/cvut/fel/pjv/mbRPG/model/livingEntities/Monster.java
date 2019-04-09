@@ -27,5 +27,5 @@ public class Monster extends LivingEntity<Player>{
     @Override
     public boolean attack(Player entity) {
         return false;
-    }    
+    }
 }
