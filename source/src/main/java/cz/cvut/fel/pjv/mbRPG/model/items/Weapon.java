@@ -5,13 +5,14 @@
  */
 package cz.cvut.fel.pjv.mbRPG.model.items;
 
+import cz.cvut.fel.pjv.mbRPG.model.ItemButtonable;
 import javafx.scene.image.Image;
 
 /**
  *
  * @author Matěj Bartoň
  */
-public class Weapon {
+public class Weapon implements ItemButtonable{
     private final int damage;
     private final Image image;
     
@@ -34,5 +35,10 @@ public class Weapon {
      */
     public int use(){
         return damage;
+    }
+    
+    @Override
+    public Image getImage() {
+        return image;
     }
 }
