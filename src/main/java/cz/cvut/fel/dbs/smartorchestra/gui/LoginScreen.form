@@ -89,11 +89,11 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btnSubmit" min="-2" pref="94" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="fieldPassword" pref="200" max="32767" attributes="0"/>
                           <Component id="fieldUserEmail" max="32767" attributes="0"/>
                       </Group>
+                      <Component id="btnSubmit" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="90" max="32767" attributes="0"/>
               </Group>

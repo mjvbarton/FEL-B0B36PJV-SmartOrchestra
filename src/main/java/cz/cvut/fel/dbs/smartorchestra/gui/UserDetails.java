@@ -352,6 +352,11 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
         labelConfirmPasswd.setText("Nové heslo znovu:");
 
         btnPasswdChange.setText("Změnit heslo");
+        btnPasswdChange.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnPasswdChangeMouseClicked(evt);
+            }
+        });
 
         labelPermissions.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         labelPermissions.setText("Přístupová práva");
@@ -401,8 +406,8 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
                             .addComponent(infoCurrentPasswd)
                             .addComponent(infoNewPasswd)
                             .addComponent(infoConfirmPasswd)))
-                    .addComponent(btnPasswdChange, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(176, Short.MAX_VALUE))
+                    .addComponent(btnPasswdChange))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(settingsSpecialLayout.createSequentialGroup()
                 .addGap(44, 44, 44)
                 .addComponent(fieldPermCommonAccount)
@@ -526,6 +531,11 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
         // TODO add your handling code here:
         controller.saveUser();
     }//GEN-LAST:event_btnSubmitMouseClicked
+
+    private void btnPasswdChangeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPasswdChangeMouseClicked
+        // TODO add your handling code here:
+        controller.changePasswd();
+    }//GEN-LAST:event_btnPasswdChangeMouseClicked
 
     /**
      * @param args the command line arguments

@@ -597,7 +597,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
+                          <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="fieldCurrentPasswd" alignment="0" pref="150" max="32767" attributes="0"/>
                                   <Component id="fieldNewPasswd" alignment="0" max="32767" attributes="0"/>
@@ -610,9 +610,9 @@
                                   <Component id="infoConfirmPasswd" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Component id="btnPasswdChange" alignment="0" min="-2" pref="103" max="-2" attributes="0"/>
+                          <Component id="btnPasswdChange" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="176" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
@@ -723,6 +723,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Zm&#x11b;nit heslo"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnPasswdChangeMouseClicked"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
               </AuxValues>

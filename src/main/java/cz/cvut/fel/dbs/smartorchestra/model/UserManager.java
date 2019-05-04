@@ -8,7 +8,10 @@ package cz.cvut.fel.dbs.smartorchestra.model;
 import cz.cvut.fel.dbs.smartorchestra.UserSettings;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.*;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.UserReader;
+import cz.cvut.fel.dbs.smartorchestra.model.dao.UserWriter;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
 
@@ -33,12 +36,15 @@ public class UserManager {
             throw new NonExistingUserException();
         }
     }
-    
-    public final void updateUserInformation(UserSettings controller){
         
-    }
-    
-    private void updateUserCommonInformation(UserSettings controller){
-        
+    public final void changePasswd(Users user, String NewPasswd) throws UserManagerException{
+        try {
+            user.setPasswd(BCrypt.hashpw(NewPasswd, BCrypt.gensalt(12)));
+            UserWriter uw = new UserWriter();
+            uw.write(user);
+            
+        } catch (Exception ex) {
+            throw new UserManagerException("Chyba v běhu programu: " + ex.getMessage());
+        }       
     }
 }

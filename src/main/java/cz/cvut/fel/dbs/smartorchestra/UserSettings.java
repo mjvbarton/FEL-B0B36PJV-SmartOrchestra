@@ -5,8 +5,10 @@
  */
 package cz.cvut.fel.dbs.smartorchestra;
 
+import cz.cvut.fel.dbs.smartorchestra.exceptions.UserManagerException;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.WrongInputException;
 import cz.cvut.fel.dbs.smartorchestra.gui.UserDetails;
+import cz.cvut.fel.dbs.smartorchestra.model.UserManager;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.UserWriter;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.text.DateFormat;
@@ -14,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -102,6 +105,66 @@ public class UserSettings implements UIController<UserDetails>{
         }
         controled.setExitCode(UserDetails.EXIT);
         controled.dispose();
+    }
+    
+    public void changePasswd(){
+        controled.getInfoCurrentPasswd().setText("");
+        controled.getInfoNewPasswd().setText("");
+        controled.getInfoConfirmPasswd().setText("");
+        
+        String currentPasswd = controled.getFieldCurrentPasswd().getText();
+        String newPasswd = controled.getFieldNewPasswd().getText();
+        String confirmPasswd = controled.getFieldConfirmPasswd().getText();
+        
+        boolean emptyPasswd = false;
+        boolean raiseException = false;
+        if(currentPasswd.isEmpty()){
+            controled.getInfoCurrentPasswd().setText("Nevyplnili jste toto pole");
+            emptyPasswd = true;                        
+        }
+        
+        if(newPasswd.isEmpty()){
+            controled.getInfoNewPasswd().setText("Nevyplnili jste toto pole");
+            emptyPasswd = true;                        
+        }
+        
+        if(confirmPasswd.isEmpty()){
+            controled.getInfoConfirmPasswd().setText("Nevyplnili jste toto pole");
+            emptyPasswd = true;                        
+        }
+        
+        if(!BCrypt.checkpw(currentPasswd, user.getPasswd()) && !emptyPasswd){
+            controled.getInfoCurrentPasswd().setText("Neplatné heslo");
+            emptyPasswd = true;
+        }
+        
+        if(!confirmPasswd.equals(newPasswd) && !emptyPasswd){
+            controled.getInfoConfirmPasswd().setText("Zadaná hesla se neshodují");
+            emptyPasswd = true;
+        }
+        if(emptyPasswd){
+            JOptionPane.showMessageDialog(controled, "Změna hesla se nezdařila", controled.getTitle(), 
+                    JOptionPane.WARNING_MESSAGE);
+            controled.getFieldCurrentPasswd().setText("");
+            controled.getFieldNewPasswd().setText("");
+            controled.getFieldConfirmPasswd().setText("");
+            return;
+        }
+        
+        UserManager um = new UserManager();
+        try {
+            um.changePasswd(user, newPasswd);
+            JOptionPane.showMessageDialog(controled, "Heslo bylo změněno!", controled.getTitle(), JOptionPane.INFORMATION_MESSAGE);
+                    
+        } catch (UserManagerException ex) {
+            Logger.getLogger(UserSettings.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(controled, "Chyba v běhu programu: " + ex.getMessage(), controled.getTitle(), 
+                    JOptionPane.ERROR);
+        } finally {
+            controled.getFieldCurrentPasswd().setText("");
+            controled.getFieldNewPasswd().setText("");
+            controled.getFieldConfirmPasswd().setText("");
+        }
     }
     
 }
