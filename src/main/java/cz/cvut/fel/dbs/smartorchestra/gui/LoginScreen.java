@@ -5,11 +5,14 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
+import cz.cvut.fel.dbs.smartorchestra.UserLogin;
+
 /**
  *
  * @author Matěj Bartoň
  */
 public class LoginScreen extends javax.swing.JFrame {
+   
 
     /**
      * Creates new form LoginScreen
@@ -71,6 +74,16 @@ public class LoginScreen extends javax.swing.JFrame {
         labelPassword.setText("Heslo:");
 
         btnSubmit.setText("Přihlásit se");
+        btnSubmit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSubmitMouseClicked(evt);
+            }
+        });
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -110,6 +123,17 @@ public class LoginScreen extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
+    private void btnSubmitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSubmitMouseClicked
+        // TODO add your handling code here:
+        UserLogin controller = new UserLogin(this);
+        controller.login(fieldUserEmail, fieldPassword);
+    }//GEN-LAST:event_btnSubmitMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -144,6 +168,8 @@ public class LoginScreen extends javax.swing.JFrame {
             }
         });
     }
+    
+       
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSubmit;

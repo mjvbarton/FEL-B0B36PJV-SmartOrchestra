@@ -5,17 +5,22 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
+import cz.cvut.fel.dbs.smartorchestra.MainControl;
+import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
+import cz.cvut.fel.dbs.smartorchestra.UIControlled;
+
 /**
  *
  * @author Matěj Bartoň
  */
-public class Main extends javax.swing.JFrame {
-
+public class Main extends javax.swing.JFrame implements UIControlled<MainControl>{
+    private MainControl controller;
     /**
      * Creates new form Main
      */
     public Main() {
         initComponents();
+        setUIController(SmartOrchestra.getController(this));
     }
 
     /**
@@ -31,12 +36,18 @@ public class Main extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        showEvents1 = new cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents();
-        showUsers1 = new cz.cvut.fel.dbs.smartorchestra.gui.ShowUsers();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        jSeparator1 = new javax.swing.JSeparator();
+        content = new javax.swing.JTabbedPane();
+        events = new cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents();
+        users = new cz.cvut.fel.dbs.smartorchestra.gui.ShowUsers();
+        mainMenu = new javax.swing.JMenuBar();
+        fileMenu = new javax.swing.JMenu();
+        fileAddEvent = new javax.swing.JMenuItem();
+        fileAddUser = new javax.swing.JMenuItem();
+        fileSeparator1 = new javax.swing.JPopupMenu.Separator();
+        fileViewProfile = new javax.swing.JMenuItem();
+        fileSeparator2 = new javax.swing.JPopupMenu.Separator();
+        fileQuit = new javax.swing.JMenuItem();
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -76,18 +87,59 @@ public class Main extends javax.swing.JFrame {
         setName("SmartOrchestra"); // NOI18N
         setPreferredSize(new java.awt.Dimension(700, 400));
 
-        jTabbedPane1.addTab("Přehled událostí", showEvents1);
-        jTabbedPane1.addTab("Přehled uživatelů", showUsers1);
+        content.addTab("Přehled událostí", events);
 
-        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
+        users.setEnabled(false);
+        content.addTab("Přehled uživatelů", users);
 
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
+        getContentPane().add(content, java.awt.BorderLayout.PAGE_START);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        fileMenu.setText("Soubor");
+        fileMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileMenuActionPerformed(evt);
+            }
+        });
 
-        setJMenuBar(jMenuBar1);
+        fileAddEvent.setText("Přidat událost");
+        fileAddEvent.setEnabled(false);
+        fileMenu.add(fileAddEvent);
+
+        fileAddUser.setText("Přidat uživatele");
+        fileAddUser.setEnabled(false);
+        fileAddUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileAddUserActionPerformed(evt);
+            }
+        });
+        fileMenu.add(fileAddUser);
+        fileMenu.add(fileSeparator1);
+
+        fileViewProfile.setText("Zobrazit profil");
+        fileViewProfile.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fileViewProfileMouseClicked(evt);
+            }
+        });
+        fileViewProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileViewProfileActionPerformed(evt);
+            }
+        });
+        fileMenu.add(fileViewProfile);
+        fileMenu.add(fileSeparator2);
+
+        fileQuit.setText("Ukončit aplikaci");
+        fileQuit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileQuitActionPerformed(evt);
+            }
+        });
+        fileMenu.add(fileQuit);
+
+        mainMenu.add(fileMenu);
+
+        setJMenuBar(mainMenu);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -99,6 +151,30 @@ public class Main extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void fileAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileAddUserActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fileAddUserActionPerformed
+
+    private void fileQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileQuitActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_fileQuitActionPerformed
+
+    private void fileViewProfileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fileViewProfileMouseClicked
+        // TODO add your handling code here:
+        System.out.println("Turning on controller");
+        controller.showUserProfile();
+    }//GEN-LAST:event_fileViewProfileMouseClicked
+
+    private void fileMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenuActionPerformed
+        
+    }//GEN-LAST:event_fileMenuActionPerformed
+
+    private void fileViewProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileViewProfileActionPerformed
+        // TODO add your handling code here:
+        controller.showUserProfile();
+    }//GEN-LAST:event_fileViewProfileActionPerformed
 
     /**
      * @param args the command line arguments
@@ -136,15 +212,31 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTabbedPane content;
+    private cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents events;
+    private javax.swing.JMenuItem fileAddEvent;
+    private javax.swing.JMenuItem fileAddUser;
+    private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenuItem fileQuit;
+    private javax.swing.JPopupMenu.Separator fileSeparator1;
+    private javax.swing.JPopupMenu.Separator fileSeparator2;
+    private javax.swing.JMenuItem fileViewProfile;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
-    private cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents showEvents1;
-    private cz.cvut.fel.dbs.smartorchestra.gui.ShowUsers showUsers1;
+    private javax.swing.JMenuBar mainMenu;
+    private cz.cvut.fel.dbs.smartorchestra.gui.ShowUsers users;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public final void setUIController(MainControl controller) {
+        this.controller = controller;
+    }
+
+    @Override
+    public MainControl getUIController() {
+        return controller;
+    }
 }

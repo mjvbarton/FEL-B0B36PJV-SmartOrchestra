@@ -5,41 +5,17 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
-import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
-import cz.cvut.fel.dbs.smartorchestra.UIControlled;
-import cz.cvut.fel.dbs.smartorchestra.UserSettings;
-import cz.cvut.fel.dbs.smartorchestra.gui.helpers.InputGroup;
-import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import javax.swing.*;
-
 /**
  *
  * @author Matěj Bartoň
  */
-public class UserDetails extends javax.swing.JDialog implements UIControlled<UserSettings>{
-    public static final int SAVE_DETAILS = 1;
-    public static final int CANCEL = 0;
-    public static final int EXIT = -1;
-        
-    protected UserSettings controller;
-    
-    private LinkedList<InputGroup> inputGroupsCommon;
-    private LinkedList<InputGroup> inputGroupSection;
-    private LinkedList<InputGroup> inputGroupSpecial;
-    
-    private int exitCode = UserDetails.CANCEL;
-        
+public class UserDetailsFrame extends javax.swing.JFrame {
+
     /**
-     * Creates new form NewJDialog
+     * Creates new form UserDetails
      */
-    public UserDetails(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public UserDetailsFrame() {
         initComponents();
-        setUIController(new UserSettings(UserDetails.this));
-        
     }
 
     /**
@@ -51,6 +27,9 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        sectionFunc = new javax.swing.ButtonGroup();
+        permissions = new javax.swing.ButtonGroup();
+        caption = new javax.swing.JLabel();
         content = new javax.swing.JTabbedPane();
         settingsCustom = new javax.swing.JPanel();
         labelFirstName = new javax.swing.JLabel();
@@ -103,21 +82,26 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
         infoCurrentPasswd = new javax.swing.JLabel();
         infoNewPasswd = new javax.swing.JLabel();
         infoConfirmPasswd = new javax.swing.JLabel();
-        caption = new javax.swing.JLabel();
         controls = new javax.swing.JPanel();
         btnSubmit = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Nastavení uživatele");
         setAlwaysOnTop(true);
-        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setIconImage(null);
         setMaximumSize(new java.awt.Dimension(530, 430));
         setMinimumSize(new java.awt.Dimension(530, 430));
-        setModal(true);
+        setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         setResizable(false);
-        setSize(new java.awt.Dimension(530, 430));
+
+        caption.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        caption.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        caption.setText("Nastavení uživatele");
+        caption.setAlignmentX(0.5F);
+        caption.setMaximumSize(new java.awt.Dimension(104, 50));
+        caption.setMinimumSize(new java.awt.Dimension(104, 50));
+        caption.setPreferredSize(new java.awt.Dimension(104, 50));
+        getContentPane().add(caption, java.awt.BorderLayout.PAGE_START);
 
         labelFirstName.setText("Jméno:");
 
@@ -284,7 +268,7 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
                     .addComponent(fieldAddrZipCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelAddrZipCode)
                     .addComponent(infoAddrZipCode))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(7, Short.MAX_VALUE))
         );
 
         content.addTab("Obecné", settingsCustom);
@@ -293,11 +277,14 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
 
         fieldSection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "bez sekce", "I. housle", "II. housle", "Viola", "Violoncello", "Kontrabas", " " }));
 
+        sectionFunc.add(fieldNoFunction);
         fieldNoFunction.setSelected(true);
         fieldNoFunction.setText("bez funkce");
 
+        sectionFunc.add(fieldConcertMaster);
         fieldConcertMaster.setText("Koncertní mistr");
 
+        sectionFunc.add(fieldCompConcertMaster);
         fieldCompConcertMaster.setText("Zástupce koncertního");
 
         labelFunction.setText("Speciální funkce:");
@@ -356,9 +343,11 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
         labelPermissions.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         labelPermissions.setText("Přístupová práva");
 
+        permissions.add(fieldPermCommonAccount);
         fieldPermCommonAccount.setSelected(true);
         fieldPermCommonAccount.setText("běžný účet");
 
+        permissions.add(fieldPermSpecialAccount);
         fieldPermSpecialAccount.setText("správce");
 
         btnDeleteAccount.setText("Smazat účet");
@@ -408,7 +397,7 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
                 .addComponent(fieldPermCommonAccount)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fieldPermSpecialAccount)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 169, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnDeleteAccount)
                 .addGap(37, 37, 37))
         );
@@ -451,33 +440,9 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
 
         getContentPane().add(content, java.awt.BorderLayout.CENTER);
 
-        caption.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        caption.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        caption.setText("Nastavení uživatele");
-        caption.setAlignmentX(0.5F);
-        caption.setMaximumSize(new java.awt.Dimension(104, 50));
-        caption.setMinimumSize(new java.awt.Dimension(104, 50));
-        caption.setPreferredSize(new java.awt.Dimension(104, 50));
-        getContentPane().add(caption, java.awt.BorderLayout.PAGE_START);
-
         btnSubmit.setText("Uložit");
-        btnSubmit.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnSubmitMouseClicked(evt);
-            }
-        });
-        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSubmitActionPerformed(evt);
-            }
-        });
 
         btnReset.setText("Zrušit");
-        btnReset.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnResetMouseClicked(evt);
-            }
-        });
 
         javax.swing.GroupLayout controlsLayout = new javax.swing.GroupLayout(controls);
         controls.setLayout(controlsLayout);
@@ -502,7 +467,7 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
 
         getContentPane().add(controls, java.awt.BorderLayout.PAGE_END);
 
-        setBounds(0, 0, 546, 468);
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void fieldPhoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldPhoneActionPerformed
@@ -512,20 +477,6 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
     private void fieldAddrHouseNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldAddrHouseNumberActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_fieldAddrHouseNumberActionPerformed
-
-    private void btnResetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResetMouseClicked
-        // TODO add your handling code here:
-        dispose();
-    }//GEN-LAST:event_btnResetMouseClicked
-
-    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSubmitActionPerformed
-
-    private void btnSubmitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSubmitMouseClicked
-        // TODO add your handling code here:
-        controller.saveUser();
-    }//GEN-LAST:event_btnSubmitMouseClicked
 
     /**
      * @param args the command line arguments
@@ -544,28 +495,21 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UserDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserDetailsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UserDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserDetailsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UserDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserDetailsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UserDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserDetailsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
 
-        /* Create and display the dialog */
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                UserDetails dialog = new UserDetails(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+                new UserDetailsFrame().setVisible(true);
             }
         });
     }
@@ -624,175 +568,10 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
     protected javax.swing.JLabel labelPermissions;
     protected javax.swing.JLabel labelPhone;
     protected javax.swing.JLabel labelSection;
+    private javax.swing.ButtonGroup permissions;
+    private javax.swing.ButtonGroup sectionFunc;
     private javax.swing.JPanel settingsCustom;
     private javax.swing.JPanel settingsSection;
     private javax.swing.JPanel settingsSpecial;
     // End of variables declaration//GEN-END:variables
-
-    @Override
-    public void setUIController(UserSettings controller) {
-        this.controller = controller;
-    }
-    
-    public void loadUserDetail(Users user, DateFormat dateFormatter){       
-        fieldFirstName.setText(user.getFirstName());
-        fieldFamilyName.setText(user.getFamilyName());
-        fieldBirthDate.setText(dateFormatter.format(user.getBirthDate()));
-        fieldPhone.setText(user.getPhone());
-        fieldEmail.setText(user.getEmail());
-        fieldAddrStreet.setText(user.getAddrStreet());
-        fieldAddrHouseNumber.setText(user.getAddrHouseNumber());
-        fieldAddrTown.setText(user.getAddrTown());
-        if(user.getAddrZipCode() != null){
-            fieldAddrZipCode.setText(user.getAddrZipCode().toString());
-        }
-        
-    }
-          
-    @Override
-    public UserSettings getUIController() {
-        return this.controller;
-    }
-    
-    public int doModal() {
-        setModal(true);
-        setVisible(true);
-        return exitCode;
-    }
-    
-    public void clearErrorMessages(){
-        infoFirstName.setText("");
-        infoFamilyName.setText("");
-        infoBirthDate.setText("");
-        infoPhone.setText("");
-        infoEmail.setText("");
-        infoAddrStreet.setText("");
-        infoAddrHouseNumber.setText("");
-        infoAddrTown.setText("");
-        infoAddrZipCode.setText("");
-    }
-
-    public JTextField getFieldAddrHouseNumber() {
-        return fieldAddrHouseNumber;
-    }
-
-    public JTextField getFieldAddrStreet() {
-        return fieldAddrStreet;
-    }
-
-    public JTextField getFieldAddrTown() {
-        return fieldAddrTown;
-    }
-
-    public JTextField getFieldAddrZipCode() {
-        return fieldAddrZipCode;
-    }
-
-    public JTextField getFieldBirthDate() {
-        return fieldBirthDate;
-    }
-
-    public JRadioButton getFieldCompConcertMaster() {
-        return fieldCompConcertMaster;
-    }
-
-    public JRadioButton getFieldConcertMaster() {
-        return fieldConcertMaster;
-    }
-
-    public JPasswordField getFieldConfirmPasswd() {
-        return fieldConfirmPasswd;
-    }
-
-    public JPasswordField getFieldCurrentPasswd() {
-        return fieldCurrentPasswd;
-    }
-
-    public JTextField getFieldEmail() {
-        return fieldEmail;
-    }
-
-    public JTextField getFieldFamilyName() {
-        return fieldFamilyName;
-    }
-
-    public JTextField getFieldFirstName() {
-        return fieldFirstName;
-    }
-
-    public JPasswordField getFieldNewPasswd() {
-        return fieldNewPasswd;
-    }
-
-    public JRadioButton getFieldNoFunction() {
-        return fieldNoFunction;
-    }
-
-    public JRadioButton getFieldPermCommonAccount() {
-        return fieldPermCommonAccount;
-    }
-
-    public JRadioButton getFieldPermSpecialAccount() {
-        return fieldPermSpecialAccount;
-    }
-
-    public JTextField getFieldPhone() {
-        return fieldPhone;
-    }
-
-    public JComboBox<String> getFieldSection() {
-        return fieldSection;
-    }
-
-    public JLabel getInfoAddrHouseNumber() {
-        return infoAddrHouseNumber;
-    }
-
-    public JLabel getInfoAddrStreet() {
-        return infoAddrStreet;
-    }
-
-    public JLabel getInfoAddrTown() {
-        return infoAddrTown;
-    }
-
-    public JLabel getInfoAddrZipCode() {
-        return infoAddrZipCode;
-    }
-
-    public JLabel getInfoBirthDate() {
-        return infoBirthDate;
-    }
-
-    public JLabel getInfoConfirmPasswd() {
-        return infoConfirmPasswd;
-    }
-
-    public JLabel getInfoCurrentPasswd() {
-        return infoCurrentPasswd;
-    }
-
-    public JLabel getInfoEmail() {
-        return infoEmail;
-    }
-
-    public JLabel getInfoFamilyName() {
-        return infoFamilyName;
-    }
-
-    public JLabel getInfoFirstName() {
-        return infoFirstName;
-    }
-
-    public JLabel getInfoNewPasswd() {
-        return infoNewPasswd;
-    }
-
-    public JLabel getInfoPhone() {
-        return infoPhone;
-    }
-
-    public void setExitCode(int exitCode) {
-        this.exitCode = exitCode;
-    }   
 }

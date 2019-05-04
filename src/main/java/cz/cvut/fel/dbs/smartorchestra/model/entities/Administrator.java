@@ -5,10 +5,24 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.model.entities;
 
+import javax.persistence.*;
 /**
  *
  * @author Matěj Bartoň
  */
-public class Administrator {
-    private int uid;
+@Entity
+@Table
+public class Administrator{
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+  public void setId(int id) {
+        this.id = id;
+    }   
 }

@@ -62,6 +62,7 @@ public class ShowEvents extends javax.swing.JPanel {
         });
 
         jButton1.setText("Přidat událost");
+        jButton1.setEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);

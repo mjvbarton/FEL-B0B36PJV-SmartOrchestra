@@ -147,6 +147,10 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="P&#x159;ihl&#xe1;sit se"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnSubmitMouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSubmitActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
