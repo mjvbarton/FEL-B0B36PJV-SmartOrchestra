@@ -27,76 +27,62 @@ public class ShowUsers extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jToolBar1 = new javax.swing.JToolBar();
+        userToolbar = new javax.swing.JToolBar();
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jButton3 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        labelSearchUser = new javax.swing.JLabel();
+        fieldSearchUser = new javax.swing.JTextField();
+        labelFilterSection = new javax.swing.JLabel();
+        fieldFilterSection = new javax.swing.JComboBox<>();
+        btnSearchUser = new javax.swing.JButton();
+        btnAddUser = new javax.swing.JButton();
+        userContent = new javax.swing.JScrollPane();
+        userTable = new javax.swing.JTable();
 
         setLayout(new java.awt.BorderLayout());
 
-        jToolBar1.setFloatable(false);
-        jToolBar1.setRollover(true);
-        jToolBar1.setMaximumSize(new java.awt.Dimension(18, 40));
-        jToolBar1.setMinimumSize(new java.awt.Dimension(18, 40));
-        jToolBar1.setPreferredSize(new java.awt.Dimension(40, 50));
+        userToolbar.setFloatable(false);
+        userToolbar.setRollover(true);
+        userToolbar.setMaximumSize(new java.awt.Dimension(18, 40));
+        userToolbar.setMinimumSize(new java.awt.Dimension(18, 40));
+        userToolbar.setPreferredSize(new java.awt.Dimension(40, 50));
 
-        jLabel2.setText("Vyhledat uživatele:");
+        labelSearchUser.setText("Vyhledat uživatele:");
 
-        jTextField2.setText("jTextField2");
+        labelFilterSection.setText("Zobraz sekci:");
 
-        jButton2.setText("Hledej");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        fieldFilterSection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "všechny", "1. Housle", "2. Housle", "Viola", "Violoncello", "Kontrabas" }));
+        fieldFilterSection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                fieldFilterSectionActionPerformed(evt);
             }
         });
 
-        jLabel1.setText("Zobraz sekci:");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "všechny", "1. Housle", "2. Housle", "Viola", "Violoncello", "Kontrabas" }));
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+        btnSearchUser.setText("Hledej");
+        btnSearchUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
+                btnSearchUserActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Hledej");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        jButton1.setText("Přidat uživatele");
+        btnAddUser.setText("Přidat uživatele");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(363, 363, 363)
-                .addComponent(jButton2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addComponent(labelSearchUser)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldSearchUser, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
+                .addComponent(btnSearchUser)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addComponent(labelFilterSection)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldFilterSection, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(btnAddUser)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -105,82 +91,126 @@ public class ShowUsers extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jTextField2)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnSearchUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(fieldSearchUser)
+                        .addComponent(labelSearchUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                        .addComponent(labelFilterSection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(fieldFilterSection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAddUser)))
+                .addGap(12, 12, 12))
         );
 
-        jToolBar1.add(jPanel1);
+        userToolbar.add(jPanel1);
 
-        add(jToolBar1, java.awt.BorderLayout.PAGE_START);
+        add(userToolbar, java.awt.BorderLayout.PAGE_START);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        userTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"Josefína", "Abuzaradová", "31.12.2019", "Klášterec nad Ohří", "+420 777 777 777", "josefina.abuzaradova@ensembleacademia.cz", "příčná flétna", null}
+                {"Josefína", "Abuzaradová", "31.12.2019", "Klášterec nad Ohří", "+420 777 777 777", "josefina.abuzaradova@ensembleacademia.cz", "příčná flétna"},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Jméno", "Příjmení", "Datum narození:", "Bydliště:", "Telefon:", "Email:", "Sekce:", ""
+                "Jméno", "Příjmení", "Datum narození:", "Bydliště:", "Telefon:", "Email:", "Sekce:"
             }
-        ));
-        jTable2.setAutoscrolls(false);
-        jTable2.setMaximumSize(new java.awt.Dimension(1185, 16));
-        jTable2.setMinimumSize(new java.awt.Dimension(1185, 16));
-        jTable2.getTableHeader().setResizingAllowed(false);
-        jTable2.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(0).setResizable(false);
-            jTable2.getColumnModel().getColumn(0).setPreferredWidth(150);
-            jTable2.getColumnModel().getColumn(1).setResizable(false);
-            jTable2.getColumnModel().getColumn(1).setPreferredWidth(150);
-            jTable2.getColumnModel().getColumn(2).setResizable(false);
-            jTable2.getColumnModel().getColumn(2).setPreferredWidth(120);
-            jTable2.getColumnModel().getColumn(3).setResizable(false);
-            jTable2.getColumnModel().getColumn(3).setPreferredWidth(175);
-            jTable2.getColumnModel().getColumn(4).setResizable(false);
-            jTable2.getColumnModel().getColumn(4).setPreferredWidth(200);
-            jTable2.getColumnModel().getColumn(5).setResizable(false);
-            jTable2.getColumnModel().getColumn(5).setPreferredWidth(250);
-            jTable2.getColumnModel().getColumn(6).setResizable(false);
-            jTable2.getColumnModel().getColumn(6).setPreferredWidth(100);
-            jTable2.getColumnModel().getColumn(7).setResizable(false);
-            jTable2.getColumnModel().getColumn(7).setPreferredWidth(40);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        userTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        userTable.setAutoscrolls(false);
+        userTable.setMaximumSize(new java.awt.Dimension(1185, 16));
+        userTable.setMinimumSize(new java.awt.Dimension(1185, 16));
+        userTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        userTable.setShowHorizontalLines(false);
+        userTable.setShowVerticalLines(false);
+        userTable.getTableHeader().setResizingAllowed(false);
+        userTable.getTableHeader().setReorderingAllowed(false);
+        userTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                userTableMouseClicked(evt);
+            }
+        });
+        userContent.setViewportView(userTable);
+        if (userTable.getColumnModel().getColumnCount() > 0) {
+            userTable.getColumnModel().getColumn(0).setResizable(false);
+            userTable.getColumnModel().getColumn(0).setPreferredWidth(150);
+            userTable.getColumnModel().getColumn(1).setResizable(false);
+            userTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+            userTable.getColumnModel().getColumn(2).setResizable(false);
+            userTable.getColumnModel().getColumn(2).setPreferredWidth(120);
+            userTable.getColumnModel().getColumn(3).setResizable(false);
+            userTable.getColumnModel().getColumn(3).setPreferredWidth(175);
+            userTable.getColumnModel().getColumn(4).setResizable(false);
+            userTable.getColumnModel().getColumn(4).setPreferredWidth(200);
+            userTable.getColumnModel().getColumn(5).setResizable(false);
+            userTable.getColumnModel().getColumn(5).setPreferredWidth(250);
+            userTable.getColumnModel().getColumn(6).setResizable(false);
+            userTable.getColumnModel().getColumn(6).setPreferredWidth(100);
         }
 
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        add(userContent, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void fieldFilterSectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldFilterSectionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_fieldFilterSectionActionPerformed
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+    private void btnSearchUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchUserActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox2ActionPerformed
+    }//GEN-LAST:event_btnSearchUserActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void userTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTableMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        if(evt.getClickCount() == 2){
+            
+        }
+    }//GEN-LAST:event_userTableMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton btnAddUser;
+    private javax.swing.JButton btnSearchUser;
+    private javax.swing.JComboBox<String> fieldFilterSection;
+    private javax.swing.JTextField fieldSearchUser;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel labelFilterSection;
+    private javax.swing.JLabel labelSearchUser;
+    private javax.swing.JScrollPane userContent;
+    private javax.swing.JTable userTable;
+    private javax.swing.JToolBar userToolbar;
     // End of variables declaration//GEN-END:variables
 }

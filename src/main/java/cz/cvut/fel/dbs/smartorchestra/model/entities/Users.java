@@ -104,7 +104,7 @@ public class Users implements Serializable {
         if(date.isEmpty()){
             throw new WrongInputException("Nevyplnili jste toto pole");
         }
-        DateFormat format = new SimpleDateFormat("dd.mm.yyyy");
+        DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
         try{
             setBirthDate(format.parse(date));
             
@@ -131,9 +131,7 @@ public class Users implements Serializable {
     }
 
     public void setAddrStreet(String addrStreet) {
-        if(!addrStreet.isEmpty()){
-            this.addrStreet = addrStreet;
-        }
+        this.addrStreet = addrStreet;
     }
 
     public String getAddrHouseNumber() {
@@ -141,9 +139,7 @@ public class Users implements Serializable {
     }
 
     public void setAddrHouseNumber(String addrHouseNumber){
-        if(!addrHouseNumber.isEmpty()){
-            this.addrHouseNumber = addrHouseNumber;
-        }
+        this.addrHouseNumber = addrHouseNumber;
     }
 
     public String getAddrTown() {
@@ -151,9 +147,7 @@ public class Users implements Serializable {
     }
 
     public void setAddrTown(String addrTown){
-        if(!addrTown.isEmpty()){
-            this.addrTown = addrTown;
-        }
+        this.addrTown = addrTown;
     }
 
     public Integer getAddrZipCode() {
@@ -171,6 +165,7 @@ public class Users implements Serializable {
     
     public void setAddrZipCode(String addrZipCode) throws WrongInputException{
         if(addrZipCode.isEmpty()){
+            this.addrZipCode = null;
             return;
         }
         try{

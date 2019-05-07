@@ -5,11 +5,17 @@
  */
 package cz.cvut.fel.dbs.smartorchestra;
 
+import cz.cvut.fel.dbs.smartorchestra.exceptions.NotAPlayerException;
+import cz.cvut.fel.dbs.smartorchestra.exceptions.PlayerManagerException;
+import cz.cvut.fel.dbs.smartorchestra.exceptions.UserAdminException;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.UserManagerException;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.WrongInputException;
 import cz.cvut.fel.dbs.smartorchestra.gui.UserDetails;
+import cz.cvut.fel.dbs.smartorchestra.model.PlayerManager;
+import cz.cvut.fel.dbs.smartorchestra.model.UserAdmin;
 import cz.cvut.fel.dbs.smartorchestra.model.UserManager;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.UserWriter;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Player;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,6 +29,10 @@ import org.mindrot.jbcrypt.BCrypt;
  * @author Matěj Bartoň
  */
 public class UserSettings implements UIController<UserDetails>{
+    public static final Boolean FUNC_NONE = null;
+    public static final Boolean FUNC_COMP_CONCERTMASTER = false;
+    public static final Boolean FUNC_CONCERTMASTER = true;
+    
     private UserDetails controled;
     private Users user;
     private DateFormat dateFormatter;
@@ -40,6 +50,38 @@ public class UserSettings implements UIController<UserDetails>{
     public void loadUser(Users activeUser) {
         user = activeUser;
         controled.loadUserDetail(user, dateFormatter);
+        loadSections();
+    }
+    
+    public boolean checkEmail(){
+        UserAdmin ua = new UserAdmin();
+        try {
+            ua.checkFreeEmail(controled.getFieldEmail().getText());
+            controled.getInfoEmail().setText("");
+            return true;
+        } catch (UserAdminException ex) {
+            controled.getInfoEmail().setText(ex.getMessage());
+            return false;
+        }
+    }
+    
+    public void loadSections(){
+        try {
+            PlayerManager pm = new PlayerManager();
+            controled.fetchSections(pm.getActiveSections(), 2);
+            Player player = pm.getPlayerInfo(user);
+            controled.getFieldSection().setSelectedIndex(pm.getIndexOfPlayerSection(player) + 1);
+            controled.setConcertMasterFlag(player.getConcertmaster());
+            
+        } catch (PlayerManagerException ex) {
+            Logger.getLogger(UserSettings.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(controled, ex.getMessage(), controled.getTitle(), 
+                    JOptionPane.WARNING_MESSAGE);
+            
+        } catch (NotAPlayerException ex){
+            controled.getFieldSection().setSelectedIndex(0);
+            controled.setConcertMasterFlag(FUNC_NONE);
+        }
     }
     
     public void saveUser(){
@@ -79,10 +121,14 @@ public class UserSettings implements UIController<UserDetails>{
             raisedException = true;
         }
         
+        if(!checkEmail()){
+            raisedException = true;
+        }
         
         user.setAddrStreet(controled.getFieldAddrStreet().getText());
         user.setAddrHouseNumber(controled.getFieldAddrHouseNumber().getText());
         user.setAddrTown(controled.getFieldAddrTown().getText());
+        
         try {
             user.setAddrZipCode(controled.getFieldAddrZipCode().getText());
         } catch (WrongInputException ex) {
@@ -96,8 +142,32 @@ public class UserSettings implements UIController<UserDetails>{
             return;
         }
         UserWriter uw = new UserWriter();
+        PlayerManager pm;
+        try {
+            pm = new PlayerManager();
+        } catch (PlayerManagerException ex) {
+            Logger.getLogger(UserSettings.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(controled, "Chyba při běhu programu: " + ex.getMessage(), controled.getTitle(), 
+                    JOptionPane.ERROR);
+            return;
+        }
+        
         try{
             uw.write(user);
+            if(controled.getFieldSection().getSelectedIndex() != 0){
+                int sectionIndex = controled.getFieldSection().getSelectedIndex() - 1;
+                Player player = pm.getPlayerInfo(user);
+                player.setSeid(pm.getActiveSections().get(sectionIndex));
+                player.setConcertmaster(controled.getConcertMasterFlag());
+                pm.updatePlayerInfo(player);
+            } else{
+                pm.removePlayer(user);
+            }
+        } catch(NotAPlayerException err){
+            if(controled.getFieldSection().getSelectedIndex() != 0){
+                pm.createNewPlayer(user, controled.getFieldSection().getSelectedIndex() - 1, controled.getConcertMasterFlag());
+            }
+            
         } catch(Exception err){
             err.printStackTrace();
             JOptionPane.showMessageDialog(controled, "Chyba při běhu programu: " + err.getMessage(), controled.getTitle(), 

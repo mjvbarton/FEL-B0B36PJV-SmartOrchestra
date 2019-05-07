@@ -9,11 +9,16 @@ import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
 import cz.cvut.fel.dbs.smartorchestra.UIControlled;
 import cz.cvut.fel.dbs.smartorchestra.UserSettings;
 import cz.cvut.fel.dbs.smartorchestra.gui.helpers.InputGroup;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -25,12 +30,8 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
     public static final int EXIT = -1;
         
     protected UserSettings controller;
-    
-    private LinkedList<InputGroup> inputGroupsCommon;
-    private LinkedList<InputGroup> inputGroupSection;
-    private LinkedList<InputGroup> inputGroupSpecial;
-    
-    private int exitCode = UserDetails.CANCEL;
+        
+    private int exitCode = UserDetails.CANCEL;   
         
     /**
      * Creates new form NewJDialog
@@ -51,6 +52,8 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnGroupConcertMaster = new javax.swing.ButtonGroup();
+        btnGroupPermissions = new javax.swing.ButtonGroup();
         content = new javax.swing.JTabbedPane();
         settingsCustom = new javax.swing.JPanel();
         labelFirstName = new javax.swing.JLabel();
@@ -131,6 +134,29 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
         fieldPhone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fieldPhoneActionPerformed(evt);
+            }
+        });
+
+        fieldEmail.getDocument().addDocumentListener(new DocumentListener(){
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                UserDetails.this.getUIController().checkEmail();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                UserDetails.this.getUIController().checkEmail();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                UserDetails.this.getUIController().checkEmail();
+            }
+        });
+        fieldEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldEmailActionPerformed(evt);
             }
         });
 
@@ -292,13 +318,31 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
         labelSection.setText("Sekce:");
 
         fieldSection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "bez sekce", "I. housle", "II. housle", "Viola", "Violoncello", "Kontrabas", " " }));
+        fieldSection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldSectionActionPerformed(evt);
+            }
+        });
 
+        btnGroupConcertMaster.add(fieldNoFunction);
         fieldNoFunction.setSelected(true);
         fieldNoFunction.setText("bez funkce");
 
+        btnGroupConcertMaster.add(fieldConcertMaster);
         fieldConcertMaster.setText("Koncertní mistr");
+        fieldConcertMaster.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fieldConcertMasterMouseClicked(evt);
+            }
+        });
 
+        btnGroupConcertMaster.add(fieldCompConcertMaster);
         fieldCompConcertMaster.setText("Zástupce koncertního");
+        fieldCompConcertMaster.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fieldCompConcertMasterMouseClicked(evt);
+            }
+        });
 
         labelFunction.setText("Speciální funkce:");
 
@@ -361,9 +405,11 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
         labelPermissions.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         labelPermissions.setText("Přístupová práva");
 
+        btnGroupPermissions.add(fieldPermCommonAccount);
         fieldPermCommonAccount.setSelected(true);
         fieldPermCommonAccount.setText("běžný účet");
 
+        btnGroupPermissions.add(fieldPermSpecialAccount);
         fieldPermSpecialAccount.setText("správce");
 
         btnDeleteAccount.setText("Smazat účet");
@@ -537,6 +583,40 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
         controller.changePasswd();
     }//GEN-LAST:event_btnPasswdChangeMouseClicked
 
+    private void fieldSectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldSectionActionPerformed
+        // TODO add your handling code here:
+        if(fieldSection.getSelectedIndex() == 0){
+            fieldConcertMaster.setEnabled(false);
+            fieldCompConcertMaster.setEnabled(false);
+            fieldNoFunction.setEnabled(false);
+        } else {
+            fieldConcertMaster.setEnabled(true);
+            fieldCompConcertMaster.setEnabled(true);
+            fieldNoFunction.setEnabled(true);           
+        }
+        fieldNoFunction.setSelected(true);
+    }//GEN-LAST:event_fieldSectionActionPerformed
+
+    private void fieldConcertMasterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fieldConcertMasterMouseClicked
+        // TODO add your handling code here:
+        int dialogResult = JOptionPane.showConfirmDialog(UserDetails.this, 
+                "Změna tohoto nastavení přepíše hodnotu současného nastavení. Chcete pokračovat?", "Varování!", JOptionPane.YES_NO_OPTION);
+        if(dialogResult == 0){
+            return;
+        }
+        fieldNoFunction.setSelected(true);
+    }//GEN-LAST:event_fieldConcertMasterMouseClicked
+
+    private void fieldCompConcertMasterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fieldCompConcertMasterMouseClicked
+        // TODO add your handling code here:
+        fieldConcertMasterMouseClicked(evt);
+    }//GEN-LAST:event_fieldCompConcertMasterMouseClicked
+
+    private void fieldEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldEmailActionPerformed
+        // TODO add your handling code here:
+        controller.checkEmail();
+    }//GEN-LAST:event_fieldEmailActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -582,6 +662,8 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     protected javax.swing.JButton btnDeleteAccount;
+    private javax.swing.ButtonGroup btnGroupConcertMaster;
+    private javax.swing.ButtonGroup btnGroupPermissions;
     protected javax.swing.JButton btnPasswdChange;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSubmit;
@@ -802,7 +884,45 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
         return infoPhone;
     }
 
+    public ButtonGroup getBtnGroupConcertMaster() {
+        return btnGroupConcertMaster;
+    }
+
+    public ButtonGroup getBtnGroupPermissions() {
+        return btnGroupPermissions;
+    }
+    
     public void setExitCode(int exitCode) {
         this.exitCode = exitCode;
     }   
+
+    public void fetchSections(List<Sections> activeSections, int i) {
+        DefaultComboBoxModel sectionsFiller = new DefaultComboBoxModel();
+        sectionsFiller.addElement("bez sekce");
+        for(Sections section : activeSections){
+            sectionsFiller.addElement(section.getSectionname());
+        }
+        fieldSection.setModel(sectionsFiller);
+    }
+    
+    public void setConcertMasterFlag(Boolean concertMasterFlag){
+        if(concertMasterFlag == UserSettings.FUNC_CONCERTMASTER){
+            fieldConcertMaster.setSelected(true);
+        } else if(concertMasterFlag == UserSettings.FUNC_COMP_CONCERTMASTER){
+            fieldCompConcertMaster.setSelected(true);
+        } else {
+            fieldNoFunction.setSelected(true);
+        }
+        
+    }
+    
+    public Boolean getConcertMasterFlag(){
+        if(fieldConcertMaster.isSelected()){
+            return UserSettings.FUNC_CONCERTMASTER;
+        } else if(fieldCompConcertMaster.isSelected()){
+            return UserSettings.FUNC_COMP_CONCERTMASTER;
+        } else {
+            return UserSettings.FUNC_NONE;
+        }
+    }
 }

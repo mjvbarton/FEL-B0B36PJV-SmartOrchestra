@@ -8,12 +8,22 @@ package cz.cvut.fel.dbs.smartorchestra.gui;
 import cz.cvut.fel.dbs.smartorchestra.MainControl;
 import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
 import cz.cvut.fel.dbs.smartorchestra.UIControlled;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
+import java.awt.Dimension;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
  * @author Matěj Bartoň
  */
 public class Main extends javax.swing.JFrame implements UIControlled<MainControl>{
+    public static final String[] USERS_COLUMN_NAMES = new String [] {
+                "Příjmení", "Jméno", "Datum narození:", "Bydliště:", "Telefon:", "Email:", "Sekce:"
+            };
     private MainControl controller;
     /**
      * Creates new form Main
@@ -39,7 +49,17 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         jSeparator1 = new javax.swing.JSeparator();
         content = new javax.swing.JTabbedPane();
         events = new cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents();
-        users = new cz.cvut.fel.dbs.smartorchestra.gui.ShowUsers();
+        jPanel1 = new javax.swing.JPanel();
+        userToolbar = new javax.swing.JToolBar();
+        jPanel2 = new javax.swing.JPanel();
+        labelSearchUser = new javax.swing.JLabel();
+        fieldSearchUser = new javax.swing.JTextField();
+        labelFilterSection = new javax.swing.JLabel();
+        fieldFilterSection = new javax.swing.JComboBox<>();
+        btnSearchUser = new javax.swing.JButton();
+        btnAddUser = new javax.swing.JButton();
+        userContent = new javax.swing.JScrollPane();
+        userTable = new javax.swing.JTable();
         mainMenu = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         fileAddEvent = new javax.swing.JMenuItem();
@@ -87,10 +107,167 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         setName("SmartOrchestra"); // NOI18N
         setPreferredSize(new java.awt.Dimension(700, 400));
 
+        content.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                contentStateChanged(evt);
+            }
+        });
+        content.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                contentMouseClicked(evt);
+            }
+        });
         content.addTab("Přehled událostí", events);
 
-        users.setEnabled(false);
-        content.addTab("Přehled uživatelů", users);
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        userToolbar.setFloatable(false);
+        userToolbar.setRollover(true);
+        userToolbar.setMaximumSize(new java.awt.Dimension(18, 40));
+        userToolbar.setMinimumSize(new java.awt.Dimension(18, 40));
+        userToolbar.setPreferredSize(new java.awt.Dimension(40, 50));
+
+        labelSearchUser.setText("Vyhledat uživatele:");
+
+        labelFilterSection.setText("Zobraz sekci:");
+
+        fieldFilterSection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "všechny", "1. Housle", "2. Housle", "Viola", "Violoncello", "Kontrabas" }));
+        fieldFilterSection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldFilterSectionActionPerformed(evt);
+            }
+        });
+
+        btnSearchUser.setText("Hledej");
+        btnSearchUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchUserActionPerformed(evt);
+            }
+        });
+
+        btnAddUser.setText("Přidat uživatele");
+
+        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(labelSearchUser)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(fieldSearchUser, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 163, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(btnSearchUser)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 12, Short.MAX_VALUE)
+                .add(labelFilterSection)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(fieldFilterSection, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 120, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(btnAddUser)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(btnSearchUser, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(fieldSearchUser)
+                        .add(labelSearchUser, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(labelFilterSection, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(fieldFilterSection, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(btnAddUser)))
+                .add(12, 12, 12))
+        );
+
+        userToolbar.add(jPanel2);
+
+        jPanel1.add(userToolbar, java.awt.BorderLayout.PAGE_START);
+
+        userContent.setMinimumSize(new Dimension(getWidth(), getHeight() - userToolbar.getHeight() - mainMenu.getHeight()));
+
+        userTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"Josefína", "Abuzaradová", "31.12.2019", "Klášterec nad Ohří", "+420 777 777 777", "josefina.abuzaradova@ensembleacademia.cz", "příčná flétna"},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Jméno", "Příjmení", "Datum narození:", "Bydliště:", "Telefon:", "Email:", "Sekce:"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        userTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        userTable.setAutoscrolls(false);
+        userTable.setMaximumSize(new java.awt.Dimension(1185, 16));
+        userTable.setMinimumSize(new java.awt.Dimension(1185, 16));
+        userTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        userTable.setShowHorizontalLines(false);
+        userTable.setShowVerticalLines(false);
+        userTable.getTableHeader().setResizingAllowed(false);
+        userTable.getTableHeader().setReorderingAllowed(false);
+        userTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                userTableMouseClicked(evt);
+            }
+        });
+        userContent.setViewportView(userTable);
+        if (userTable.getColumnModel().getColumnCount() > 0) {
+            userTable.getColumnModel().getColumn(0).setResizable(false);
+            userTable.getColumnModel().getColumn(0).setPreferredWidth(150);
+            userTable.getColumnModel().getColumn(1).setResizable(false);
+            userTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+            userTable.getColumnModel().getColumn(2).setResizable(false);
+            userTable.getColumnModel().getColumn(2).setPreferredWidth(120);
+            userTable.getColumnModel().getColumn(3).setResizable(false);
+            userTable.getColumnModel().getColumn(3).setPreferredWidth(175);
+            userTable.getColumnModel().getColumn(4).setResizable(false);
+            userTable.getColumnModel().getColumn(4).setPreferredWidth(200);
+            userTable.getColumnModel().getColumn(5).setResizable(false);
+            userTable.getColumnModel().getColumn(5).setPreferredWidth(250);
+            userTable.getColumnModel().getColumn(6).setResizable(false);
+            userTable.getColumnModel().getColumn(6).setPreferredWidth(100);
+        }
+
+        jPanel1.add(userContent, java.awt.BorderLayout.CENTER);
+
+        content.addTab("Přehled uživatelů", jPanel1);
 
         getContentPane().add(content, java.awt.BorderLayout.PAGE_START);
 
@@ -176,6 +353,33 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         controller.showUserProfile();
     }//GEN-LAST:event_fileViewProfileActionPerformed
 
+    private void fieldFilterSectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldFilterSectionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldFilterSectionActionPerformed
+
+    private void btnSearchUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchUserActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSearchUserActionPerformed
+
+    private void userTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTableMouseClicked
+        // TODO add your handling code here:
+        if(evt.getClickCount() == 2){
+            controller.editUserFromTable(userTable.rowAtPoint(evt.getPoint()));
+        }
+    }//GEN-LAST:event_userTableMouseClicked
+
+    private void contentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contentMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_contentMouseClicked
+
+    private void contentStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_contentStateChanged
+        // TODO add your handling code here:
+        System.out.println(content.getSelectedIndex());
+        if(content.getSelectedIndex() == 1){
+            controller.loadUsersToTable();
+        }
+    }//GEN-LAST:event_contentStateChanged
+
     /**
      * @param args the command line arguments
      */
@@ -212,8 +416,12 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddUser;
+    private javax.swing.JButton btnSearchUser;
     private javax.swing.JTabbedPane content;
     private cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents events;
+    private javax.swing.JComboBox<String> fieldFilterSection;
+    private javax.swing.JTextField fieldSearchUser;
     private javax.swing.JMenuItem fileAddEvent;
     private javax.swing.JMenuItem fileAddUser;
     private javax.swing.JMenu fileMenu;
@@ -224,10 +432,16 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel labelFilterSection;
+    private javax.swing.JLabel labelSearchUser;
     private javax.swing.JMenuBar mainMenu;
-    private cz.cvut.fel.dbs.smartorchestra.gui.ShowUsers users;
+    private javax.swing.JScrollPane userContent;
+    private javax.swing.JTable userTable;
+    private javax.swing.JToolBar userToolbar;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -238,5 +452,50 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
     @Override
     public MainControl getUIController() {
         return controller;
+    }
+    
+    public void fetchUserIntoTable(List<Users> users){
+        DefaultTableModel tableContent = new DefaultTableModel(
+                new Object[][] {{}, {}},                        
+                Main.USERS_COLUMN_NAMES){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+                    
+                };
+        tableContent.setRowCount(0);
+        for(Users user : users){
+            tableContent.addRow(new String[]{
+                    user.getFamilyName(),
+                    user.getFirstName(),
+                    new SimpleDateFormat("dd.MM.yyyy").format(user.getBirthDate()),
+                    user.getAddrTown(),
+                    user.getPhone(),
+                    user.getEmail(),
+                    "sekce"                    
+            });
+        }
+        userTable.setModel(tableContent);
+        fetchColumns();
+    }
+    
+    private void fetchColumns(){
+        if (userTable.getColumnModel().getColumnCount() > 0) {
+            userTable.getColumnModel().getColumn(0).setResizable(false);
+            userTable.getColumnModel().getColumn(0).setPreferredWidth(150);
+            userTable.getColumnModel().getColumn(1).setResizable(false);
+            userTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+            userTable.getColumnModel().getColumn(2).setResizable(false);
+            userTable.getColumnModel().getColumn(2).setPreferredWidth(120);
+            userTable.getColumnModel().getColumn(3).setResizable(false);
+            userTable.getColumnModel().getColumn(3).setPreferredWidth(175);
+            userTable.getColumnModel().getColumn(4).setResizable(false);
+            userTable.getColumnModel().getColumn(4).setPreferredWidth(200);
+            userTable.getColumnModel().getColumn(5).setResizable(false);
+            userTable.getColumnModel().getColumn(5).setPreferredWidth(250);
+            userTable.getColumnModel().getColumn(6).setResizable(false);
+            userTable.getColumnModel().getColumn(6).setPreferredWidth(100);
+        }
     }
 }

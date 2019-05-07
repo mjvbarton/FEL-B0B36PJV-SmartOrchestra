@@ -12,6 +12,7 @@ import cz.cvut.fel.dbs.smartorchestra.model.dao.UserWriter;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.NoResultException;
 import org.mindrot.jbcrypt.BCrypt;
 
 
@@ -34,7 +35,10 @@ public class UserManager {
             return user;            
         } catch(UserManagerException err){
             throw new NonExistingUserException();
-        }
+            
+        } catch(NoResultException err){
+            throw new NonExistingUserException();
+        } 
     }
         
     public final void changePasswd(Users user, String NewPasswd) throws UserManagerException{
