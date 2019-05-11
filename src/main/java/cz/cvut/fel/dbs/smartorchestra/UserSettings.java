@@ -33,9 +33,9 @@ public class UserSettings implements UIController<UserDetails>{
     public static final Boolean FUNC_COMP_CONCERTMASTER = false;
     public static final Boolean FUNC_CONCERTMASTER = true;
     
-    private UserDetails controled;
-    private Users user;
-    private DateFormat dateFormatter;
+    protected UserDetails controled;
+    protected Users user;
+    protected DateFormat dateFormatter;
 
     public UserSettings(UserDetails controled) {
         setControlled(controled);
@@ -52,11 +52,11 @@ public class UserSettings implements UIController<UserDetails>{
         controled.loadUserDetail(user, dateFormatter);
         loadSections();
     }
-    
+      
     public boolean checkEmail(){
         UserAdmin ua = new UserAdmin();
         try {
-            ua.checkFreeEmail(controled.getFieldEmail().getText());
+            ua.checkFreeEmail(controled.getFieldEmail().getText(), user);
             controled.getInfoEmail().setText("");
             return true;
         } catch (UserAdminException ex) {

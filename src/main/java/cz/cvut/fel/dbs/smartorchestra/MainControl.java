@@ -8,6 +8,7 @@ package cz.cvut.fel.dbs.smartorchestra;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.UserAdminException;
 import cz.cvut.fel.dbs.smartorchestra.gui.Main;
 import cz.cvut.fel.dbs.smartorchestra.gui.UserDetails;
+import cz.cvut.fel.dbs.smartorchestra.gui.UserRegistration;
 import cz.cvut.fel.dbs.smartorchestra.gui.ViewProfile;
 import cz.cvut.fel.dbs.smartorchestra.model.UserAdmin;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
@@ -37,7 +38,7 @@ public class MainControl implements UIController<Main>{
             public void run() {
                 ViewProfile dialog = new ViewProfile(controled, true);
                 UserSettings uic = dialog.getUIController();
-                uic.loadUser(SmartOrchestra.getActiveUser());
+                uic.loadUser(SmartOrchestra.getInstance().getActiveUser());
                 if(dialog.doModal() == UserDetails.SAVE_DETAILS) {
 
                 }
@@ -66,7 +67,8 @@ public class MainControl implements UIController<Main>{
             public void run() {
                 UserDetails dialog = new UserDetails(controled, true);
                 UserSettings uic = dialog.getUIController();
-                uic.loadUser(SmartOrchestra.getActiveUser());
+                Users user = ua.getUserForAdministration(rowAtPoint);
+                uic.loadUser(user);
                 if(dialog.doModal() == UserDetails.SAVE_DETAILS) {
                     
                 }
@@ -74,6 +76,21 @@ public class MainControl implements UIController<Main>{
             }
         });
         
+    }
+
+    public void addNewUser() {
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run() {
+                UserRegistration dialog = new UserRegistration(controled, true);
+                Registration rg = dialog.getUIController();
+                rg.loadUser(new Users());
+                if(dialog.doModal() == UserDetails.SAVE_DETAILS) {
+                    
+                }
+                controled.getUIController().loadUsersToTable();            
+            }            
+        });
     }
     
 }

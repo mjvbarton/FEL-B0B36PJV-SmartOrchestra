@@ -9,9 +9,11 @@ import cz.cvut.fel.dbs.smartorchestra.exceptions.NonExistingUserException;
 import cz.cvut.fel.dbs.smartorchestra.gui.LoginScreen;
 import cz.cvut.fel.dbs.smartorchestra.model.UserManager;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,16 +34,18 @@ public class UserLogin{
         try{
             UserManager um = new UserManager();
             Users activeUser = um.login(email.getText(), passwd.getText());
-            SmartOrchestra.setActiveUser(activeUser);
-            SmartOrchestra.runMainWindow();
+            Logger.getLogger(UserLogin.class.getName()).log(Level.FINE, "User {0} logon", email.getText());
+            SmartOrchestra.getInstance().setActiveUser(activeUser);
+            SmartOrchestra.getInstance().runMainWindow();
             
         } catch (NonExistingUserException err){
+            Logger.getLogger(UserLogin.class.getName()).log(Level.FINE, "Login failed for email: {0}", email.getText());
             JOptionPane.showMessageDialog(scr, "Špatné uživatelské jméno nebo heslo", "Přihlášení se nezdařilo",
                     JOptionPane.WARNING_MESSAGE);
             email.setText("");
             passwd.setText("");
         } catch (Exception err){
-            err.printStackTrace();
+            Logger.getLogger(UserLogin.class.getName()).log(Level.SEVERE, null, err);
             JOptionPane.showMessageDialog(scr, "Chyba při běhu programu. Pro více informací zkontrolujte log.", "Chyba",
                     JOptionPane.ERROR_MESSAGE);
             email.setText("");

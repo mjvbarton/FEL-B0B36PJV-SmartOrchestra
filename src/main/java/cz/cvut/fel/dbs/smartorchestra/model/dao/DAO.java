@@ -16,6 +16,6 @@ public abstract class DAO {
     protected EntityManager em;
     
     protected DAO() {
-        em = SmartOrchestra.getEntityManager();
+        em = SmartOrchestra.getInstance().getEntityManager();
     }
 }

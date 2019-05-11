@@ -30,7 +30,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
      */
     public Main() {
         initComponents();
-        setUIController(SmartOrchestra.getController(this));
+        setUIController(SmartOrchestra.getInstance().getController(this));
     }
 
     /**
@@ -146,6 +146,11 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         });
 
         btnAddUser.setText("Přidat uživatele");
+        btnAddUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAddUserMouseClicked(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -363,6 +368,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
 
     private void userTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTableMouseClicked
         // TODO add your handling code here:
+        System.out.println(userTable.rowAtPoint(evt.getPoint()));
         if(evt.getClickCount() == 2){
             controller.editUserFromTable(userTable.rowAtPoint(evt.getPoint()));
         }
@@ -379,6 +385,11 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
             controller.loadUsersToTable();
         }
     }//GEN-LAST:event_contentStateChanged
+
+    private void btnAddUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddUserMouseClicked
+        // TODO add your handling code here:
+        controller.addNewUser();
+    }//GEN-LAST:event_btnAddUserMouseClicked
 
     /**
      * @param args the command line arguments

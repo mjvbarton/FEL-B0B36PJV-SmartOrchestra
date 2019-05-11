@@ -5,10 +5,7 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.model.dao;
 
-import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
-import cz.cvut.fel.dbs.smartorchestra.exceptions.UserAdminException;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
@@ -16,13 +13,8 @@ import javax.persistence.*;
  *
  * @author Matěj Bartoň
  */
-public class UserReader {
-    private EntityManager em;
-    
-    public UserReader() {
-        em = SmartOrchestra.getEntityManager();
-    }
-    
+public class UserReader extends DAO{
+      
     public Users getUserFromEmail(String email) throws NoResultException{
         Users user = em.createQuery("SELECT u FROM Users u WHERE u.email = :email", Users.class).
                 setParameter("email", email).getSingleResult();

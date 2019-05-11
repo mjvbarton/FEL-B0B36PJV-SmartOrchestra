@@ -277,6 +277,9 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="P&#x159;idat u&#x17e;ivatele"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnAddUserMouseClicked"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
