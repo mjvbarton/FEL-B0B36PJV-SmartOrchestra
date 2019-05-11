@@ -249,12 +249,42 @@ public class UserSettings implements UIController<UserDetails>{
             Logger.getLogger(UserSettings.class.getName())
                     .log(Level.SEVERE, "Cannot change password for user " + controled.getFieldEmail().getText(), ex);
             JOptionPane.showMessageDialog(controled, "Chyba v běhu programu: " + ex.getMessage(), controled.getTitle(), 
-                    JOptionPane.ERROR);
+                    JOptionPane.ERROR_MESSAGE);
         } finally {
             controled.getFieldCurrentPasswd().setText("");
             controled.getFieldNewPasswd().setText("");
             controled.getFieldConfirmPasswd().setText("");
         }
+    }
+
+    public void deleteUser() {
+        int response = JOptionPane.showConfirmDialog(controled, 
+                "Opravdu si přejete smazat uživatele " + user.getEmail() + "?\n"
+                + "(Vymazání uživatele odstraní veškeré záznamy o uživateli a jeho aktivitách.)", "Smazat uživatele", JOptionPane.YES_NO_OPTION);
+        if(response == JOptionPane.YES_OPTION){
+            Logger.getLogger(UserSettings.class.getName()).log(Level.FINE, "Deleting account {0} ...", user);
+            UserAdmin ua = new UserAdmin();
+            try{
+                ua.removeUser(user);
+                Logger.getLogger(UserSettings.class.getName())
+                    .log(Level.INFO, "{0} deleted", user);
+                JOptionPane.showMessageDialog(controled, "Uživatel " + user.getEmail() + " byl smazán", controled.getTitle(), 
+                        JOptionPane.INFORMATION_MESSAGE );
+            } catch (UserAdminException ex){
+                Logger.getLogger(UserSettings.class.getName())
+                    .log(Level.WARNING, "Cannot delete deleted user " + controled.getFieldEmail().getText(), ex);
+                JOptionPane.showMessageDialog(controled, ex.getMessage(), "Smazat uživatele", JOptionPane.WARNING_MESSAGE);
+            } catch (Exception ex){
+                Logger.getLogger(UserSettings.class.getName())
+                    .log(Level.SEVERE, "Cannot delete user " + controled.getFieldEmail().getText(), ex);
+                JOptionPane.showMessageDialog(controled, "Chyba v běhu programu: " + ex.getMessage(), controled.getTitle(), 
+                    JOptionPane.ERROR_MESSAGE);
+            } finally{
+                controled.setExitCode(UserDetails.EXIT);
+                controled.dispose();
+            }
+            
+        }        
     }
     
 }

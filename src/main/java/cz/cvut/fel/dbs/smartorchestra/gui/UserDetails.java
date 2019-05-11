@@ -416,6 +416,11 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
         fieldPermSpecialAccount.setText("správce");
 
         btnDeleteAccount.setText("Smazat účet");
+        btnDeleteAccount.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDeleteAccountMouseClicked(evt);
+            }
+        });
 
         infoCurrentPasswd.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         infoCurrentPasswd.setForeground(new java.awt.Color(255, 0, 0));
@@ -619,6 +624,11 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
         // TODO add your handling code here:
         controller.checkEmail();
     }//GEN-LAST:event_fieldEmailActionPerformed
+
+    private void btnDeleteAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteAccountMouseClicked
+        // TODO add your handling code here:
+        controller.deleteUser();
+    }//GEN-LAST:event_btnDeleteAccountMouseClicked
 
     /**
      * @param args the command line arguments

@@ -5,16 +5,13 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.model;
 
-import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.UserAdminException;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.AdministratorHandler;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.UserReader;
-import cz.cvut.fel.dbs.smartorchestra.model.entities.Administrators;
+import cz.cvut.fel.dbs.smartorchestra.model.dao.UserWriter;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.NoResultException;
 
 /**
@@ -62,4 +59,9 @@ public class UserAdmin extends UserManager{
             ah.remove(user);
         }
     }    
+
+    public void removeUser(Users user) throws UserAdminException, Exception{
+        UserWriter uw = new UserWriter();
+        uw.removeUser(user);
+    }
 }
