@@ -27,7 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Player.findAll", query = "SELECT p FROM Player p")
     , @NamedQuery(name = "Player.findByUid", query = "SELECT p FROM Player p WHERE p.uid = :uid")
-    , @NamedQuery(name = "Player.findByConcertmaster", query = "SELECT p FROM Player p WHERE p.concertmaster = :concertmaster")})
+    , @NamedQuery(name = "Player.findByConcertmaster", query = "SELECT p FROM Player p WHERE p.concertmaster = :concertmaster AND p.seid = :seid")})
+    
 public class Player implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -94,7 +95,7 @@ public class Player implements Serializable {
 
     @Override
     public String toString() {
-        return "cz.cvut.fel.dbs.smartorchestra.model.entities.Player[ uid=" + uid + " ]";
+        return "Player[#" + uid + " --> " + seid + "]";
     }
     
 }

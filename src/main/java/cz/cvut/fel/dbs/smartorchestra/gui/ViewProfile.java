@@ -6,9 +6,7 @@
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
 import cz.cvut.fel.dbs.smartorchestra.UIControlled;
-import cz.cvut.fel.dbs.smartorchestra.UIController;
 import cz.cvut.fel.dbs.smartorchestra.UserSettings;
-import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.awt.Frame;
 
 /**
@@ -31,6 +29,8 @@ public final class ViewProfile extends UserDetails implements UIControlled<UserS
         fieldNoFunction.setEnabled(false);
         fieldConcertMaster.setEnabled(false);
         fieldCompConcertMaster.setEnabled(false);
+        fieldCurrentPasswd.setEnabled(true);
+        labelCurrentPasswd.setEnabled(true);
         
         fieldPermCommonAccount.setEnabled(false);
         fieldPermSpecialAccount.setEnabled(false);

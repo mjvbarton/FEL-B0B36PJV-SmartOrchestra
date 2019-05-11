@@ -56,24 +56,26 @@ public class PlayerManager {
         return player;
     }
 
-    public void updatePlayerInfo(Player player){
-        pw.write(player);
+    public Player updatePlayerInfo(Player player){
+        return player;
     }
 
-    public void createNewPlayer(Users user, int activeSectionsIndex, Boolean concertMasterFlag) {
+    public Player createNewPlayer(Users user, int activeSectionsIndex, Boolean concertMasterFlag) {
         Player player = new Player();
         player.setUid(user.getUid());
         player.setConcertmaster(concertMasterFlag);
         player.setSeid(activeSections.get(activeSectionsIndex));
         pw.write(player);
+        return player;
     }
     
-    public void removePlayer(Users user) throws NotAPlayerException{
+    public Player removePlayer(Users user) throws NotAPlayerException{
         Player player = pr.getPlayer(user.getUid());
         if(player == null){
             throw new NotAPlayerException("Zadaný uživatel není hráčem");
         }
         pw.remove(player);
+        return player;
     }
     
     

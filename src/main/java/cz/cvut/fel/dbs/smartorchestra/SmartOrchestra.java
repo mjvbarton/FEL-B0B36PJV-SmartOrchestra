@@ -8,7 +8,12 @@ package cz.cvut.fel.dbs.smartorchestra;
 import cz.cvut.fel.dbs.smartorchestra.gui.LoginScreen;
 import cz.cvut.fel.dbs.smartorchestra.gui.Main;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.*;
+import javax.swing.JOptionPane;
+import org.hibernate.service.spi.ServiceException;
 
 
 /**
@@ -33,21 +38,36 @@ public class SmartOrchestra {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        SmartOrchestra.getInstance().setupJPA();
+        Logger.getLogger("").setLevel(Level.INFO);
+        for(Handler h : Logger.getLogger("").getHandlers()){
+            h.setLevel(Level.INFO);
+        }
+        Logger.getGlobal().fine("SMARTORCHESTRA STARTED");
+        try{        
+            SmartOrchestra.getInstance().setupJPA();
         
-        SmartOrchestra.getInstance().loginScr = new LoginScreen();
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                SmartOrchestra.getInstance().loginScr.setVisible(true);
-            }
-        });
+            SmartOrchestra.getInstance().loginScr = new LoginScreen();
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    SmartOrchestra.getInstance().loginScr.setVisible(true);
+                }
+            });
+        } catch (ServiceException err){
+            Logger.getLogger(SmartOrchestra.class.getName()).log(Level.SEVERE, "Database connection failed.", err);
+            JOptionPane.showMessageDialog(null, "Připojení k databázi selhalo.", 
+                    "SmartOrchestra", JOptionPane.ERROR_MESSAGE);
+        } catch(Exception err){
+            Logger.getLogger(SmartOrchestra.class.getName()).log(Level.SEVERE, "Cannot run SmartOrchestra", err);
+            JOptionPane.showMessageDialog(null, "Chyba při běhu programu. Pro více informací zkontrolujte log.", 
+                    "SmartOrchestra", JOptionPane.ERROR_MESSAGE);            
+        }
     }
     
     public final EntityManager getEntityManager(){
         return em;
     }
     
-    private void setupJPA(){
+    private void setupJPA() throws ServiceException{
         emf = Persistence.createEntityManagerFactory("smartorchestraPU");
         em = emf.createEntityManager();
     }

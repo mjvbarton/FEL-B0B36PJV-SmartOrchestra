@@ -7,10 +7,14 @@ package cz.cvut.fel.dbs.smartorchestra.model;
 
 import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.UserAdminException;
+import cz.cvut.fel.dbs.smartorchestra.model.dao.AdministratorHandler;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.UserReader;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Administrators;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.NoResultException;
 
 /**
@@ -37,16 +41,25 @@ public class UserAdmin extends UserManager{
         return adminedUsers.get(arrayIndex);
     }
     
-    public void checkFreeEmail(String email) throws UserAdminException{
+    public void checkFreeEmail(String email, Users activeUser) throws UserAdminException{
         UserReader ur = new UserReader();
         try{
             Users user = ur.getUserFromEmail(email);
-            if(!user.equals(SmartOrchestra.getActiveUser())){
-            throw new UserAdminException("Uživatel s tímto emailem již existuje");
+            if(!user.equals(activeUser)){
+            throw new UserAdminException("Email je již obsazen");
             }
         } catch(NoResultException err){
         }
     }
-    
-    
+
+    public void setAdministrator(Users user, boolean isAdmin) throws Exception{
+        AdministratorHandler ah = new AdministratorHandler();
+        boolean wasAdmin = checkAdministrator(user);
+        if(!wasAdmin && isAdmin){
+            ah.newAdmin(user);
+                        
+        } else if(wasAdmin && !isAdmin){
+            ah.remove(user);
+        }
+    }    
 }

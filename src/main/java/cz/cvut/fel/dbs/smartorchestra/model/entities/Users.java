@@ -64,7 +64,7 @@ public class Users implements Serializable {
     }
 
     public void setPasswd(String passwd) throws WrongInputException {
-        if(firstName.isEmpty()){
+        if(passwd.isEmpty()){
             throw new WrongInputException("Nevyplnili jste toto pole");
         }
         this.passwd = passwd;
@@ -199,7 +199,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "cz.cvut.fel.dbs.smartorchestra.model.entities.Users[ id=" + uid + " ]";
+        return "User['" + email + "']";
     }
     
 }

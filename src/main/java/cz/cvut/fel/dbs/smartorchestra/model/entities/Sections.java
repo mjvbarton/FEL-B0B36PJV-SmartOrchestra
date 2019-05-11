@@ -131,7 +131,7 @@ public class Sections implements Serializable {
 
     @Override
     public String toString() {
-        return "cz.cvut.fel.dbs.smartorchestra.model.entities.Sections[ seid=" + seid + " ]";
+        return sectionname;
     }
     
 }

@@ -34,12 +34,15 @@ public class UserLogin{
         try{
             UserManager um = new UserManager();
             Users activeUser = um.login(email.getText(), passwd.getText());
-            Logger.getLogger(UserLogin.class.getName()).log(Level.FINE, "User {0} logon", email.getText());
+            boolean enableAdminAccess = um.checkAdministrator(activeUser);
+            SmartOrchestra.getInstance().setAdministrationActive(enableAdminAccess);
+            Logger.getLogger(UserLogin.class.getName()).log(Level.INFO, "User {0} logon", email.getText());
+            Logger.getLogger(UserLogin.class.getName()).log(Level.INFO, "Administrator usage for {0} enabled: {1}", new Object[]{email.getText(), enableAdminAccess});
             SmartOrchestra.getInstance().setActiveUser(activeUser);
             SmartOrchestra.getInstance().runMainWindow();
             
         } catch (NonExistingUserException err){
-            Logger.getLogger(UserLogin.class.getName()).log(Level.FINE, "Login failed for email: {0}", email.getText());
+            Logger.getLogger(UserLogin.class.getName()).log(Level.WARNING, "Login failed for email: {0}", email.getText());
             JOptionPane.showMessageDialog(scr, "Špatné uživatelské jméno nebo heslo", "Přihlášení se nezdařilo",
                     JOptionPane.WARNING_MESSAGE);
             email.setText("");

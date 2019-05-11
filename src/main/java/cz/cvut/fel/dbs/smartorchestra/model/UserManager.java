@@ -7,6 +7,7 @@ package cz.cvut.fel.dbs.smartorchestra.model;
 
 import cz.cvut.fel.dbs.smartorchestra.UserSettings;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.*;
+import cz.cvut.fel.dbs.smartorchestra.model.dao.AdministratorHandler;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.UserReader;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.UserWriter;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
@@ -50,5 +51,10 @@ public class UserManager {
         } catch (Exception ex) {
             throw new UserManagerException("Chyba v běhu programu: " + ex.getMessage());
         }       
+    }
+    
+    public final boolean checkAdministrator(Users user){
+        AdministratorHandler ah = new AdministratorHandler();
+        return ah.getIsAdministrator(user);
     }
 }

@@ -31,20 +31,20 @@ public class Administrators implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "uid")
-    private Integer uid;
+    private Long uid;
 
     public Administrators() {
     }
 
-    public Administrators(Integer uid) {
+    public Administrators(Long uid) {
         this.uid = uid;
     }
 
-    public Integer getUid() {
+    public Long getUid() {
         return uid;
     }
 
-    public void setUid(Integer uid) {
+    public void setUid(Long uid) {
         this.uid = uid;
     }
 

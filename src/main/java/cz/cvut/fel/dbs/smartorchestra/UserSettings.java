@@ -51,6 +51,15 @@ public class UserSettings implements UIController<UserDetails>{
         user = activeUser;
         controled.loadUserDetail(user, dateFormatter);
         loadSections();
+        UserManager um = new UserManager();
+        boolean isAdmin = um.checkAdministrator(activeUser);
+        controled.loadPermissions(isAdmin);
+        if(activeUser.equals(SmartOrchestra.getInstance().getActiveUser())){
+            controled.getFieldPermSpecialAccount().setEnabled(false);
+            controled.getFieldPermCommonAccount().setEnabled(false);
+            controled.getBtnDeleteAccount().setEnabled(false);
+        }
+        
     }
       
     public boolean checkEmail(){
@@ -146,13 +155,14 @@ public class UserSettings implements UIController<UserDetails>{
         try {
             pm = new PlayerManager();
         } catch (PlayerManagerException ex) {
-            Logger.getLogger(UserSettings.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserSettings.class.getName()).log(Level.SEVERE, "Cannot save data for " + user, ex);
             JOptionPane.showMessageDialog(controled, "Chyba při běhu programu: " + ex.getMessage(), controled.getTitle(), 
                     JOptionPane.ERROR);
             return;
         }
         
         try{
+            pm = new PlayerManager();
             uw.write(user);
             if(controled.getFieldSection().getSelectedIndex() != 0){
                 int sectionIndex = controled.getFieldSection().getSelectedIndex() - 1;
@@ -160,21 +170,28 @@ public class UserSettings implements UIController<UserDetails>{
                 player.setSeid(pm.getActiveSections().get(sectionIndex));
                 player.setConcertmaster(controled.getConcertMasterFlag());
                 pm.updatePlayerInfo(player);
+                Logger.getLogger(UserSettings.class.getName()).log(Level.INFO, "Section of player changed - {0}", player);
             } else{
-                pm.removePlayer(user);
+                Player player = pm.removePlayer(user);
+                Logger.getLogger(UserSettings.class.getName()).log(Level.INFO, "Player removed - {0}", player);
             }
+            UserAdmin ua = new UserAdmin();
+            ua.setAdministrator(user, controled.getFieldPermSpecialAccount().isSelected());
+            
         } catch(NotAPlayerException err){
             if(controled.getFieldSection().getSelectedIndex() != 0){
-                pm.createNewPlayer(user, controled.getFieldSection().getSelectedIndex() - 1, controled.getConcertMasterFlag());
+                Player player = pm.createNewPlayer(user, controled.getFieldSection().getSelectedIndex() - 1, controled.getConcertMasterFlag());
+                Logger.getLogger(UserSettings.class.getName()).log(Level.INFO, "New player created - {0}", player);
             }
             
         } catch(Exception err){
-            err.printStackTrace();
+            Logger.getLogger(UserSettings.class.getName()).log(Level.SEVERE, "Cannot save data for " + user, err);
             JOptionPane.showMessageDialog(controled, "Chyba při běhu programu: " + err.getMessage(), controled.getTitle(), 
-                    JOptionPane.ERROR);
+                    JOptionPane.ERROR_MESSAGE);
+        } finally {
+            controled.setExitCode(UserDetails.EXIT);
+            controled.dispose();
         }
-        controled.setExitCode(UserDetails.EXIT);
-        controled.dispose();
     }
     
     public void changePasswd(){
@@ -187,8 +204,9 @@ public class UserSettings implements UIController<UserDetails>{
         String confirmPasswd = controled.getFieldConfirmPasswd().getText();
         
         boolean emptyPasswd = false;
-        boolean raiseException = false;
-        if(currentPasswd.isEmpty()){
+        boolean adminAccessEnabled = SmartOrchestra.getInstance().isAdministrationActive();
+        
+        if(currentPasswd.isEmpty() && !adminAccessEnabled){
             controled.getInfoCurrentPasswd().setText("Nevyplnili jste toto pole");
             emptyPasswd = true;                        
         }
@@ -203,7 +221,7 @@ public class UserSettings implements UIController<UserDetails>{
             emptyPasswd = true;                        
         }
         
-        if(!BCrypt.checkpw(currentPasswd, user.getPasswd()) && !emptyPasswd){
+        if(!BCrypt.checkpw(currentPasswd, user.getPasswd()) && !emptyPasswd && !adminAccessEnabled){
             controled.getInfoCurrentPasswd().setText("Neplatné heslo");
             emptyPasswd = true;
         }
@@ -224,10 +242,12 @@ public class UserSettings implements UIController<UserDetails>{
         UserManager um = new UserManager();
         try {
             um.changePasswd(user, newPasswd);
+            Logger.getLogger(UserSettings.class.getName()).log(Level.INFO, "Password changed for {0}", controled.getFieldEmail().getText());
             JOptionPane.showMessageDialog(controled, "Heslo bylo změněno!", controled.getTitle(), JOptionPane.INFORMATION_MESSAGE);
                     
         } catch (UserManagerException ex) {
-            Logger.getLogger(UserSettings.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserSettings.class.getName())
+                    .log(Level.SEVERE, "Cannot change password for user " + controled.getFieldEmail().getText(), ex);
             JOptionPane.showMessageDialog(controled, "Chyba v běhu programu: " + ex.getMessage(), controled.getTitle(), 
                     JOptionPane.ERROR);
         } finally {

@@ -17,7 +17,13 @@ public class UserWriter {
     private EntityManager em;
     
     public UserWriter() {
-        em = SmartOrchestra.getEntityManager();
+        em = SmartOrchestra.getInstance().getEntityManager();
+    }
+    
+    public void create(Users user){
+        em.getTransaction().begin();
+        em.persist(user);
+        em.getTransaction().commit();               
     }
     
     public void write(Users user){

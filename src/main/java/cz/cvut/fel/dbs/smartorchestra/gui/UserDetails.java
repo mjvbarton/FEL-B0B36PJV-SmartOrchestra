@@ -390,10 +390,13 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
         labelPasswordChange.setText("Nastavení hesla");
 
         labelCurrentPasswd.setText("Současné heslo:");
+        labelCurrentPasswd.setEnabled(false);
 
         labelNewPasswd.setText("Nové heslo:");
 
         labelConfirmPasswd.setText("Nové heslo znovu:");
+
+        fieldCurrentPasswd.setEnabled(false);
 
         btnPasswdChange.setText("Změnit heslo");
         btnPasswdChange.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -573,7 +576,7 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSubmitActionPerformed
 
-    private void btnSubmitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSubmitMouseClicked
+    protected void btnSubmitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSubmitMouseClicked
         // TODO add your handling code here:
         controller.saveUser();
     }//GEN-LAST:event_btnSubmitMouseClicked
@@ -666,7 +669,7 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
     private javax.swing.ButtonGroup btnGroupPermissions;
     protected javax.swing.JButton btnPasswdChange;
     private javax.swing.JButton btnReset;
-    private javax.swing.JButton btnSubmit;
+    protected javax.swing.JButton btnSubmit;
     protected javax.swing.JLabel caption;
     private javax.swing.JTabbedPane content;
     private javax.swing.JPanel controls;
@@ -738,7 +741,11 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
         if(user.getAddrZipCode() != null){
             fieldAddrZipCode.setText(user.getAddrZipCode().toString());
         }
-        
+    }
+    
+    public void loadPermissions(boolean isAdministrator){
+        fieldPermSpecialAccount.setSelected(isAdministrator);
+        fieldPermCommonAccount.setSelected(!isAdministrator);
     }
           
     @Override
@@ -891,7 +898,11 @@ public class UserDetails extends javax.swing.JDialog implements UIControlled<Use
     public ButtonGroup getBtnGroupPermissions() {
         return btnGroupPermissions;
     }
-    
+
+    public JButton getBtnDeleteAccount() {
+        return btnDeleteAccount;
+    }
+        
     public void setExitCode(int exitCode) {
         this.exitCode = exitCode;
     }   
