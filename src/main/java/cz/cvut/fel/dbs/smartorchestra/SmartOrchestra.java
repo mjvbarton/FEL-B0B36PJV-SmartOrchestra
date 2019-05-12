@@ -8,10 +8,18 @@ package cz.cvut.fel.dbs.smartorchestra;
 import cz.cvut.fel.dbs.smartorchestra.gui.LoginScreen;
 import cz.cvut.fel.dbs.smartorchestra.gui.Main;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.persistence.*;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import org.hibernate.service.spi.ServiceException;
 
@@ -27,17 +35,30 @@ public class SmartOrchestra {
     private EntityManager em;
     private EntityManagerFactory emf;
     
+    private Image ico;
+    
     private LoginScreen loginScr;
     private Main mainWin;
     
     private Users activeUser;
     private boolean administrationActive;
+    
+    private SmartOrchestra(){
+        try{
+            ico = ImageIO.read(new File("src/main/resources/img/orchestra.png"));
+        } catch(IOException ex){
+            Logger.getLogger(SmartOrchestra.class.getName()).log(Level.SEVERE, "Cannot get icon. ", ex);
+            ico = null;
+        }
+        
+    }
         
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
         Logger.getLogger("").setLevel(Level.INFO);
         for(Handler h : Logger.getLogger("").getHandlers()){
             h.setLevel(Level.INFO);
@@ -105,6 +126,10 @@ public class SmartOrchestra {
 
     public void setAdministrationActive(boolean administrationActive) {
         this.administrationActive = administrationActive;
+    }
+
+    public Image getIco() {
+        return ico;
     }
         
     public static SmartOrchestra getInstance(){

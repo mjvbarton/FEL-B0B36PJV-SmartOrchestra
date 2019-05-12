@@ -5,6 +5,7 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
+import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
 import cz.cvut.fel.dbs.smartorchestra.UserLogin;
 
 /**
@@ -43,6 +44,7 @@ public class LoginScreen extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SmartOrchestra - Přihlásit se");
+        setIconImage(SmartOrchestra.getInstance().getIco());
         setMaximumSize(new java.awt.Dimension(400, 240));
         setMinimumSize(new java.awt.Dimension(400, 240));
         setPreferredSize(new java.awt.Dimension(400, 240));

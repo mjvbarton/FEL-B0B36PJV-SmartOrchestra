@@ -104,9 +104,11 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         jToolBar1.add(jButton3);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(700, 400));
+        setTitle("SmartOrchestra");
+        setIconImage(SmartOrchestra.getInstance().getIco());
+        setMinimumSize(new java.awt.Dimension(700, 535));
         setName("SmartOrchestra"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(700, 400));
+        setPreferredSize(new java.awt.Dimension(700, 535));
 
         content.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -164,7 +166,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
                 .add(fieldSearchUser, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 163, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(btnSearchUser)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 112, Short.MAX_VALUE)
                 .add(labelFilterSection)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(fieldFilterSection, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 120, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
