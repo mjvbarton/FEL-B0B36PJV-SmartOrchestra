@@ -5,6 +5,10 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
+import java.util.List;
+import javax.swing.JPanel;
+
 /**
  *
  * @author Matěj Bartoň
@@ -27,108 +31,102 @@ public class ShowEvents extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jToolBar1 = new javax.swing.JToolBar();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jPanel1 = new javax.swing.JPanel();
-        eventInfo4 = new cz.cvut.fel.dbs.smartorchestra.gui.EventInfo();
-        eventInfo5 = new cz.cvut.fel.dbs.smartorchestra.gui.EventInfo();
-        eventInfo6 = new cz.cvut.fel.dbs.smartorchestra.gui.EventInfo();
-        eventInfo8 = new cz.cvut.fel.dbs.smartorchestra.gui.EventInfo();
-        eventInfo7 = new cz.cvut.fel.dbs.smartorchestra.gui.EventInfo();
+        toolbar = new javax.swing.JToolBar();
+        toolbarContent = new javax.swing.JPanel();
+        labelFilterEvents = new javax.swing.JLabel();
+        fieldFilterEvents = new javax.swing.JComboBox<>();
+        btnAddEvent = new javax.swing.JButton();
+        contentScroll = new javax.swing.JScrollPane();
+        content = new javax.swing.JPanel();
 
         setMinimumSize(new java.awt.Dimension(640, 300));
         setPreferredSize(new java.awt.Dimension(640, 300));
         setLayout(new java.awt.BorderLayout());
 
-        jToolBar1.setFloatable(false);
-        jToolBar1.setRollover(true);
-        jToolBar1.setMaximumSize(new java.awt.Dimension(18, 40));
-        jToolBar1.setMinimumSize(new java.awt.Dimension(18, 40));
-        jToolBar1.setPreferredSize(new java.awt.Dimension(40, 50));
+        toolbar.setFloatable(false);
+        toolbar.setRollover(true);
+        toolbar.setMaximumSize(new java.awt.Dimension(18, 40));
+        toolbar.setMinimumSize(new java.awt.Dimension(18, 40));
+        toolbar.setPreferredSize(new java.awt.Dimension(40, 50));
 
-        jPanel2.setPreferredSize(new java.awt.Dimension(547, 50));
+        toolbarContent.setPreferredSize(new java.awt.Dimension(547, 50));
 
-        jLabel1.setText("Zobrazení událostí:");
+        labelFilterEvents.setText("Zobrazení událostí:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nadcházející", "Uplynulé", "Všechny události" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        fieldFilterEvents.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nadcházející", "Uplynulé", "Všechny události" }));
+        fieldFilterEvents.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                fieldFilterEventsActionPerformed(evt);
             }
         });
 
-        jButton1.setText("Přidat událost");
-        jButton1.setEnabled(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnAddEvent.setText("Přidat událost");
+        btnAddEvent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnAddEventActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout toolbarContentLayout = new javax.swing.GroupLayout(toolbarContent);
+        toolbarContent.setLayout(toolbarContentLayout);
+        toolbarContentLayout.setHorizontalGroup(
+            toolbarContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(toolbarContentLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(labelFilterEvents)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldFilterEvents, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 218, Short.MAX_VALUE)
-                .addComponent(jButton1))
+                .addComponent(btnAddEvent))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        toolbarContentLayout.setVerticalGroup(
+            toolbarContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(toolbarContentLayout.createSequentialGroup()
                 .addGap(7, 7, 7)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE))
+                .addGroup(toolbarContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelFilterEvents, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fieldFilterEvents, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddEvent, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
-        jToolBar1.add(jPanel2);
+        toolbar.add(toolbarContent);
 
-        add(jToolBar1, java.awt.BorderLayout.PAGE_START);
+        add(toolbar, java.awt.BorderLayout.PAGE_START);
 
-        jPanel1.setLayout(new java.awt.GridLayout(10, 1));
-        jPanel1.add(eventInfo4);
-        jPanel1.add(eventInfo5);
-        jPanel1.add(eventInfo6);
-        jPanel1.add(eventInfo8);
-        jPanel1.add(eventInfo7);
+        content.setLayout(new javax.swing.BoxLayout(content, javax.swing.BoxLayout.PAGE_AXIS));
+        contentScroll.setViewportView(content);
 
-        jScrollPane1.setViewportView(jPanel1);
-
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        add(contentScroll, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void fieldFilterEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldFilterEventsActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_fieldFilterEventsActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnAddEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddEventActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnAddEventActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private cz.cvut.fel.dbs.smartorchestra.gui.EventInfo eventInfo4;
-    private cz.cvut.fel.dbs.smartorchestra.gui.EventInfo eventInfo5;
-    private cz.cvut.fel.dbs.smartorchestra.gui.EventInfo eventInfo6;
-    private cz.cvut.fel.dbs.smartorchestra.gui.EventInfo eventInfo7;
-    private cz.cvut.fel.dbs.smartorchestra.gui.EventInfo eventInfo8;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JButton btnAddEvent;
+    private javax.swing.JPanel content;
+    private javax.swing.JScrollPane contentScroll;
+    private javax.swing.JComboBox<String> fieldFilterEvents;
+    private javax.swing.JLabel labelFilterEvents;
+    private javax.swing.JToolBar toolbar;
+    private javax.swing.JPanel toolbarContent;
     // End of variables declaration//GEN-END:variables
+
+    public JPanel getContent() {
+        return content;
+    }
+    
+    public void loadEvents(List<Events> events){
+        content.removeAll();
+        for(Events event : events){
+            content.add(new EventInfo(event));
+        }
+    }
 }

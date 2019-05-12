@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Sections.findAll", query = "SELECT s FROM Sections s")
     , @NamedQuery(name = "Sections.findBySeid", query = "SELECT s FROM Sections s WHERE s.seid = :seid")
     , @NamedQuery(name = "Sections.findBySectionname", query = "SELECT s FROM Sections s WHERE s.sectionname = :sectionname")
-    , @NamedQuery(name = "Sections.findBySectiontype", query = "SELECT s FROM Sections s WHERE s.sectiontype = :sectiontype")
+    , @NamedQuery(name = "Sections.findActiveBySectiontype", query = "SELECT s FROM Sections s WHERE s.sectiontype = :sectiontype AND s.aktivni = TRUE")
     , @NamedQuery(name = "Sections.findByAktivni", query = "SELECT s FROM Sections s WHERE s.aktivni = :aktivni")})
 public class Sections implements Serializable {
 

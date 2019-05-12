@@ -31,6 +31,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
     public Main() {
         initComponents();
         setUIController(SmartOrchestra.getInstance().getController(this));
+        controller.loadEvents();
     }
 
     /**
@@ -345,7 +346,6 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
 
     private void fileViewProfileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fileViewProfileMouseClicked
         // TODO add your handling code here:
-        System.out.println("Turning on controller");
         controller.showUserProfile();
     }//GEN-LAST:event_fileViewProfileMouseClicked
 
@@ -380,9 +380,10 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
 
     private void contentStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_contentStateChanged
         // TODO add your handling code here:
-        System.out.println(content.getSelectedIndex());
         if(content.getSelectedIndex() == 1){
             controller.loadUsersToTable();
+        } else if(content.getSelectedIndex() == 1){
+            controller.loadEvents();
         }
     }//GEN-LAST:event_contentStateChanged
 
@@ -508,5 +509,9 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
             userTable.getColumnModel().getColumn(6).setResizable(false);
             userTable.getColumnModel().getColumn(6).setPreferredWidth(100);
         }
+    }
+
+    public ShowEvents getEvents() {
+        return events;
     }
 }

@@ -7,6 +7,7 @@
     <class>cz.cvut.fel.dbs.smartorchestra.model.entities.Sections</class>
     <class>cz.cvut.fel.dbs.smartorchestra.model.entities.Events</class>
     <class>cz.cvut.fel.dbs.smartorchestra.model.entities.Administrators</class>
+    <class>cz.cvut.fel.dbs.smartorchestra.model.entities.Participants</class>
     <properties>
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
       <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>

@@ -5,16 +5,138 @@
  */
 package cz.cvut.fel.dbs.smartorchestra;
 
+import cz.cvut.fel.dbs.smartorchestra.exceptions.WrongInputException;
 import cz.cvut.fel.dbs.smartorchestra.gui.EventDetails;
+import cz.cvut.fel.dbs.smartorchestra.model.EventAdmin;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Matěj Bartoň
  */
-public class EventSettings {
+public class EventSettings implements UIController<EventDetails>{
 
-    public EventSettings(EventDetails aThis) {
+    private EventDetails controled;
+    private Events event;
+    
+    public EventSettings(EventDetails controled) {
+        setControlled(controled);
+    }
+
+    @Override
+    public void setControlled(EventDetails controled) {
+        this.controled = controled;
+    }
+    
+    public void loadEvent(int evid){
         
     }
+    
+    public void loadEvent(Events event){
+        this.event = event;
+        controled.getFieldName().setText(event.getEventname());
+        DateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        controled.getFieldBeginsDate().setText(f.format(event.getBegins()));
+        controled.getFieldEndsDate().setText(f.format(event.getEnds()));
+        
+        controled.getFieldAddrInstitution().setText(event.getAddrinstitution());
+        controled.getFieldAddrStreet().setText(event.getAddrstreet());
+        controled.getFieldAddrHouseNumber().setText(event.getAddrhousenumber());
+        controled.getFieldAddrTown().setText(event.getAddrtown());
+        controled.getFieldAddrZipCode().setText(event.getAddrzipcode().toString());
+    }
+           
+    public void saveEvent(){
+        saveEvent(event);
+    }
+    
+    public void saveEvent(Events event){
+        controled.clearInfos();
+        boolean noFail = true;
+        try {
+            event.setEventname(controled.getFieldName().getText());
+        } catch (WrongInputException ex) {
+            Logger.getLogger(EventSettings.class.getName()).log(Level.FINE, "Validation of event.name failed: {0}", ex.getMessage());
+            controled.getInfoName().setText(ex.getMessage());
+            noFail = false;
+        }
+        
+        try {
+            event.setBegins(controled.getFieldBeginsDate().getText());
+        } catch (WrongInputException ex) {
+            Logger.getLogger(EventSettings.class.getName()).log(Level.FINE, "Validation of event.begins failed: {0}", ex.getMessage());
+            controled.getInfoBeginsDate().setText(ex.getMessage());
+            noFail = false;
+        }
+        
+        try {
+            event.setEnds(controled.getFieldEndsDate().getText());
+        } catch (WrongInputException ex) {
+            Logger.getLogger(EventSettings.class.getName()).log(Level.FINE, "Validation of event.ends failed: {0}", ex.getMessage());
+            controled.getInfoEndsDate().setText(ex.getMessage());
+            noFail = false;
+        }
+        
+        try {
+            event.setAddrinstitution(controled.getFieldAddrInstitution().getText());
+        } catch (WrongInputException ex) {
+            Logger.getLogger(EventSettings.class.getName()).log(Level.FINE, "Validation of event.addrInstitution failed: {0}", ex.getMessage());
+            controled.getInfoAddrInstitution().setText(ex.getMessage());
+            noFail = false;
+        }
+        
+        try {
+            event.setAddrstreet(controled.getFieldAddrStreet().getText());
+        } catch (WrongInputException ex) {
+            Logger.getLogger(EventSettings.class.getName()).log(Level.FINE, "Validation of event.addrStreet failed: {0}", ex.getMessage());
+            controled.getInfoAddrStreet().setText(ex.getMessage());
+            noFail = false;
+        }
+        
+        try {
+            event.setAddrtown(controled.getFieldAddrTown().getText());
+        } catch (WrongInputException ex) {
+            Logger.getLogger(EventSettings.class.getName()).log(Level.FINE, "Validation of event.addrTown failed: {0}", ex.getMessage());
+            controled.getInfoAddrTown().setText(ex.getMessage());
+            noFail = false;
+        }
+        
+        try {
+            event.setAddrZipCode(controled.getFieldAddrZipCode().getText());
+        } catch (WrongInputException ex) {
+            Logger.getLogger(EventSettings.class.getName()).log(Level.FINE, "Validation of event.addrZipCode failed: {0}", ex.getMessage());
+            controled.getInfoAddrZipCode().setText(ex.getMessage());
+            noFail = false;
+        }
+        
+        if(!noFail){
+            JOptionPane.showMessageDialog(controled, "Ukládání události se nezdařilo.", controled.getTitle(),
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        EventAdmin ea = new EventAdmin();
+        try{
+            ea.saveEvent(event);
+            Logger.getLogger(EventSettings.class.getName()).log(Level.INFO, "Event {0} was created.", event);
+            JOptionPane.showMessageDialog(controled, "Událost byla uložena.", 
+                    controled.getTitle(), JOptionPane.INFORMATION_MESSAGE);
+        } catch(Exception ex){
+            Logger.getLogger(EventSettings.class.getName()).log(Level.SEVERE, "Unable to create event: " + event, ex);
+            JOptionPane.showMessageDialog(controled, "Chyba při běhu programu: " + ex.getMessage(), 
+                    controled.getTitle(), JOptionPane.ERROR_MESSAGE);
+        } finally {
+            controled.dispose();
+        }
+    }
+    
+    
+
+    
     
 }

@@ -7,6 +7,7 @@ package cz.cvut.fel.dbs.smartorchestra.gui;
 
 import cz.cvut.fel.dbs.smartorchestra.EventSettings;
 import cz.cvut.fel.dbs.smartorchestra.UIControlled;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.SectionType;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,7 +19,12 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -92,8 +98,6 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
             }
         });
     }
-    
-    
 
     public EventDetails(Frame owner) {
         super(owner, true);
@@ -101,7 +105,7 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     }
 
-    private int doModal() {
+    public int doModal() {
         setVisible(true);
         return 0;
     }
@@ -113,7 +117,18 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
 
     @Override
     public void setUIController(EventSettings controller) {
-        this.controller = new EventSettings(this);
+        this.controller = controller;
+    }
+
+    public void clearInfos() {
+        infoName.setText("");
+        infoBeginsDate.setText("");
+        infoEndsDate.setText("");
+        infoAddrInstitution.setText("");
+        infoAddrStreet.setText("");
+        infoAddrHouseNumber.setText("");
+        infoAddrTown.setText("");
+        infoAddrZipCode.setText("");
     }
     
     private class Formfield<T>{
@@ -146,26 +161,7 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
             parent.add(c);
         }
     }
-       
-    private enum SectionType{
-        STRINGS(0, "smyčce"),
-        WINDS(1, "dechy"),
-        OTHER(2, "ostatní");
-        
-        private final int index;
-        private final String name;
-        
-        private SectionType(int index, String name){
-            this.index = index;
-            this.name = name;
-        }
-        
-        @Override
-        public String toString() {
-            return name;
-        }       
-    }
-    
+           
     private class SectionGroup extends JPanel{
         private JButton caption;
         private List<JCheckBox> sections;
@@ -223,17 +219,51 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
         fieldName = name.field;
         infoName = name.info;
         
-        Formfield<JPanel> begins = new Formfield(tabCommon, "Začátek:", new JPanel());
-        fieldBeginsDate = new JTextField(6);
-        fieldBeginsTime = new JTextField(3);
-        begins.field.add(fieldBeginsDate);
-        begins.field.add(fieldBeginsTime);
+        Formfield<JTextField> begins = new Formfield(tabCommon, "Začátek:", new JTextField(10));
+        infoBeginsDate = begins.info;
+        fieldBeginsDate = begins.field;
+        fieldBeginsDate.addMouseListener(new MouseListener(){
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+                
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(fieldBeginsDate.getText().isEmpty()){
+                    DateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+                    fieldBeginsDate.setText(f.format(new Date()));
+                }
+            }
+        });
         
-        Formfield<JPanel> ends = new Formfield(tabCommon, "Konec:", new JPanel());
-        fieldEndsDate = new JTextField(6);
-        fieldEndsTime = new JTextField(3);
-        ends.field.add(fieldEndsDate);  
-        ends.field.add(fieldEndsTime);
+        
+        Formfield<JTextField> ends = new Formfield(tabCommon, "Konec:", new JTextField(10));
+        infoEndsDate = ends.info;
+        fieldEndsDate = ends.field;
+        fieldEndsDate.addMouseListener(new MouseListener(){
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+                
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(fieldEndsDate.getText().isEmpty()){
+                    DateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+                    fieldEndsDate.setText(f.format(new Date()));
+                }
+            }
+        });
+            
         
         Formfield<JTextField> inst = new Formfield(tabCommon, "Název instituce:", new JTextField(15));
         fieldAddrInstitution = inst.field;
@@ -363,7 +393,7 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
     }
     
     protected void btnSubmitClicked(ActionEvent e){
-        
+        controller.saveEvent();
     }
     
     protected void btnCancelClicked(ActionEvent e){
@@ -373,5 +403,87 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
     protected void btnDeleteEventClicked(ActionEvent e){
         
     }
+
+    public JTextField getFieldName() {
+        return fieldName;
+    }
+
+    public JTextField getFieldBeginsDate() {
+        return fieldBeginsDate;
+    }
+
+    public JTextField getFieldBeginsTime() {
+        return fieldBeginsTime;
+    }
+
+    public JTextField getFieldEndsDate() {
+        return fieldEndsDate;
+    }
+
+    public JTextField getFieldEndsTime() {
+        return fieldEndsTime;
+    }
+
+    public JTextField getFieldAddrInstitution() {
+        return fieldAddrInstitution;
+    }
+
+    public JTextField getFieldAddrStreet() {
+        return fieldAddrStreet;
+    }
+
+    public JTextField getFieldAddrHouseNumber() {
+        return fieldAddrHouseNumber;
+    }
+
+    public JTextField getFieldAddrTown() {
+        return fieldAddrTown;
+    }
+
+    public JTextField getFieldAddrZipCode() {
+        return fieldAddrZipCode;
+    }
+
+    public JLabel getInfoName() {
+        return infoName;
+    }
+
+    public JLabel getInfoBeginsDate() {
+        return infoBeginsDate;
+    }
+
+    public JLabel getInfoBeginsTime() {
+        return infoBeginsTime;
+    }
+
+    public JLabel getInfoEndsDate() {
+        return infoEndsDate;
+    }
+
+    public JLabel getInfoEndsTime() {
+        return infoEndsTime;
+    }
+
+    public JLabel getInfoAddrInstitution() {
+        return infoAddrInstitution;
+    }
+
+    public JLabel getInfoAddrStreet() {
+        return infoAddrStreet;
+    }
+
+    public JLabel getInfoAddrHouseNumber() {
+        return infoAddrHouseNumber;
+    }
+
+    public JLabel getInfoAddrTown() {
+        return infoAddrTown;
+    }
+
+    public JLabel getInfoAddrZipCode() {
+        return infoAddrZipCode;
+    }
+    
+    
     
 }

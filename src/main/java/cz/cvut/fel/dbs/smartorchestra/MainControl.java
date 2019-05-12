@@ -7,15 +7,18 @@ package cz.cvut.fel.dbs.smartorchestra;
 
 import cz.cvut.fel.dbs.smartorchestra.exceptions.UserAdminException;
 import cz.cvut.fel.dbs.smartorchestra.gui.Main;
+import cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents;
 import cz.cvut.fel.dbs.smartorchestra.gui.UserDetails;
 import cz.cvut.fel.dbs.smartorchestra.gui.UserRegistration;
 import cz.cvut.fel.dbs.smartorchestra.gui.ViewProfile;
+import cz.cvut.fel.dbs.smartorchestra.model.EventAdmin;
 import cz.cvut.fel.dbs.smartorchestra.model.UserAdmin;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -25,10 +28,12 @@ public class MainControl implements UIController<Main>{
     private Main controled;
     
     private boolean adminAccess = true;
+    private ShowEvents showEvents;
     private UserAdmin ua;
     
     public MainControl(Main mainWin){
         setControlled(mainWin);
+        showEvents = controled.getEvents();
         ua = new UserAdmin();        
     }
     
@@ -49,6 +54,21 @@ public class MainControl implements UIController<Main>{
     @Override
     public void setControlled(Main controled) {
         this.controled = controled;
+    }
+    
+    public void loadEvents(){
+        EventAdmin ea = new EventAdmin();
+        try {
+            controled.getEvents().loadEvents(ea.loadEvents());
+        } catch (NoResultException ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.INFO, "No events found.");
+            JOptionPane.showMessageDialog(controled, "Seznam událostí je prázdný.", 
+                    controled.getTitle(), JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, "Unable to load events.", ex);
+            JOptionPane.showMessageDialog(controled, "Chyba v běhu programu: " + ex.getMessage(), 
+                    controled.getTitle(), JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     public void loadUsersToTable(){
