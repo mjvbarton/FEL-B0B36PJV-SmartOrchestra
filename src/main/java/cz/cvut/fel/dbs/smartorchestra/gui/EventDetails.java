@@ -162,7 +162,7 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
         }
     }
            
-    private class SectionGroup extends JPanel{
+    public class SectionGroup extends JPanel{
         private JButton caption;
         private List<JCheckBox> sections;
         private JPanel content;
@@ -171,7 +171,7 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
             sections = new ArrayList();
             setLayout(new BorderLayout());
             caption = new JButton();
-            caption.setText(sectionType.toString());
+            caption.setText(sectionType.toString(true));
             caption.addActionListener(new ActionListener(){
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -372,7 +372,7 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
         setSize(new Dimension(480,410));
         
         // TEST DATA
-        List<Sections> secStrings = new ArrayList();
+        /*List<Sections> secStrings = new ArrayList();
         secStrings.add(new Sections(1, "I.housle", SectionType.STRINGS.toString(), true));
         secStrings.add(new Sections(1, "II.housle", SectionType.STRINGS.toString(), true));
         secStrings.add(new Sections(1, "Viola", SectionType.STRINGS.toString(), true));
@@ -388,7 +388,7 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
         secOther.add(new Sections(1, "Klavír", SectionType.STRINGS.toString(), true));
         secOther.add(new Sections(1, "Sbor", SectionType.STRINGS.toString(), true));
         secOther.add(new Sections(1, "Perkuse", SectionType.STRINGS.toString(), true));
-        groupOther.loadSections(secOther);
+        groupOther.loadSections(secOther);*/
         
     }
     
@@ -482,6 +482,18 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
 
     public JLabel getInfoAddrZipCode() {
         return infoAddrZipCode;
+    }
+
+    public SectionGroup getGroupStrings() {
+        return groupStrings;
+    }
+
+    public SectionGroup getGroupWinds() {
+        return groupWinds;
+    }
+
+    public SectionGroup getGroupOther() {
+        return groupOther;
     }
     
     

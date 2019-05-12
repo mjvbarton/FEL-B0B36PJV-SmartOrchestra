@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +22,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 /**
  *
@@ -27,12 +31,16 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "sections")
+@TypeDef(
+        name = "section_type",
+        typeClass = PostgreSQLEnumType.class
+)
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Sections.findAll", query = "SELECT s FROM Sections s")
     , @NamedQuery(name = "Sections.findBySeid", query = "SELECT s FROM Sections s WHERE s.seid = :seid")
     , @NamedQuery(name = "Sections.findBySectionname", query = "SELECT s FROM Sections s WHERE s.sectionname = :sectionname")
-    , @NamedQuery(name = "Sections.findActiveBySectiontype", query = "SELECT s FROM Sections s WHERE s.sectiontype = :sectiontype AND s.aktivni = TRUE")
+    , @NamedQuery(name = "Sections.findActiveBySectiontype", query = "SELECT s FROM Sections s WHERE s.sectiontype = :sectiontype AND s.aktivni = TRUE ORDER BY s.seid")
     , @NamedQuery(name = "Sections.findByAktivni", query = "SELECT s FROM Sections s WHERE s.aktivni = :aktivni")})
 public class Sections implements Serializable {
 
@@ -46,8 +54,10 @@ public class Sections implements Serializable {
     @Column(name = "sectionname")
     private String sectionname;
     @Basic(optional = false)
+    @Enumerated(EnumType.STRING)
     @Column(name = "sectiontype")
-    private String sectiontype;
+    @Type(type = "section_type")
+    private SectionType sectiontype;
     @Basic(optional = false)
     @Column(name = "aktivni")
     private boolean aktivni;
@@ -61,7 +71,7 @@ public class Sections implements Serializable {
         this.seid = seid;
     }
 
-    public Sections(Integer seid, String sectionname, String sectiontype, boolean aktivni) {
+    public Sections(Integer seid, String sectionname, SectionType sectiontype, boolean aktivni) {
         this.seid = seid;
         this.sectionname = sectionname;
         this.sectiontype = sectiontype;
@@ -84,11 +94,11 @@ public class Sections implements Serializable {
         this.sectionname = sectionname;
     }
 
-    public String getSectiontype() {
+    public SectionType getSectiontype() {
         return sectiontype;
     }
 
-    public void setSectiontype(String sectiontype) {
+    public void setSectiontype(SectionType sectiontype) {
         this.sectiontype = sectiontype;
     }
 

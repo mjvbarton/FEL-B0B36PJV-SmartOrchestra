@@ -9,6 +9,7 @@ import cz.cvut.fel.dbs.smartorchestra.exceptions.WrongInputException;
 import cz.cvut.fel.dbs.smartorchestra.gui.EventDetails;
 import cz.cvut.fel.dbs.smartorchestra.model.EventAdmin;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.SectionType;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
@@ -49,6 +50,23 @@ public class EventSettings implements UIController<EventDetails>{
         controled.getFieldAddrHouseNumber().setText(event.getAddrhousenumber());
         controled.getFieldAddrTown().setText(event.getAddrtown());
         controled.getFieldAddrZipCode().setText(event.getAddrzipcode().toString());
+        
+        EventAdmin ea = new EventAdmin();
+        try {
+            ea.loadSections();
+            controled.getGroupStrings().loadSections(SectionType.STRINGS.getSections());
+            controled.getGroupWinds().loadSections(SectionType.WINDS.getSections());
+            controled.getGroupOther().loadSections(SectionType.OTHER.getSections());
+            Logger.getLogger(EventSettings.class.getName()).log(Level.INFO, "Loaded sections to SectionType enum.");
+            ea.checkSections(event, controled.getGroupStrings().getSections(), SectionType.STRINGS);
+            ea.checkSections(event, controled.getGroupWinds().getSections(), SectionType.WINDS);
+            ea.checkSections(event, controled.getGroupOther().getSections(), SectionType.OTHER);
+            
+        } catch (Exception ex) {
+            Logger.getLogger(EventSettings.class.getName()).log(Level.SEVERE, "Cannot read sections.", ex);
+            JOptionPane.showMessageDialog(controled, "Chyba při běhu programu: " + ex.getMessage(),
+                    controled.getTitle(), JOptionPane.ERROR_MESSAGE);
+        }
     }
            
     public void saveEvent(){
@@ -124,6 +142,9 @@ public class EventSettings implements UIController<EventDetails>{
         try{
             ea.saveEvent(event);
             Logger.getLogger(EventSettings.class.getName()).log(Level.INFO, "Event {0} was created.", event);
+            ea.sendInvitations(event, controled.getGroupStrings().getSections(), SectionType.STRINGS);
+            //ea.sendInvitations(event, controled.getGroupWinds().getSections(), SectionType.WINDS);
+            //ea.sendInvitations(event, controled.getGroupOther().getSections(), SectionType.OTHER);
             JOptionPane.showMessageDialog(controled, "Událost byla uložena.", 
                     controled.getTitle(), JOptionPane.INFORMATION_MESSAGE);
         } catch(Exception ex){
@@ -134,9 +155,4 @@ public class EventSettings implements UIController<EventDetails>{
             controled.dispose();
         }
     }
-    
-    
-
-    
-    
 }

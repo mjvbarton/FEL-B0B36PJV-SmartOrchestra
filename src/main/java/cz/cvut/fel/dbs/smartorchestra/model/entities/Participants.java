@@ -32,6 +32,9 @@ public class Participants implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected ParticipantsPK participantsPK;
+    @JoinColumn(name = "seid", referencedColumnName = "seid")
+    @ManyToOne(optional = false)
+    private Sections seid;
     @Column(name = "message")
     private String message;
     @Column(name = "active")
@@ -39,6 +42,9 @@ public class Participants implements Serializable {
     @JoinColumn(name = "evid", referencedColumnName = "evid", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Events events;
+    @JoinColumn(name = "uid", referencedColumnName = "uid", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Users users;    
 
     public Participants() {
     }
@@ -50,6 +56,8 @@ public class Participants implements Serializable {
     public Participants(int uid, int evid) {
         this.participantsPK = new ParticipantsPK(uid, evid);
     }
+    
+    
 
     public ParticipantsPK getParticipantsPK() {
         return participantsPK;
@@ -83,6 +91,22 @@ public class Participants implements Serializable {
         this.events = events;
     }
 
+    public Sections getSeid() {
+        return seid;
+    }
+
+    public void setSeid(Sections seid) {
+        this.seid = seid;
+    }
+
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
+    }
+       
     @Override
     public int hashCode() {
         int hash = 0;

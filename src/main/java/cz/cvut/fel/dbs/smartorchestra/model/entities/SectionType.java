@@ -12,17 +12,19 @@ import java.util.List;
  * @author Matěj Bartoň
  */
 public enum SectionType{
-        STRINGS(0, "smyčce"),
-        WINDS(1, "dechy"),
-        OTHER(2, "ostatní");
+        STRINGS(0, "STRINGS", "smyčce"),
+        WINDS(1, "WINDS", "dechy"),
+        OTHER(2, "OTHER", "ostatní");
         
         private List<Sections> sections;
         private final int index;
-        private final String name;
+        private final String dbName;
+        private final String appName;
         
-        private SectionType(int index, String name){
+        private SectionType(int index, String dbName, String appName){
             this.index = index;
-            this.name = name;
+            this.dbName = dbName;
+            this.appName = appName;
         }
 
     public List<Sections> getSections() {
@@ -35,6 +37,10 @@ public enum SectionType{
                 
     @Override
     public String toString() {
-        return name;
-    }       
+        return dbName;
+    }
+    
+    public String toString(boolean showAppName){
+        return showAppName ? appName : toString();
+    }
 }

@@ -30,7 +30,7 @@ public class SectionReader extends DAO{
     public List<Sections> getSectionsBySectionType(SectionType type){
         try{
             return em.createNamedQuery("Sections.findActiveBySectiontype", Sections.class)
-                    .setParameter("sectiontype", type.toString()).getResultList();
+                    .setParameter("sectiontype", type).getResultList();
         } catch(NoResultException ex){
             Logger.getLogger(SectionReader.class.getName()).log(Level.WARNING, "No sections found for section type: {0}", type);
             return new ArrayList();
