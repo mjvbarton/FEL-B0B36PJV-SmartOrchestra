@@ -101,6 +101,12 @@ public class SmartOrchestra implements ThreadEntityManager{
     public void runMainWindow(){
         loginScr.dispose();
         mainWin = new Main();
+        mainWin.getActiveUserName().setText(
+                        String.format(mainWin.getActiveUserName().getText(),
+                                activeUser.getFirstName(),
+                                activeUser.getFamilyName(),
+                                activeUser.getEmail()
+                        ));
         java.awt.EventQueue.invokeLater(new Runnable(){
             public void run(){
                 mainWin.setVisible(true);

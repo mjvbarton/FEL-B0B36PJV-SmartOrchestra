@@ -10,13 +10,17 @@ import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
 import cz.cvut.fel.dbs.smartorchestra.UIControlled;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import javax.swing.Box;
+import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -29,6 +33,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
             };
     public static final int TAB_EVENTS = 0;
     public static final int TAB_USERS = 1;
+    private JLabel activeUserName;
        
     private MainControl controller;
     /**
@@ -66,6 +71,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         btnAddUser = new javax.swing.JButton();
         userContent = new javax.swing.JScrollPane();
         userTable = new javax.swing.JTable();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         mainMenu = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         fileAddEvent = new javax.swing.JMenuItem();
@@ -283,6 +289,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         content.addTab("Přehled uživatelů", jPanel1);
 
         getContentPane().add(content, java.awt.BorderLayout.PAGE_START);
+        getContentPane().add(filler1, java.awt.BorderLayout.CENTER);
 
         fileMenu.setText("Soubor");
         fileMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -319,6 +326,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         fileMenu.add(fileViewProfile);
         fileMenu.add(fileSeparator2);
 
+        fileQuit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         fileQuit.setText("Ukončit aplikaci");
         fileQuit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -328,6 +336,13 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         fileMenu.add(fileQuit);
 
         mainMenu.add(fileMenu);
+        activeUserName = new JLabel("%s %s (%s)");
+        activeUserName.setBorder(new EmptyBorder(0,0,0,5));
+        Font f = activeUserName.getFont();
+        activeUserName.setVerticalTextPosition(JLabel.CENTER);
+        activeUserName.setFont(f.deriveFont(f.getStyle() & ~Font.BOLD, 11));
+        mainMenu.add(Box.createHorizontalGlue());
+        mainMenu.add(activeUserName);
 
         setJMenuBar(mainMenu);
 
@@ -448,6 +463,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
     private javax.swing.JPopupMenu.Separator fileSeparator1;
     private javax.swing.JPopupMenu.Separator fileSeparator2;
     private javax.swing.JMenuItem fileViewProfile;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -525,4 +541,10 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
     public JTabbedPane getContent() {
         return content;
     }
+
+    public JLabel getActiveUserName() {
+        return activeUserName;
+    }
+    
+    
 }

@@ -59,6 +59,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fileMenuActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="activeUserName = new JLabel(&quot;%s %s (%s)&quot;);&#xa;activeUserName.setBorder(new EmptyBorder(0,0,0,5));&#xa;Font f = activeUserName.getFont();&#xa;activeUserName.setVerticalTextPosition(JLabel.CENTER);&#xa;activeUserName.setFont(f.deriveFont(f.getStyle() &amp; ~Font.BOLD, 11));&#xa;mainMenu.add(Box.createHorizontalGlue());&#xa;mainMenu.add(activeUserName);"/>
+          </AuxValues>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="fileAddEvent">
               <Properties>
@@ -90,6 +93,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="fileQuit">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Alt+F4"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Ukon&#x10d;it aplikaci"/>
               </Properties>
               <Events>
@@ -597,5 +603,20 @@
         </Container>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.Box$Filler" name="filler1">
+      <Properties>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[32767, 0]"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
+      </AuxValues>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+          <BorderConstraints direction="Center"/>
+        </Constraint>
+      </Constraints>
+    </Component>
   </SubComponents>
 </Form>
