@@ -48,7 +48,7 @@ public class UserLogin{
             email.setText("");
             passwd.setText("");
         } catch (Exception err){
-            Logger.getLogger(UserLogin.class.getName()).log(Level.SEVERE, null, err);
+            Logger.getLogger(UserLogin.class.getName()).log(Level.SEVERE, "Cannot login.", err);
             JOptionPane.showMessageDialog(scr, "Chyba při běhu programu. Pro více informací zkontrolujte log.", "Chyba",
                     JOptionPane.ERROR_MESSAGE);
             email.setText("");

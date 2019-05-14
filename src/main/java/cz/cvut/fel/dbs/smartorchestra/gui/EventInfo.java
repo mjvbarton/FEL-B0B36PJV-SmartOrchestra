@@ -7,6 +7,7 @@ package cz.cvut.fel.dbs.smartorchestra.gui;
 
 import cz.cvut.fel.dbs.smartorchestra.Participation;
 import cz.cvut.fel.dbs.smartorchestra.UIControlled;
+import cz.cvut.fel.dbs.smartorchestra.gui.helpers.EventUpdaterPause;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,6 +28,8 @@ public class EventInfo extends javax.swing.JPanel implements UIControlled<Partic
         controller.setControlled(this);
         initComponents();
         updateEventInfo(event);
+        btnShowDetails.addActionListener(new EventUpdaterPause());
+        //btnShowParticipants.addActionListener(new EventUpdaterPause());
     }
     
     public void updateEventInfo(Events event){

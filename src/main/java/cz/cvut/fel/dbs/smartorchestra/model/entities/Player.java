@@ -55,7 +55,7 @@ public class Player implements Serializable {
         return uid;
     }
 
-    public void setUid(Long uid) {
+    public synchronized void setUid(Long uid) {
         this.uid = uid;
     }
 
@@ -63,7 +63,7 @@ public class Player implements Serializable {
         return concertmaster;
     }
 
-    public void setConcertmaster(Boolean concertmaster) {
+    public synchronized void setConcertmaster(Boolean concertmaster) {
         this.concertmaster = concertmaster;
     }
 
@@ -71,7 +71,7 @@ public class Player implements Serializable {
         return seid;
     }
 
-    public void setSeid(Sections seid) {
+    public synchronized void setSeid(Sections seid) {
         this.seid = seid;
     }
 

@@ -8,6 +8,7 @@ package cz.cvut.fel.dbs.smartorchestra;
 import cz.cvut.fel.dbs.smartorchestra.gui.EventDetails;
 import cz.cvut.fel.dbs.smartorchestra.gui.EventInfo;
 import cz.cvut.fel.dbs.smartorchestra.gui.UserDetails;
+import cz.cvut.fel.dbs.smartorchestra.gui.helpers.EventUpdaterResume;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import javax.swing.SwingUtilities;
 
@@ -28,6 +29,7 @@ public class Participation implements UIController<EventInfo>{
             @Override
             public void run() {
                 EventDetails dialog = new EventDetails(SmartOrchestra.getInstance().getMainWin());
+                dialog.addWindowListener(new EventUpdaterResume());
                 EventSettings es = new EventSettings(dialog);
                 dialog.setUIController(es);
                 es.loadEvent(event);                

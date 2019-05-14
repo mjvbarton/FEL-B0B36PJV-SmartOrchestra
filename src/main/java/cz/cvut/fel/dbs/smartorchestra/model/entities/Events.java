@@ -90,7 +90,7 @@ public class Events implements Serializable {
         return evid;
     }
 
-    public void setEvid(Integer evid) {
+    public synchronized void setEvid(Integer evid) {
         this.evid = evid;
     }
 
@@ -98,7 +98,7 @@ public class Events implements Serializable {
         return eventname;
     }
 
-    public void setEventname(String eventname) throws WrongInputException{
+    public synchronized void setEventname(String eventname) throws WrongInputException{
         if(eventname.isEmpty()){
             throw new WrongInputException("Nevyplnili jste toto pole");
         }
@@ -109,11 +109,11 @@ public class Events implements Serializable {
         return begins;
     }
 
-    public void setBegins(Date begins){
+    public synchronized void setBegins(Date begins){
         this.begins = begins;
     }
     
-    public void setBegins(String begins) throws WrongInputException{
+    public synchronized void setBegins(String begins) throws WrongInputException{
         if(begins.isEmpty()){
             throw new WrongInputException("Nevyplnili jste toto pole");
         }
@@ -130,11 +130,11 @@ public class Events implements Serializable {
         return ends;
     }
 
-    public void setEnds(Date ends) {
+    public synchronized void setEnds(Date ends) {
         this.ends = ends;
     }
     
-    public void setEnds(String ends) throws WrongInputException{
+    public synchronized void setEnds(String ends) throws WrongInputException{
         if(ends.isEmpty()){
             throw new WrongInputException("Nevyplnili jste toto pole");
         }
@@ -151,7 +151,7 @@ public class Events implements Serializable {
         return addrinstitution;
     }
 
-    public void setAddrinstitution(String addrinstitution) throws WrongInputException {
+    public synchronized void setAddrinstitution(String addrinstitution) throws WrongInputException {
         if(addrinstitution.isEmpty()){
             throw new WrongInputException("Nevyplnili jste toto pole");
         }
@@ -162,7 +162,7 @@ public class Events implements Serializable {
         return addrstreet;
     }
 
-    public void setAddrstreet(String addrstreet) throws WrongInputException {
+    public synchronized void setAddrstreet(String addrstreet) throws WrongInputException {
         if(addrstreet.isEmpty()){
             throw new WrongInputException("Nevyplnili jste toto pole");
         }
@@ -173,7 +173,7 @@ public class Events implements Serializable {
         return addrhousenumber;
     }
 
-    public void setAddrhousenumber(String addrhousenumber) throws WrongInputException{
+    public synchronized void setAddrhousenumber(String addrhousenumber) throws WrongInputException{
         if(addrhousenumber.isEmpty()){
             throw new WrongInputException("Nevyplnili jste toto pole");
         }
@@ -184,7 +184,7 @@ public class Events implements Serializable {
         return addrtown;
     }
 
-    public void setAddrtown(String addrtown) throws WrongInputException {
+    public synchronized void setAddrtown(String addrtown) throws WrongInputException {
         if(addrtown.isEmpty()){
             throw new WrongInputException("Nevyplnili jste toto pole");
         }
@@ -195,7 +195,7 @@ public class Events implements Serializable {
         return addrZipCode;
     }
 
-    public void setAddrZipCode(Integer addrZipCode) throws WrongInputException {
+    public synchronized void setAddrZipCode(Integer addrZipCode) throws WrongInputException {
         int zipCode = (int) addrZipCode;
         if(zipCode >= 10000 && zipCode <= 999999){
             this.addrZipCode = addrZipCode;
@@ -204,7 +204,7 @@ public class Events implements Serializable {
         throw new WrongInputException("Špatný formát PSČ");
     }
     
-    public void setAddrZipCode(String addrZipCode) throws WrongInputException{
+    public synchronized void setAddrZipCode(String addrZipCode) throws WrongInputException{
         if(addrZipCode.isEmpty()){
             throw new WrongInputException("Nevyplnili jste toto pole");
         }
@@ -221,7 +221,7 @@ public class Events implements Serializable {
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public synchronized void setActive(Boolean active) {
         this.active = active;
     }
 
@@ -229,7 +229,7 @@ public class Events implements Serializable {
         return participantsCollection;
     }
 
-    public void setParticipantsCollection(Collection<Participants> participantsCollection) {
+    public synchronized void setParticipantsCollection(Collection<Participants> participantsCollection) {
         this.participantsCollection = participantsCollection;
     }
 

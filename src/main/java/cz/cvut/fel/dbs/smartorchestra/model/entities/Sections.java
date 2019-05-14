@@ -82,7 +82,7 @@ public class Sections implements Serializable {
         return seid;
     }
 
-    public void setSeid(Integer seid) {
+    public synchronized void setSeid(Integer seid) {
         this.seid = seid;
     }
 
@@ -90,7 +90,7 @@ public class Sections implements Serializable {
         return sectionname;
     }
 
-    public void setSectionname(String sectionname) {
+    public synchronized void setSectionname(String sectionname) {
         this.sectionname = sectionname;
     }
 
@@ -98,7 +98,7 @@ public class Sections implements Serializable {
         return sectiontype;
     }
 
-    public void setSectiontype(SectionType sectiontype) {
+    public synchronized void setSectiontype(SectionType sectiontype) {
         this.sectiontype = sectiontype;
     }
 
@@ -106,7 +106,7 @@ public class Sections implements Serializable {
         return aktivni;
     }
 
-    public void setAktivni(boolean aktivni) {
+    public synchronized void setAktivni(boolean aktivni) {
         this.aktivni = aktivni;
     }
 
@@ -115,7 +115,7 @@ public class Sections implements Serializable {
         return playerCollection;
     }
 
-    public void setPlayerCollection(Collection<Player> playerCollection) {
+    public synchronized void setPlayerCollection(Collection<Player> playerCollection) {
         this.playerCollection = playerCollection;
     }
 

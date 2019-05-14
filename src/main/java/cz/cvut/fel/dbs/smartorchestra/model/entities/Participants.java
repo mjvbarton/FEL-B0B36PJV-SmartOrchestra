@@ -55,15 +55,13 @@ public class Participants implements Serializable {
 
     public Participants(int uid, int evid) {
         this.participantsPK = new ParticipantsPK(uid, evid);
-    }
-    
-    
+    }    
 
     public ParticipantsPK getParticipantsPK() {
         return participantsPK;
     }
 
-    public void setParticipantsPK(ParticipantsPK participantsPK) {
+    public synchronized void setParticipantsPK(ParticipantsPK participantsPK) {
         this.participantsPK = participantsPK;
     }
 
@@ -71,7 +69,7 @@ public class Participants implements Serializable {
         return message;
     }
 
-    public void setMessage(String message) {
+    public synchronized void setMessage(String message) {
         this.message = message;
     }
 
@@ -79,7 +77,7 @@ public class Participants implements Serializable {
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public synchronized void setActive(Boolean active) {
         this.active = active;
     }
 
@@ -87,7 +85,7 @@ public class Participants implements Serializable {
         return events;
     }
 
-    public void setEvents(Events events) {
+    public synchronized void setEvents(Events events) {
         this.events = events;
     }
 
@@ -95,7 +93,7 @@ public class Participants implements Serializable {
         return seid;
     }
 
-    public void setSeid(Sections seid) {
+    public synchronized void setSeid(Sections seid) {
         this.seid = seid;
     }
 
@@ -103,7 +101,7 @@ public class Participants implements Serializable {
         return users;
     }
 
-    public void setUsers(Users users) {
+    public synchronized void setUsers(Users users) {
         this.users = users;
     }
        

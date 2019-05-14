@@ -57,18 +57,7 @@ public class MainControl implements UIController<Main>{
     }
     
     public void loadEvents(){
-        EventAdmin ea = new EventAdmin();
-        try {
-            controled.getEvents().loadEvents(ea.loadEvents());
-        } catch (NoResultException ex) {
-            Logger.getLogger(MainControl.class.getName()).log(Level.INFO, "No events found.");
-            JOptionPane.showMessageDialog(controled, "Seznam událostí je prázdný.", 
-                    controled.getTitle(), JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception ex) {
-            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, "Unable to load events.", ex);
-            JOptionPane.showMessageDialog(controled, "Chyba v běhu programu: " + ex.getMessage(), 
-                    controled.getTitle(), JOptionPane.ERROR_MESSAGE);
-        }
+        Logger.getLogger(MainControl.class.getName()).log(Level.INFO, "Unnecessary function toggled");        
     }
     
     public void loadUsersToTable(){

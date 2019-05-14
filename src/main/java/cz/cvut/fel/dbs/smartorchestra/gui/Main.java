@@ -10,11 +10,14 @@ import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
 import cz.cvut.fel.dbs.smartorchestra.UIControlled;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.awt.Dimension;
-import java.text.DateFormat;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -24,6 +27,9 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
     public static final String[] USERS_COLUMN_NAMES = new String [] {
                 "Příjmení", "Jméno", "Datum narození:", "Bydliště:", "Telefon:", "Email:", "Sekce:"
             };
+    public static final int TAB_EVENTS = 0;
+    public static final int TAB_USERS = 1;
+       
     private MainControl controller;
     /**
      * Creates new form Main
@@ -31,7 +37,6 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
     public Main() {
         initComponents();
         setUIController(SmartOrchestra.getInstance().getController(this));
-        controller.loadEvents();
     }
 
     /**
@@ -515,5 +520,9 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
 
     public ShowEvents getEvents() {
         return events;
+    }
+    
+    public JTabbedPane getContent() {
+        return content;
     }
 }

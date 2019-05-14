@@ -7,19 +7,16 @@ package cz.cvut.fel.dbs.smartorchestra;
 
 import cz.cvut.fel.dbs.smartorchestra.gui.LoginScreen;
 import cz.cvut.fel.dbs.smartorchestra.gui.Main;
+import cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.persistence.*;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import org.hibernate.service.spi.ServiceException;
 
@@ -36,6 +33,7 @@ public class SmartOrchestra {
     private EntityManagerFactory emf;
     
     private Image ico;
+    private EventUpdater eventUpdater;
     
     private LoginScreen loginScr;
     private Main mainWin;
@@ -50,6 +48,7 @@ public class SmartOrchestra {
             Logger.getLogger(SmartOrchestra.class.getName()).log(Level.SEVERE, "Cannot get icon. ", ex);
             ico = null;
         }
+        eventUpdater = null;
         
     }
         
@@ -102,6 +101,7 @@ public class SmartOrchestra {
                 mainWin.setVisible(true);
             }
         });
+        startEventUpdater(mainWin.getEvents());
         
     }
     public MainControl getController(Main mainWin){
@@ -141,5 +141,29 @@ public class SmartOrchestra {
             }
         }
         return singleton;
-    }    
+    }
+    
+    public void startEventUpdater(){
+        startEventUpdater(getMainWin().getEvents());
+    }
+
+    public void startEventUpdater(ShowEvents events) {
+        if(eventUpdater == null){
+            synchronized(SmartOrchestra.class){
+                if(eventUpdater == null){
+                    eventUpdater = new EventUpdater(events);
+                    eventUpdater.start();
+                    Logger.getLogger(SmartOrchestra.class.getName()).log(Level.INFO, "EventUpdater started.");
+                }
+            }
+        } else {
+            synchronized(SmartOrchestra.class){
+                eventUpdater.notify();
+            }
+        }
+    }
+
+    public EventUpdater getEventUpdater() {
+        return eventUpdater;
+    }
 }

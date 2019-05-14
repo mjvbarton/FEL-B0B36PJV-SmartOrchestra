@@ -44,7 +44,7 @@ public class Administrators implements Serializable {
         return uid;
     }
 
-    public void setUid(Long uid) {
+    public synchronized void setUid(Long uid) {
         this.uid = uid;
     }
 

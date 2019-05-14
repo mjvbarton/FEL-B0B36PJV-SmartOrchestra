@@ -28,8 +28,12 @@ public class EventHandler extends DAO {
     }  
 
     public List<Events> getActiveEvents() throws NoResultException, Exception{
+        em.clear();
         Date now = new Date();
-        return em.createQuery("SELECT e FROM Events e WHERE e.begins > :now AND e.active = TRUE ORDER BY e.begins, e.eventname", Events.class)
+        em.getTransaction().begin();
+        List<Events> e = em.createQuery("SELECT e FROM Events e WHERE e.begins > :now AND e.active = TRUE ORDER BY e.begins, e.eventname", Events.class)
                 .setParameter("now", now).getResultList();
+        em.getTransaction().commit();
+        return e;
     }
 }

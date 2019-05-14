@@ -10,6 +10,7 @@
     <class>cz.cvut.fel.dbs.smartorchestra.model.entities.Participants</class>
     <properties>
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
+      <property name="hibernate.cache.use.query_cache" value="false"/>
       <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>
       <!--property name="javax.persistence.schema-generation.database.action" value="create"/-->
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/db19_bartom47"/>

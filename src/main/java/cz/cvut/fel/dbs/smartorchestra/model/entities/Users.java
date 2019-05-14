@@ -44,7 +44,7 @@ public class Users implements Serializable {
         return uid;
     }
 
-    public void setUid(Long uid) {
+    public synchronized void setUid(Long uid) {
         this.uid = uid;
     }
 
@@ -52,7 +52,7 @@ public class Users implements Serializable {
         return email;
     }
 
-    public void setEmail(String email) throws WrongInputException{
+    public synchronized void setEmail(String email) throws WrongInputException{
         if(!email.matches("^[-a-z0-9~!$%^&*_=+}{\\'?]+(\\.[-a-z0-9~!$%^&*_=+}{\\'?]+)*@([a-z0-9_][-a-z0-9_]*(\\.[-a-z0-9_]+)*\\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,5})?$")){
             throw new WrongInputException("Neplatný email");
         }                   
@@ -63,7 +63,7 @@ public class Users implements Serializable {
         return passwd;
     }
 
-    public void setPasswd(String passwd) throws WrongInputException {
+    public synchronized void setPasswd(String passwd) throws WrongInputException {
         if(passwd.isEmpty()){
             throw new WrongInputException("Nevyplnili jste toto pole");
         }
@@ -74,7 +74,7 @@ public class Users implements Serializable {
         return firstName;
     }
 
-    public void setFirstName(String firstName) throws WrongInputException {
+    public synchronized void setFirstName(String firstName) throws WrongInputException {
         if(firstName.isEmpty()){
             throw new WrongInputException("Nevyplnili jste toto pole");
         }
@@ -85,7 +85,7 @@ public class Users implements Serializable {
         return familyName;
     }
 
-    public void setFamilyName(String familyName) throws WrongInputException {
+    public synchronized void setFamilyName(String familyName) throws WrongInputException {
         if(familyName.isEmpty()){
             throw new WrongInputException("Nevyplnili jste toto pole");
         }
@@ -96,11 +96,11 @@ public class Users implements Serializable {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public synchronized void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
     
-    public void setBirthDate(String date) throws WrongInputException {
+    public synchronized void setBirthDate(String date) throws WrongInputException {
         if(date.isEmpty()){
             throw new WrongInputException("Nevyplnili jste toto pole");
         }
@@ -117,7 +117,7 @@ public class Users implements Serializable {
         return phone;
     }
 
-    public void setPhone(String phone) throws WrongInputException{
+    public synchronized void setPhone(String phone) throws WrongInputException{
         if(phone.isEmpty()){
             throw new WrongInputException("Nevyplnili jste toto pole");
         } else if(!phone.matches("^\\+[1-9]{1}[0-9]{3,14}$")){
@@ -130,7 +130,7 @@ public class Users implements Serializable {
         return addrStreet;
     }
 
-    public void setAddrStreet(String addrStreet) {
+    public synchronized void setAddrStreet(String addrStreet) {
         this.addrStreet = addrStreet;
     }
 
@@ -138,7 +138,7 @@ public class Users implements Serializable {
         return addrHouseNumber;
     }
 
-    public void setAddrHouseNumber(String addrHouseNumber){
+    public synchronized void setAddrHouseNumber(String addrHouseNumber){
         this.addrHouseNumber = addrHouseNumber;
     }
 
@@ -146,7 +146,7 @@ public class Users implements Serializable {
         return addrTown;
     }
 
-    public void setAddrTown(String addrTown){
+    public synchronized void setAddrTown(String addrTown){
         this.addrTown = addrTown;
     }
 
@@ -154,7 +154,7 @@ public class Users implements Serializable {
         return addrZipCode;
     }
 
-    public void setAddrZipCode(Integer addrZipCode) throws WrongInputException {
+    public synchronized void setAddrZipCode(Integer addrZipCode) throws WrongInputException {
         int zipCode = (int) addrZipCode;
         if(zipCode >= 10000 && zipCode <= 999999){
             this.addrZipCode = addrZipCode;
@@ -163,7 +163,7 @@ public class Users implements Serializable {
         throw new WrongInputException("Špatný formát PSČ");
     }
     
-    public void setAddrZipCode(String addrZipCode) throws WrongInputException{
+    public synchronized void setAddrZipCode(String addrZipCode) throws WrongInputException{
         if(addrZipCode.isEmpty()){
             this.addrZipCode = null;
             return;
