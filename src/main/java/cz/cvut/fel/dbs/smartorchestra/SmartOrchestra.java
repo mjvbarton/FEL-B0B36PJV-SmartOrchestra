@@ -25,12 +25,12 @@ import org.hibernate.service.spi.ServiceException;
  *
  * @author Matěj Bartoň
  */
-public class SmartOrchestra {
+public class SmartOrchestra implements ThreadEntityManager{
     private static SmartOrchestra singleton;
     public static final String DATE_FORMAT = "dd.MM.yyyy";
     
     private EntityManager em;
-    private EntityManagerFactory emf;
+    private static EntityManagerFactory emf;
     
     private Image ico;
     private EventUpdater eventUpdater;
@@ -84,6 +84,7 @@ public class SmartOrchestra {
         }
     }
     
+    @Override
     public final EntityManager getEntityManager(){
         return em;
     }
@@ -91,6 +92,10 @@ public class SmartOrchestra {
     private void setupJPA() throws ServiceException{
         emf = Persistence.createEntityManagerFactory("smartorchestraPU");
         em = emf.createEntityManager();
+    }
+    
+    public static EntityManagerFactory getEntityManagerFactory(){
+        return emf;
     }
     
     public void runMainWindow(){

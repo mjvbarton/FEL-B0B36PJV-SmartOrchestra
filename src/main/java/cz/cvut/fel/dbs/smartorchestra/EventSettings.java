@@ -8,6 +8,7 @@ package cz.cvut.fel.dbs.smartorchestra;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.WrongInputException;
 import cz.cvut.fel.dbs.smartorchestra.gui.EventDetails;
 import cz.cvut.fel.dbs.smartorchestra.model.EventAdmin;
+import cz.cvut.fel.dbs.smartorchestra.model.dao.EventHandler;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.SectionType;
 import java.text.DateFormat;
@@ -35,10 +36,11 @@ public class EventSettings implements UIController<EventDetails>{
     }
     
     public void loadEvent(int evid){
-        
+        EventHandler eh = new EventHandler(SmartOrchestra.getInstance().getEntityManager());
+        loadEvent(eh.getEvent(evid));
     }
     
-    public void loadEvent(Events event){
+    private void loadEvent(Events event){
         this.event = event;
         controled.getFieldName().setText(event.getEventname());
         DateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm");
@@ -51,7 +53,7 @@ public class EventSettings implements UIController<EventDetails>{
         controled.getFieldAddrTown().setText(event.getAddrtown());
         controled.getFieldAddrZipCode().setText(event.getAddrzipcode().toString());
         
-        EventAdmin ea = new EventAdmin();
+        EventAdmin ea = new EventAdmin(SmartOrchestra.getInstance());
         try {
             ea.loadSections();
             controled.getGroupStrings().loadSections(SectionType.STRINGS.getSections());
@@ -138,7 +140,7 @@ public class EventSettings implements UIController<EventDetails>{
             return;
         }
         
-        EventAdmin ea = new EventAdmin();
+        EventAdmin ea = new EventAdmin(SmartOrchestra.getInstance());
         try{
             ea.saveEvent(event);
             Logger.getLogger(EventSettings.class.getName()).log(Level.INFO, "Event {0} was created.", event);

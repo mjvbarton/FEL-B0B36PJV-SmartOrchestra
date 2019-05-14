@@ -32,11 +32,11 @@ public class Participation implements UIController<EventInfo>{
                 dialog.addWindowListener(new EventUpdaterResume());
                 EventSettings es = new EventSettings(dialog);
                 dialog.setUIController(es);
-                es.loadEvent(event);                
+                es.loadEvent(event.getEvid());                
                 if(dialog.doModal() == UserDetails.SAVE_DETAILS) {
 
                 }
-                SmartOrchestra.getInstance().getMainWin().getUIController().loadEvents();
+                //SmartOrchestra.getInstance().getMainWin().getUIController().loadEvents();
             }
         });
     }

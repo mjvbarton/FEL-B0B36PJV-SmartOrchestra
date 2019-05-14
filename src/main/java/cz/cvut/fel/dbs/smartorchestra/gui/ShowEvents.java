@@ -14,7 +14,7 @@ import javax.swing.JPanel;
  * @author Matěj Bartoň
  */
 public class ShowEvents extends javax.swing.JPanel {
-
+    private List<Events> events;
     /**
      * Creates new form ShowEvents
      */
@@ -124,9 +124,14 @@ public class ShowEvents extends javax.swing.JPanel {
     }
     
     public void loadEvents(List<Events> events){
+        this.events = events;
         content.removeAll();
         for(Events event : events){
             content.add(new EventInfo(event));
         }
+    }
+    
+    public List<Events> getEvents(){
+        return events;
     }
 }

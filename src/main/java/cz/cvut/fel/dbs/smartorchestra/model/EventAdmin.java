@@ -5,7 +5,9 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.model;
 
+import cz.cvut.fel.dbs.smartorchestra.EventUpdater;
 import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
+import cz.cvut.fel.dbs.smartorchestra.ThreadEntityManager;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.EventAdminException;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.EventHandler;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.ParticipantManager;
@@ -14,6 +16,7 @@ import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.SectionType;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +28,11 @@ import javax.swing.JCheckBox;
  * @author Matěj Bartoň
  */
 public class EventAdmin {
+    private ThreadEntityManager tem;
+        
+    public EventAdmin(ThreadEntityManager tem){
+        this.tem = tem;
+    }
     
     public void loadSections() throws Exception{
         SectionReader sr = new SectionReader();
@@ -35,23 +43,27 @@ public class EventAdmin {
     }
 
     public void saveEvent(Events event) {
-        EventHandler eh = new EventHandler();
+        EventHandler eh = new EventHandler(tem.getEntityManager());
         eh.saveEvent(event);
     }
-
+    
     public List<Events> loadEvents() throws Exception{
-        EventHandler eh = new EventHandler();
+        return loadEvents(new Date());
+    }
+
+    public List<Events> loadEvents(Date date) throws Exception{
+        EventHandler eh = new EventHandler(tem.getEntityManager());
         try{
             if(SmartOrchestra.getInstance().isAdministrationActive()){
-                return eh.getNextEvents();
+                return eh.getNextEvents(date);
             } else {
-                return eh.getNextEvents(SmartOrchestra.getInstance().getActiveUser());
+                return eh.getNextEvents(date, SmartOrchestra.getInstance().getActiveUser());
             }
         } catch(NoResultException ex){
             return new ArrayList();
         }
     }
-    
+        
     public void sendInvitations(Events event, List<JCheckBox> checkedSections, SectionType type){
         ParticipantManager pm = new ParticipantManager();
         for(int i = 0; i < type.getSections().size(); i++){

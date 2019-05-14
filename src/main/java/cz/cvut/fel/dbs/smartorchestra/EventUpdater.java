@@ -11,6 +11,7 @@ import cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents;
 import cz.cvut.fel.dbs.smartorchestra.model.EventAdmin;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
@@ -19,21 +20,23 @@ import javax.swing.JTabbedPane;
  *
  * @author Matěj Bartoň
  */
-public class EventUpdater extends Thread implements UIController<ShowEvents>{
+public class EventUpdater extends Thread implements UIController<ShowEvents>, ThreadEntityManager{
     private ShowEvents controled;
     private JTabbedPane tabbedPane;
     private EventAdmin ea;
+    private EntityManager em;
     private final Object pauseLock = new Object();
     private volatile boolean waiting;
     
     public EventUpdater(ShowEvents controled){
         setControlled(controled);
-        ea = new EventAdmin();
+        em = SmartOrchestra.getEntityManagerFactory().createEntityManager();
         tabbedPane = SmartOrchestra.getInstance().getMainWin().getContent();
     }
     
     @Override
     public void run() {
+        ea = new EventAdmin(EventUpdater.this);
         while(true){
             if(waiting){
                 synchronized(pauseLock){
@@ -50,7 +53,7 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>{
             }
             if(tabbedPane.getSelectedIndex() == Main.TAB_EVENTS){
                 try {
-                    controled.loadEvents(ea.loadEvents());
+                    controled.loadEvents(ea.loadEvents()); 
                 } catch (NoResultException ex) {
                     Logger.getLogger(ShowEvents.class.getName()).log(Level.INFO, "No events found.");
                     JOptionPane.showMessageDialog(controled, "Seznam událostí je prázdný.", 
@@ -63,24 +66,14 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>{
                             "Chyba", JOptionPane.ERROR_MESSAGE);
                 }
                 try {
-                    sleep(10 * 1000);
+                    sleep(1000 * 10);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(EventUpdater.class.getName()).log(Level.INFO, "EventUpdater woken up.");
                 }
             }
         }
     }
-    
-    public void updateEvents(){
-        try {
-            controled.loadEvents(ea.loadEvents());
-        } catch (Exception ex) {
-            Logger.getLogger(ShowEvents.class.getName()).log(Level.SEVERE, "Unable to load events.", ex);
-            JOptionPane.showMessageDialog(controled, "Chyba v běhu programu: " + ex.getMessage(), 
-                    "Chyba", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-          
+             
     @Override
     public void setControlled(ShowEvents controled) {
         this.controled = controled;
@@ -93,6 +86,12 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>{
                 Logger.getLogger(EventUpdater.class.getName()).log(Level.INFO, "EventUpdater resumed");
                 pauseLock.notifyAll();
             }    
+            interrupt();
         }   
     } 
+
+    @Override
+    public EntityManager getEntityManager() {
+        return em;
+    }
 }
