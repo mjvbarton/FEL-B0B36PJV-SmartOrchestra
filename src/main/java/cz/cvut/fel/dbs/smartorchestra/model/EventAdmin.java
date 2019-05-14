@@ -5,6 +5,7 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.model;
 
+import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.EventAdminException;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.EventHandler;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.ParticipantManager;
@@ -12,6 +13,7 @@ import cz.cvut.fel.dbs.smartorchestra.model.dao.SectionReader;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.SectionType;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,9 +39,17 @@ public class EventAdmin {
         eh.saveEvent(event);
     }
 
-    public List<Events> loadEvents() throws NoResultException, Exception{
+    public List<Events> loadEvents() throws Exception{
         EventHandler eh = new EventHandler();
-        return eh.getActiveEvents();
+        try{
+            if(SmartOrchestra.getInstance().isAdministrationActive()){
+                return eh.getNextEvents();
+            } else {
+                return eh.getNextEvents(SmartOrchestra.getInstance().getActiveUser());
+            }
+        } catch(NoResultException ex){
+            return new ArrayList();
+        }
     }
     
     public void sendInvitations(Events event, List<JCheckBox> checkedSections, SectionType type){

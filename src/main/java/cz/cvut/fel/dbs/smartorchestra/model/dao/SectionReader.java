@@ -23,11 +23,11 @@ public class SectionReader extends DAO{
         super();
     }
     
-    public List<Sections> getActiveSections(){
+    public synchronized List<Sections> getActiveSections(){
         return em.createQuery("SELECT s FROM Sections s WHERE s.aktivni = TRUE ORDER BY s.sectiontype, s.seid").getResultList();        
     }
     
-    public List<Sections> getSectionsBySectionType(SectionType type){
+    public synchronized List<Sections> getSectionsBySectionType(SectionType type){
         try{
             return em.createNamedQuery("Sections.findActiveBySectiontype", Sections.class)
                     .setParameter("sectiontype", type).getResultList();

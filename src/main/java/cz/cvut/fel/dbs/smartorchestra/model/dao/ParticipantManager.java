@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * @author Matěj Bartoň
  */
 public class ParticipantManager extends DAO{
-    public void processNewInvitation(Sections section, Events event, boolean addInvitation){
+    public synchronized void processNewInvitation(Sections section, Events event, boolean addInvitation){
         try {
             em.getTransaction().begin();
             List<Player> players = em.createNamedQuery("Player.findBySeid", Player.class)
@@ -69,7 +69,7 @@ public class ParticipantManager extends DAO{
         }
     }
 
-    public List<Sections> getEventSections(Events event) {
+    public synchronized List<Sections> getEventSections(Events event) {
         return em.createQuery("SELECT p.seid FROM Participants p ", Sections.class)
                 .getResultList();   
     }

@@ -55,6 +55,8 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>{
                     Logger.getLogger(ShowEvents.class.getName()).log(Level.INFO, "No events found.");
                     JOptionPane.showMessageDialog(controled, "Seznam událostí je prázdný.", 
                             "Varování", JOptionPane.INFORMATION_MESSAGE);
+                } catch (IllegalStateException ex) {
+                    Logger.getLogger(ShowEvents.class.getName()).log(Level.WARNING, "Error while loading events.", ex); 
                 } catch (Exception ex) {
                     Logger.getLogger(ShowEvents.class.getName()).log(Level.SEVERE, "Unable to load events.", ex);
                     JOptionPane.showMessageDialog(controled, "Chyba v běhu programu: " + ex.getMessage(), 
@@ -66,6 +68,16 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>{
                     Logger.getLogger(EventUpdater.class.getName()).log(Level.INFO, "EventUpdater woken up.");
                 }
             }
+        }
+    }
+    
+    public void updateEvents(){
+        try {
+            controled.loadEvents(ea.loadEvents());
+        } catch (Exception ex) {
+            Logger.getLogger(ShowEvents.class.getName()).log(Level.SEVERE, "Unable to load events.", ex);
+            JOptionPane.showMessageDialog(controled, "Chyba v běhu programu: " + ex.getMessage(), 
+                    "Chyba", JOptionPane.ERROR_MESSAGE);
         }
     }
           

@@ -5,7 +5,6 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.model.dao;
 
-import cz.cvut.fel.dbs.smartorchestra.exceptions.PlayerManagerException;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Player;
 
 /**
@@ -16,7 +15,7 @@ public class PlayerReader extends DAO{
     public PlayerReader(){
         super();
     }
-    public Player getPlayer(Long uid){
+    public synchronized Player getPlayer(Long uid){
        return em.find(Player.class, uid);
     }
     

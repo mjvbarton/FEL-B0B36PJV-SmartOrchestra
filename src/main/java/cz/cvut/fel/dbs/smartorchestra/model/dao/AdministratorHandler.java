@@ -36,7 +36,7 @@ public class AdministratorHandler extends DAO{
         }
     }
 
-    public void remove(Users user) throws UserAdminException{
+    public synchronized void remove(Users user) throws UserAdminException{
         try{
             em.getTransaction().begin();
             Administrators admin =
@@ -57,7 +57,7 @@ public class AdministratorHandler extends DAO{
         }
     }
     
-    public void newAdmin(Users user) throws Exception{
+    public synchronized void newAdmin(Users user) throws Exception{
         try{
             em.getTransaction().begin();
             Administrators admin = new Administrators(user.getUid());

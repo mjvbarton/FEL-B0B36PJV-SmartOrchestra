@@ -15,14 +15,16 @@ import javax.persistence.*;
  */
 public class UserReader extends DAO{
       
-    public Users getUserFromEmail(String email) throws NoResultException{
+    public synchronized Users getUserFromEmail(String email) throws NoResultException{
         Users user = em.createQuery("SELECT u FROM Users u WHERE u.email = :email", Users.class).
                 setParameter("email", email).getSingleResult();
         return user;
     }
 
     public List<Users> loadUsers(){
-        List<Users> result = em.createQuery("SELECT u FROM Users u ORDER BY u.familyName, u.firstName").getResultList();
-        return result;
+        synchronized(em){
+            List<Users> result = em.createQuery("SELECT u FROM Users u ORDER BY u.familyName, u.firstName").getResultList();
+            return result;
+        }
     }
 }

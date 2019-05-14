@@ -19,7 +19,7 @@ public class PlayerWriter extends DAO{
         super();
     }
     
-    public void write(Player player){
+    public synchronized void write(Player player){
        em.getTransaction().begin();
        if(player.getConcertmaster() != null){
            try{
@@ -37,7 +37,7 @@ public class PlayerWriter extends DAO{
        
     }
 
-    public void remove(Player player) {
+    public synchronized void remove(Player player) {
         em.getTransaction().begin();
         em.remove(player);
         em.getTransaction().commit();

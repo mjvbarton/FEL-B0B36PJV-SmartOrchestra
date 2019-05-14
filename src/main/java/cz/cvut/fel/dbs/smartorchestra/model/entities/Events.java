@@ -35,6 +35,7 @@ import javax.persistence.TemporalType;
 @NamedQueries({
     @NamedQuery(name = "Events.findAll", query = "SELECT e FROM Events e")
     , @NamedQuery(name = "Events.findByEvid", query = "SELECT e FROM Events e WHERE e.evid = :evid")
+    , @NamedQuery(name = "Events.findByEvidList", query = "SELECT e FROM Events e WHERE e.evid IN :evids")    
 })
 public class Events implements Serializable {
 

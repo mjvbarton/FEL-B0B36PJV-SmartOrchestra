@@ -24,7 +24,7 @@ public class UserWriter {
         em = SmartOrchestra.getInstance().getEntityManager();
     }
     
-    public void create(Users user){
+    public synchronized void create(Users user){
         try {
             em.getTransaction().begin();
             em.persist(user);
@@ -36,13 +36,13 @@ public class UserWriter {
         }
     }
     
-    public void write(Users user){
+    public synchronized void write(Users user){
         em.getTransaction().begin();
         em.persist(user);
         em.getTransaction().commit();
     }
 
-    public void removeUser(Users user) throws UserManagerException, Exception {
+    public synchronized void removeUser(Users user) throws UserManagerException, Exception {
         try{
             em.getTransaction().begin();
             em.remove(user);
