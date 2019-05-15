@@ -40,7 +40,7 @@ public class EventSettings implements UIController<EventDetails>{
         loadEvent(eh.getEvent(evid));
     }
     
-    private void loadEvent(Events event){
+    public void loadEvent(Events event){
         this.event = event;
         controled.getFieldName().setText(event.getEventname());
         DateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm");

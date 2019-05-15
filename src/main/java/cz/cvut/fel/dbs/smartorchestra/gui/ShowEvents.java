@@ -6,7 +6,12 @@
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.ParticipantState;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Participants;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 /**
@@ -123,11 +128,32 @@ public class ShowEvents extends javax.swing.JPanel {
         return content;
     }
     
-    public void loadEvents(List<Events> events){
+    public void loadEvents(List<Events> events, Map<Events, ParticipantState> participations){
         this.events = events;
         content.removeAll();
         for(Events event : events){
-            content.add(new EventInfo(event));
+            EventInfo eventInfo = new EventInfo(event);
+            JComboBox<String> eventState = eventInfo.getFieldParticipation();
+            
+            switch(participations.get(event)){
+                case NOT_INVITED:
+                    eventState.setSelectedIndex(ParticipantState.NOT_INVITED.intVal());
+                    eventState.setEnabled(false);
+                    break;
+                case NOT_FILLED:
+                    eventState.setSelectedIndex(ParticipantState.NOT_FILLED.intVal());
+                    eventState.setEnabled(true);
+                    break;
+                case NOT_COMING:
+                    eventState.setSelectedIndex(ParticipantState.NOT_COMING.intVal());
+                    eventState.setEnabled(true);
+                    break;
+                case COMING:
+                    eventState.setSelectedIndex(ParticipantState.COMING.intVal());
+                    eventState.setEnabled(true);
+                    break;
+            }
+            content.add(eventInfo);
         }
     }
     

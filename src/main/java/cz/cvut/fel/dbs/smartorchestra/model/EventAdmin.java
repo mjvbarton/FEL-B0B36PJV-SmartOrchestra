@@ -13,10 +13,16 @@ import cz.cvut.fel.dbs.smartorchestra.model.dao.EventHandler;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.ParticipantManager;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.SectionReader;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.ParticipantState;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Participants;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.SectionType;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,19 +71,42 @@ public class EventAdmin {
     }
         
     public void sendInvitations(Events event, List<JCheckBox> checkedSections, SectionType type){
-        ParticipantManager pm = new ParticipantManager();
+        ParticipantManager pm = new ParticipantManager(tem.getEntityManager());
         for(int i = 0; i < type.getSections().size(); i++){
             pm.processNewInvitation(type.getSections().get(i), event, checkedSections.get(i).isSelected());            
         }   
     }   
 
     public void checkSections(Events event, List<JCheckBox> sections, SectionType type) {
-        ParticipantManager pm = new ParticipantManager();
+        ParticipantManager pm = new ParticipantManager(tem.getEntityManager());
         List<Sections> eventSections = pm.getEventSections(event);
         for(int i = 0; i < type.getSections().size(); i++){
             sections.get(i).setSelected(
                     eventSections.contains(type.getSections().get(i))
             );
         }        
+    }
+
+    public HashMap<Events, ParticipantState> getParticipationMap(Users user, List<Events> events) {
+        ParticipantManager pm = new ParticipantManager(tem.getEntityManager());
+        List<Participants> participants = pm.getParticipantByUserAndEventList(user, events);
+        
+        HashMap<Events, ParticipantState> map =  new HashMap();
+        for(int i = 0; i < events.size(); i++){
+            if(i < participants.size() 
+                    && events.get(i).getEvid() == participants.get(i).getParticipantsPK().getEvid()){
+                Participants part = participants.get(i);
+                if(part.getActive() == null){
+                    map.put(events.get(i), ParticipantState.NOT_FILLED);
+                } else if (part.getActive()){
+                    map.put(events.get(i), ParticipantState.COMING);
+                } else {
+                    map.put(events.get(i), ParticipantState.NOT_COMING);
+                }
+            } else {
+                map.put(events.get(i), ParticipantState.NOT_INVITED);
+            }
+        }
+        return map;
     }
 }

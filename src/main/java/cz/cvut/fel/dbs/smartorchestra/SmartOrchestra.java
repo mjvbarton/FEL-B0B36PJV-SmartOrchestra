@@ -108,6 +108,7 @@ public class SmartOrchestra implements ThreadEntityManager{
                                 activeUser.getEmail()
                         ));
         java.awt.EventQueue.invokeLater(new Runnable(){
+            @Override
             public void run(){
                 mainWin.setVisible(true);
             }

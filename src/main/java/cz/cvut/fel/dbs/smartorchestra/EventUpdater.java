@@ -9,6 +9,9 @@ import cz.cvut.fel.dbs.smartorchestra.gui.Main;
 import cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents;
 
 import cz.cvut.fel.dbs.smartorchestra.model.EventAdmin;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -53,7 +56,9 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>, Th
             }
             if(tabbedPane.getSelectedIndex() == Main.TAB_EVENTS){
                 try {
-                    controled.loadEvents(ea.loadEvents()); 
+                    List<Events> events = ea.loadEvents();
+                    Users activeUser = SmartOrchestra.getInstance().getActiveUser();
+                    controled.loadEvents(events, ea.getParticipationMap(activeUser, events));
                 } catch (NoResultException ex) {
                     Logger.getLogger(ShowEvents.class.getName()).log(Level.INFO, "No events found.");
                     JOptionPane.showMessageDialog(controled, "Seznam událostí je prázdný.", 

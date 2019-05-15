@@ -31,7 +31,7 @@ public class EventHandler extends DAOThreadSafe {
         
         try{
             em.getTransaction().begin();
-            em.merge(event);
+            em.persist(event);
             em.getTransaction().commit();
         } catch(Exception ex){
             em.getTransaction().rollback();

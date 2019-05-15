@@ -10,16 +10,23 @@ import cz.cvut.fel.dbs.smartorchestra.model.entities.Participants;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.ParticipantsPK;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Player;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.NoResultException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
 
 /**
  *
  * @author Matěj Bartoň
  */
-public class ParticipantManager extends DAO{
+public class ParticipantManager extends DAOThreadSafe{
+
+    public ParticipantManager(EntityManager em) {
+        super(em);
+    }
     public synchronized void processNewInvitation(Sections section, Events event, boolean addInvitation){
         try {
             em.getTransaction().begin();
@@ -73,4 +80,19 @@ public class ParticipantManager extends DAO{
         return em.createQuery("SELECT p.seid FROM Participants p ", Sections.class)
                 .getResultList();   
     }
+    
+    public List<Participants> getParticipantByUserAndEventList(Users user, List<Events> events){
+        try {
+            return em.createQuery("SELECT p FROM Participants p WHERE p.events IN :events "
+                    + "AND p.users = :user ORDER BY p.events.begins, p.events.eventname", Participants.class)
+                    .setParameter("events", events).setParameter("user", user).getResultList();
+        } catch (NoResultException ex){
+            Logger.getLogger(ParticipantManager.class.getName()).log(Level.INFO, "User {0} does not participate any event.", user);
+            return new ArrayList();
+        } catch (Exception ex){
+            Logger.getLogger(ParticipantManager.class.getName()).log(Level.WARNING, "Cannot read Participants for user: " + user , ex);
+            return new ArrayList();
+        }
+    }
+        
 }
