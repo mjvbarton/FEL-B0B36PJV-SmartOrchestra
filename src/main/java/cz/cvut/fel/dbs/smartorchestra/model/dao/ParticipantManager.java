@@ -59,8 +59,9 @@ public class ParticipantManager extends DAOThreadSafe{
                 } else {
                     Participants participant = em.find(Participants.class, new ParticipantsPK(
                             player.getUid().intValue(), event.getEvid()));
-                    em.remove(participant);
-                    
+                    if(participant != null){
+                        em.remove(participant);
+                    }                    
                     Logger.getLogger(ParticipantManager.class.getName()).log(Level.INFO, "Player {0} - invitation to event {1} deleted", new Object[]{player, event});
                 }
             }

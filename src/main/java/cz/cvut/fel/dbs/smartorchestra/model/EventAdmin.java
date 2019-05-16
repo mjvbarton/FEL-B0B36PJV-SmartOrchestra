@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -89,23 +90,33 @@ public class EventAdmin {
 
     public HashMap<Events, ParticipantState> getParticipationMap(Users user, List<Events> events) {
         ParticipantManager pm = new ParticipantManager(tem.getEntityManager());
-        List<Participants> participants = pm.getParticipantByUserAndEventList(user, events);
+        List<Participants> participants;
+        if(events.isEmpty()){
+            participants = new ArrayList();
+        } else {
+            participants = pm.getParticipantByUserAndEventList(user, events);
+        }
+        
         
         HashMap<Events, ParticipantState> map =  new HashMap();
-        for(int i = 0; i < events.size(); i++){
-            if(i < participants.size() 
-                    && events.get(i).getEvid() == participants.get(i).getParticipantsPK().getEvid()){
-                Participants part = participants.get(i);
-                if(part.getActive() == null){
-                    map.put(events.get(i), ParticipantState.NOT_FILLED);
-                } else if (part.getActive()){
-                    map.put(events.get(i), ParticipantState.COMING);
-                } else {
-                    map.put(events.get(i), ParticipantState.NOT_COMING);
+        boolean partAdded;
+        for(Events event : events){
+            partAdded = false;
+            for(Participants part : participants){
+                if(event.getEvid() == part.getParticipantsPK().getEvid()){
+                    if(part.getActive() == null){
+                        map.put(event, ParticipantState.NOT_FILLED);
+                    } else if(!part.getActive()){
+                        map.put(event, ParticipantState.NOT_COMING);
+                    } else {
+                        map.put(event, ParticipantState.COMING);
+                    }
+                    partAdded = true;
                 }
-            } else {
-                map.put(events.get(i), ParticipantState.NOT_INVITED);
             }
+            if(!partAdded){
+                map.put(event, ParticipantState.NOT_INVITED);
+            }          
         }
         return map;
     }

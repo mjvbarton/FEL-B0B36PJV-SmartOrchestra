@@ -26,9 +26,7 @@ public class EventHandler extends DAOThreadSafe {
         super(em);
     }
 
-    public void saveEvent(Events event) {
-        em.clear();
-        
+    public void saveEvent(Events event) {        
         try{
             em.getTransaction().begin();
             em.persist(event);
@@ -41,7 +39,11 @@ public class EventHandler extends DAOThreadSafe {
     }
     
     public Events getEvent(Integer evid) throws NoResultException{
-        return em.find(Events.class, evid);
+        em.clear();
+        em.getTransaction().begin();
+        Events e = em.find(Events.class, evid);
+        em.getTransaction().commit();
+        return e;
     }
 
     // Loads new list of events including selected date and the events after this date, for administrator
