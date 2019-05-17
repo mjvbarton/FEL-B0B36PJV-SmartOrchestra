@@ -11,6 +11,8 @@ import cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents;
 import cz.cvut.fel.dbs.smartorchestra.model.EventAdmin;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,13 +60,13 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>, Th
                 try {
                     List<Events> events = ea.loadEvents();
                     Users activeUser = SmartOrchestra.getInstance().getActiveUser();
+                    if(events.isEmpty()){
+                        Logger.getLogger(ShowEvents.class.getName()).log(Level.INFO, "No events found.");
+                        /*JOptionPane.showMessageDialog(controled, "Seznam událostí je prázdný.",
+                        "Varování", JOptionPane.INFORMATION_MESSAGE);*/
+                        controled.loadEvents(events, new HashMap());
+                    }
                     controled.loadEvents(events, ea.getParticipationMap(activeUser, events));
-                } catch (NoResultException ex) {
-                    Logger.getLogger(ShowEvents.class.getName()).log(Level.INFO, "No events found.");
-                    JOptionPane.showMessageDialog(controled, "Seznam událostí je prázdný.", 
-                            "Varování", JOptionPane.INFORMATION_MESSAGE);
-                } catch (IllegalStateException ex) {
-                    Logger.getLogger(ShowEvents.class.getName()).log(Level.WARNING, "Error while loading events.", ex); 
                 } catch (Exception ex) {
                     Logger.getLogger(ShowEvents.class.getName()).log(Level.SEVERE, "Unable to load events.", ex);
                     JOptionPane.showMessageDialog(controled, "Chyba v běhu programu: " + ex.getMessage(), 

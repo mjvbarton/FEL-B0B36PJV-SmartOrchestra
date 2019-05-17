@@ -38,7 +38,7 @@ public class ParticipantManager extends DAOThreadSafe{
             em.persist(part);
             em.getTransaction().commit();
         } catch (Exception ex){
-            em.getTransaction().rollback();
+            em.getTransaction().commit();
             Logger.getLogger(ParticipantManager.class.getName()).log(Level.SEVERE, "Cannot invite User: " + user + " from section: " + section, ex);                    
             throw ex;
         }

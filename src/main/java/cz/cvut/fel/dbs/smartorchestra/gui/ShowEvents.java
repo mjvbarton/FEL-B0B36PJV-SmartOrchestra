@@ -8,10 +8,12 @@ package cz.cvut.fel.dbs.smartorchestra.gui;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.ParticipantState;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Participants;
+import java.awt.Font;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -19,12 +21,17 @@ import javax.swing.JPanel;
  * @author Matěj Bartoň
  */
 public class ShowEvents extends javax.swing.JPanel {
+    
     private List<Events> events;
+    private final JLabel noEvents = new JLabel();
     /**
      * Creates new form ShowEvents
      */
     public ShowEvents() {
         initComponents();
+        noEvents.setText("Seznam událostí je prázdný.");
+        noEvents.setHorizontalAlignment(JLabel.CENTER);
+        Font f = noEvents.getFont();
     }
 
     /**
@@ -131,6 +138,11 @@ public class ShowEvents extends javax.swing.JPanel {
     public void loadEvents(List<Events> events, Map<Events, ParticipantState> participations){
         this.events = events;
         content.removeAll();
+        content.repaint();
+        if(events.isEmpty()){
+            content.add(noEvents);
+            return;
+        }
         for(Events event : events){
             EventInfo eventInfo = new EventInfo(event);
             JComboBox<String> eventState = eventInfo.getFieldParticipation();

@@ -8,6 +8,7 @@ package cz.cvut.fel.dbs.smartorchestra.model.dao;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -61,6 +62,7 @@ public class EventHandler extends DAOThreadSafe {
         List<Integer> userEvids = em.createNamedQuery("Participants.getEvidsByUid", Integer.class)
                 .setParameter("uid", user.getUid().intValue()).getResultList();
         if(userEvids.isEmpty()){
+            em.getTransaction().rollback();
             throw new NoResultException("User " + user + " has no events");
         }
         List<Events> e = em.createQuery("SELECT e FROM Events e WHERE e.begins >= :date AND e.active = TRUE AND e.evid IN :evids ORDER BY e.begins, e.eventname", Events.class)
@@ -76,7 +78,8 @@ public class EventHandler extends DAOThreadSafe {
         List<Integer> userEvids = em.createNamedQuery("Participants.getEvidsBySection", Integer.class)
                 .setParameter("seid", section).getResultList();
         if(userEvids.isEmpty()){
-            throw new NoResultException("Section " + section + " has no events");
+            em.getTransaction().commit();
+            return new ArrayList();
         }
         List<Events> e = em.createQuery("SELECT e FROM Events e WHERE e.begins >= :date AND e.active = TRUE AND e.evid IN :evids ORDER BY e.begins, e.eventname", Events.class)
                 .setParameter("date", date).setParameter("evids", userEvids).getResultList();

@@ -57,6 +57,7 @@ public class PlayerManager {
     }
 
     public Player updatePlayerInfo(Player player){
+        pw.write(player);
         return player;
     }
 
