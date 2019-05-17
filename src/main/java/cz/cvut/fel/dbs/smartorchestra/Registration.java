@@ -76,6 +76,7 @@ public class Registration extends UserSettings{
             Logger.getLogger(Registration.class.getName()).log(Level.SEVERE, null, ex);
         }
         super.saveUser();
+        
     }
 
     @Override

@@ -27,4 +27,8 @@ public class UserReader extends DAO{
             return result;
         }
     }
+
+    public Users getUserFromUid(Long uid) {
+        return em.find(Users.class, uid);
+    }
 }

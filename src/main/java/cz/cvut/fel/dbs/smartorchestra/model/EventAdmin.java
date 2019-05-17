@@ -12,9 +12,11 @@ import cz.cvut.fel.dbs.smartorchestra.exceptions.EventAdminException;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.EventHandler;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.ParticipantManager;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.SectionReader;
+import cz.cvut.fel.dbs.smartorchestra.model.dao.UserReader;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.ParticipantState;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Participants;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Player;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.SectionType;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
@@ -83,9 +85,24 @@ public class EventAdmin {
         List<Sections> eventSections = pm.getEventSections(event);
         for(int i = 0; i < type.getSections().size(); i++){
             sections.get(i).setSelected(
-                    eventSections.contains(type.getSections().get(i))
+                eventSections.contains(type.getSections().get(i))
             );
         }        
+    }
+    
+    public void invitePlayerToEvents(Player player) throws Exception{
+        ParticipantManager pm = new ParticipantManager(tem.getEntityManager());
+        UserReader ur = new UserReader();
+        EventHandler eh = new EventHandler(tem.getEntityManager());
+        Users user = ur.getUserFromUid(player.getUid());
+        List<Participants> delParts = pm.getParticipants(user, new Date());
+        if(!delParts.isEmpty()){
+           pm.deleteParticipant(delParts);
+        }
+        List<Events> events = eh.getNextEvents(new Date(), player.getSeid());
+        for(Events event : events){
+            pm.inviteSingleUser(player.getSeid(), event, user);
+        }
     }
 
     public HashMap<Events, ParticipantState> getParticipationMap(Users user, List<Events> events) {
@@ -94,7 +111,7 @@ public class EventAdmin {
         if(events.isEmpty()){
             participants = new ArrayList();
         } else {
-            participants = pm.getParticipantByUserAndEventList(user, events);
+            participants = pm.getParticipants(user, events);
         }
         
         

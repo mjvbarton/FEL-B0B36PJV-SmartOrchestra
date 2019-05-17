@@ -11,11 +11,13 @@ import cz.cvut.fel.dbs.smartorchestra.exceptions.UserAdminException;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.UserManagerException;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.WrongInputException;
 import cz.cvut.fel.dbs.smartorchestra.gui.UserDetails;
+import cz.cvut.fel.dbs.smartorchestra.model.EventAdmin;
 import cz.cvut.fel.dbs.smartorchestra.model.PlayerManager;
 import cz.cvut.fel.dbs.smartorchestra.model.UserAdmin;
 import cz.cvut.fel.dbs.smartorchestra.model.UserManager;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.UserWriter;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Player;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -163,6 +165,7 @@ public class UserSettings implements UIController<UserDetails>{
         
         try{
             pm = new PlayerManager();
+            EventAdmin ea = new EventAdmin(SmartOrchestra.getInstance());
             uw.write(user);
             if(controled.getFieldSection().getSelectedIndex() != 0){
                 int sectionIndex = controled.getFieldSection().getSelectedIndex() - 1;
@@ -171,6 +174,7 @@ public class UserSettings implements UIController<UserDetails>{
                 player.setConcertmaster(controled.getConcertMasterFlag());
                 pm.updatePlayerInfo(player);
                 Logger.getLogger(UserSettings.class.getName()).log(Level.INFO, "Section of player changed - {0}", player);
+                invitePlayerToEvents(player);                                                 
             } else{
                 Player player = pm.removePlayer(user);
                 Logger.getLogger(UserSettings.class.getName()).log(Level.INFO, "Player removed - {0}", player);
@@ -181,6 +185,7 @@ public class UserSettings implements UIController<UserDetails>{
         } catch(NotAPlayerException err){
             if(controled.getFieldSection().getSelectedIndex() != 0){
                 Player player = pm.createNewPlayer(user, controled.getFieldSection().getSelectedIndex() - 1, controled.getConcertMasterFlag());
+                invitePlayerToEvents(player);
                 Logger.getLogger(UserSettings.class.getName()).log(Level.INFO, "New player created - {0}", player);
             }
             
@@ -192,6 +197,23 @@ public class UserSettings implements UIController<UserDetails>{
             controled.setExitCode(UserDetails.EXIT);
             controled.dispose();
         }
+    }
+    
+    private void invitePlayerToEvents(Player player){
+        EventAdmin ea = new EventAdmin(SmartOrchestra.getInstance());
+        int invitePlayer = JOptionPane.showConfirmDialog(controled
+                , "Chcete uživatele " + user.getEmail() + " pozvat na nadcházející události pro sekci " + player.getSeid().getSectionname() + " ?"
+                    + "\n Varování: Neprovedení této operace může způsobit nekonzistenci dat."
+                , "Pozvat uživatele na události", JOptionPane.YES_NO_OPTION);
+        if(invitePlayer == JOptionPane.YES_OPTION){
+            try{
+                ea.invitePlayerToEvents(player);
+            } catch(Exception ex){
+                Logger.getLogger(UserSettings.class.getName()).log(Level.SEVERE, "Cannot invite " + user + " from section " + player.getSeid(), ex);
+                JOptionPane.showMessageDialog(controled, "Chyba při běhu programu: " + ex.getMessage(), controled.getTitle(), 
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }    
     }
     
     public void changePasswd(){

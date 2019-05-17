@@ -145,8 +145,8 @@ public class EventSettings implements UIController<EventDetails>{
             ea.saveEvent(event);
             Logger.getLogger(EventSettings.class.getName()).log(Level.INFO, "Event {0} was created.", event);
             ea.sendInvitations(event, controled.getGroupStrings().getSections(), SectionType.STRINGS);
-            //ea.sendInvitations(event, controled.getGroupWinds().getSections(), SectionType.WINDS);
-            //ea.sendInvitations(event, controled.getGroupOther().getSections(), SectionType.OTHER);
+            ea.sendInvitations(event, controled.getGroupWinds().getSections(), SectionType.WINDS);
+            ea.sendInvitations(event, controled.getGroupOther().getSections(), SectionType.OTHER);
             JOptionPane.showMessageDialog(controled, "Událost byla uložena.", 
                     controled.getTitle(), JOptionPane.INFORMATION_MESSAGE);
         } catch(Exception ex){
