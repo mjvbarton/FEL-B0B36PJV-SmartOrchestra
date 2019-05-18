@@ -71,7 +71,6 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         btnAddUser = new javax.swing.JButton();
         userContent = new javax.swing.JScrollPane();
         userTable = new javax.swing.JTable();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         mainMenu = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         fileAddEvent = new javax.swing.JMenuItem();
@@ -288,8 +287,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
 
         content.addTab("Přehled uživatelů", jPanel1);
 
-        getContentPane().add(content, java.awt.BorderLayout.PAGE_START);
-        getContentPane().add(filler1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(content, java.awt.BorderLayout.CENTER);
 
         fileMenu.setText("Soubor");
         fileMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -463,7 +461,6 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
     private javax.swing.JPopupMenu.Separator fileSeparator1;
     private javax.swing.JPopupMenu.Separator fileSeparator2;
     private javax.swing.JMenuItem fileViewProfile;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

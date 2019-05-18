@@ -98,7 +98,7 @@ public class ShowEvents extends javax.swing.JPanel {
                 .addGroup(toolbarContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelFilterEvents, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(fieldFilterEvents, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAddEvent, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE))
+                    .addComponent(btnAddEvent))
                 .addContainerGap())
         );
 
@@ -106,7 +106,7 @@ public class ShowEvents extends javax.swing.JPanel {
 
         add(toolbar, java.awt.BorderLayout.PAGE_START);
 
-        content.setLayout(new javax.swing.BoxLayout(content, javax.swing.BoxLayout.PAGE_AXIS));
+        content.setLayout(new java.awt.GridLayout());
         contentScroll.setViewportView(content);
 
         add(contentScroll, java.awt.BorderLayout.CENTER);
@@ -136,37 +136,42 @@ public class ShowEvents extends javax.swing.JPanel {
     }
     
     public void loadEvents(List<Events> events, Map<Events, ParticipantState> participations){
+        if(events.equals(this.events)){
+           return; 
+        }
         this.events = events;
         content.removeAll();
         content.repaint();
         if(events.isEmpty()){
-            content.add(noEvents);
-            return;
-        }
-        for(Events event : events){
-            EventInfo eventInfo = new EventInfo(event);
-            JComboBox<String> eventState = eventInfo.getFieldParticipation();
             
-            switch(participations.get(event)){
-                case NOT_INVITED:
-                    eventState.setSelectedIndex(ParticipantState.NOT_INVITED.intVal());
-                    eventState.setEnabled(false);
-                    break;
-                case NOT_FILLED:
-                    eventState.setSelectedIndex(ParticipantState.NOT_FILLED.intVal());
-                    eventState.setEnabled(true);
-                    break;
-                case NOT_COMING:
-                    eventState.setSelectedIndex(ParticipantState.NOT_COMING.intVal());
-                    eventState.setEnabled(true);
-                    break;
-                case COMING:
-                    eventState.setSelectedIndex(ParticipantState.COMING.intVal());
-                    eventState.setEnabled(true);
-                    break;
+            content.add(noEvents);
+        } else {
+            for(Events event : events){
+                EventInfo eventInfo = new EventInfo(event);
+                JComboBox<String> eventState = eventInfo.getFieldParticipation();
+            
+                switch(participations.get(event)){
+                    case NOT_INVITED:
+                        eventState.setSelectedIndex(ParticipantState.NOT_INVITED.intVal());
+                        eventState.setEnabled(false);
+                        break;
+                    case NOT_FILLED:
+                        eventState.setSelectedIndex(ParticipantState.NOT_FILLED.intVal());
+                        eventState.setEnabled(true);
+                        break;
+                    case NOT_COMING:
+                        eventState.setSelectedIndex(ParticipantState.NOT_COMING.intVal());
+                        eventState.setEnabled(true);
+                        break;
+                    case COMING:
+                        eventState.setSelectedIndex(ParticipantState.COMING.intVal());
+                        eventState.setEnabled(true);
+                        break;
+                }
+                content.add(eventInfo);
             }
-            content.add(eventInfo);
         }
+        
     }
     
     public List<Events> getEvents(){

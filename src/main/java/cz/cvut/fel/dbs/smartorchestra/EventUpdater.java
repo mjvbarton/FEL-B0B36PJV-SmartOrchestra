@@ -37,6 +37,7 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>, Th
         setControlled(controled);
         em = SmartOrchestra.getEntityManagerFactory().createEntityManager();
         tabbedPane = SmartOrchestra.getInstance().getMainWin().getContent();
+        waiting = true;
     }
     
     @Override

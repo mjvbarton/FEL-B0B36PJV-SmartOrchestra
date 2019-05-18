@@ -73,7 +73,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="labelFilterEvents" alignment="3" max="32767" attributes="0"/>
                           <Component id="fieldFilterEvents" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnAddEvent" alignment="3" pref="34" max="32767" attributes="0"/>
+                          <Component id="btnAddEvent" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -126,8 +126,9 @@
       <SubComponents>
         <Container class="javax.swing.JPanel" name="content">
 
-          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout">
-            <Property name="axis" type="int" value="3"/>
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+            <Property name="columns" type="int" value="0"/>
+            <Property name="rows" type="int" value="1"/>
           </Layout>
         </Container>
       </SubComponents>

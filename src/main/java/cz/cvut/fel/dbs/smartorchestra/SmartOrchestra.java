@@ -10,6 +10,8 @@ import cz.cvut.fel.dbs.smartorchestra.gui.Main;
 import cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.awt.Image;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Handler;
@@ -101,6 +103,43 @@ public class SmartOrchestra implements ThreadEntityManager{
     public void runMainWindow(){
         loginScr.dispose();
         mainWin = new Main();
+        mainWin.addWindowListener(new WindowListener(){
+            @Override
+            public void windowOpened(WindowEvent e) {
+                getEventUpdater().setWaiting(false);
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {}
+                
+            @Override
+            public void windowClosed(WindowEvent e) {
+                getEventUpdater().getEntityManager().close();
+                Logger.getLogger(EventUpdater.class.getName()).log(Level.INFO, "Entity Manager closed.");
+                getEntityManager().close();
+                Logger.getLogger(SmartOrchestra.class.getName()).log(Level.INFO, "Entity Manager closed.");
+                emf.close();
+                Logger.getLogger(SmartOrchestra.class.getName()).log(Level.INFO, "Entity Manager Factory closed.");
+                Logger.getLogger(SmartOrchestra.class.getName()).log(Level.INFO, "Application quit.");
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+                getEventUpdater().setWaiting(false);
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+                getEventUpdater().setWaiting(true);
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {}
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {}
+                        
+        });
         mainWin.getActiveUserName().setText(
                         String.format(mainWin.getActiveUserName().getText(),
                                 activeUser.getFirstName(),
