@@ -13,6 +13,7 @@ import cz.cvut.fel.dbs.smartorchestra.model.dao.SectionReader;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Player;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -78,6 +79,16 @@ public class PlayerManager {
         pw.remove(player);
         return player;
     }
-    
-    
+
+    public HashMap<Long, Player> getPlayers() {
+        List<Player> players = pr.getPlayers();
+        HashMap<Long, Player> map = new HashMap();
+        if(players.isEmpty()){
+            return map;
+        }
+        for(Player player : players){
+            map.put(player.getUid(), player);
+        }
+        return map;
+    }    
 }

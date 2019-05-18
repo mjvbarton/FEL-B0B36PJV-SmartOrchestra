@@ -38,6 +38,7 @@ public class Player implements Serializable {
     @Basic(optional = false)
     @Column(name = "uid")
     private Long uid;
+            
     @Column(name = "concertmaster")
     private Boolean concertmaster;
     @JoinColumn(name = "seid", referencedColumnName = "seid")

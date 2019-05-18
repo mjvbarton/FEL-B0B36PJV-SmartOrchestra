@@ -5,6 +5,7 @@
  */
 package cz.cvut.fel.dbs.smartorchestra;
 
+import cz.cvut.fel.dbs.smartorchestra.exceptions.PlayerManagerException;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.UserAdminException;
 import cz.cvut.fel.dbs.smartorchestra.gui.Main;
 import cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents;
@@ -12,6 +13,7 @@ import cz.cvut.fel.dbs.smartorchestra.gui.UserDetails;
 import cz.cvut.fel.dbs.smartorchestra.gui.UserRegistration;
 import cz.cvut.fel.dbs.smartorchestra.gui.ViewProfile;
 import cz.cvut.fel.dbs.smartorchestra.model.EventAdmin;
+import cz.cvut.fel.dbs.smartorchestra.model.PlayerManager;
 import cz.cvut.fel.dbs.smartorchestra.model.UserAdmin;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.util.logging.Level;
@@ -63,7 +65,12 @@ public class MainControl implements UIController<Main>{
     public void loadUsersToTable(){
         ua = new UserAdmin();
         try {
-            controled.fetchUserIntoTable(ua.loadUsers());
+            PlayerManager pm = new PlayerManager();
+            controled.fetchUserIntoTable(ua.loadUsers(), pm.getPlayers());
+        } catch (PlayerManagerException ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, "Error loading users", ex);
+            JOptionPane.showMessageDialog(controled, ex.getMessage(), "Chyba", JOptionPane.ERROR_MESSAGE);
+            
         } catch (UserAdminException ex) {
             Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(controled, ex.getMessage(), controled.getTitle(), JOptionPane.WARNING_MESSAGE);

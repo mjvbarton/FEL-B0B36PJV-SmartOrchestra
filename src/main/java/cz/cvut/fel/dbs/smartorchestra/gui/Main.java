@@ -8,6 +8,7 @@ package cz.cvut.fel.dbs.smartorchestra.gui;
 import cz.cvut.fel.dbs.smartorchestra.MainControl;
 import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
 import cz.cvut.fel.dbs.smartorchestra.UIControlled;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Player;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -16,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.Box;
 import javax.swing.JLabel;
@@ -206,6 +208,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
 
         userContent.setMinimumSize(new Dimension(getWidth(), getHeight() - userToolbar.getHeight() - mainMenu.getHeight()));
 
+        userTable.setAutoCreateRowSorter(true);
         userTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"Josefína", "Abuzaradová", "31.12.2019", "Klášterec nad Ohří", "+420 777 777 777", "josefina.abuzaradova@ensembleacademia.cz", "příčná flétna"},
@@ -486,7 +489,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         return controller;
     }
     
-    public void fetchUserIntoTable(List<Users> users){
+    public void fetchUserIntoTable(List<Users> users, HashMap<Long, Player> players){
         DefaultTableModel tableContent = new DefaultTableModel(
                 new Object[][] {{}, {}},                        
                 Main.USERS_COLUMN_NAMES){
@@ -505,11 +508,19 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
                     user.getAddrTown(),
                     user.getPhone(),
                     user.getEmail(),
-                    "sekce"                    
+                    getPlayerSectionName(user, players)
             });
         }
         userTable.setModel(tableContent);
         fetchColumns();
+    }
+    
+    private String getPlayerSectionName(Users user, HashMap<Long, Player> players){
+        if(players.isEmpty() || players.get(user.getUid()) == null){
+            return "---";
+        } else {
+            return players.get(user.getUid()).getSeid().getSectionname();
+        }
     }
     
     private void fetchColumns(){

@@ -39,7 +39,7 @@ public class Users implements Serializable {
     private String addrHouseNumber;
     private String addrTown;
     private Integer addrZipCode;
-
+    
     public Long getUid() {
         return uid;
     }

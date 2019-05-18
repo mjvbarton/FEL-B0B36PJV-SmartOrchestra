@@ -78,11 +78,13 @@ public class SmartOrchestra implements ThreadEntityManager{
             Logger.getLogger(SmartOrchestra.class.getName()).log(Level.SEVERE, "Database connection failed.", err);
             JOptionPane.showMessageDialog(null, "Připojení k databázi selhalo.", 
                     "SmartOrchestra", JOptionPane.ERROR_MESSAGE);
+            return;
             
         } catch(Exception err){
             Logger.getLogger(SmartOrchestra.class.getName()).log(Level.SEVERE, "Cannot run SmartOrchestra", err);
             JOptionPane.showMessageDialog(null, "Chyba při běhu programu: Pro více informací zkontrolujte log.", 
-                    "SmartOrchestra", JOptionPane.ERROR_MESSAGE);            
+                    "SmartOrchestra", JOptionPane.ERROR_MESSAGE);
+            return;
         }
     }
     

@@ -6,6 +6,7 @@
 package cz.cvut.fel.dbs.smartorchestra.model.dao;
 
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Player;
+import java.util.List;
 
 /**
  *
@@ -18,5 +19,8 @@ public class PlayerReader extends DAO{
     public synchronized Player getPlayer(Long uid){
        return em.find(Player.class, uid);
     }
-    
+
+    public List<Player> getPlayers() {
+        return em.createNamedQuery("Player.findAll").getResultList();
+    }
 }
