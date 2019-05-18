@@ -106,7 +106,7 @@ public class ShowEvents extends javax.swing.JPanel {
 
         add(toolbar, java.awt.BorderLayout.PAGE_START);
 
-        content.setLayout(new java.awt.GridLayout());
+        content.setLayout(new javax.swing.BoxLayout(content, javax.swing.BoxLayout.PAGE_AXIS));
         contentScroll.setViewportView(content);
 
         add(contentScroll, java.awt.BorderLayout.CENTER);
