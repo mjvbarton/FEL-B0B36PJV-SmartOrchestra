@@ -51,7 +51,6 @@ public class EventHandler extends DAOThreadSafe {
         List<Events> e = em.createQuery("SELECT e FROM Events e WHERE e.begins >= :date AND e.active = TRUE ORDER BY e.begins, e.eventname", Events.class)                    
                 .setParameter("date", date).getResultList();
         em.getTransaction().commit();
-        em.clear();
         return e;        
     }
         

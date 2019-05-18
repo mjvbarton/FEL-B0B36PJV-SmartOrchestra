@@ -9,6 +9,7 @@ import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Participants;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.ParticipantsPK;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Player;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.SectionType;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.util.ArrayList;
@@ -95,8 +96,8 @@ public class ParticipantManager extends DAOThreadSafe{
     }
 
     public synchronized List<Sections> getEventSections(Events event) {
-        return em.createQuery("SELECT p.seid FROM Participants p ", Sections.class)
-                .getResultList();   
+        return em.createQuery("SELECT DISTINCT p.seid FROM Participants p WHERE p.events = :event ", Sections.class)
+                .setParameter("event", event).getResultList();  
     }
     
     public List<Participants> getParticipants(Users user, List<Events> events){

@@ -73,21 +73,21 @@ public class EventAdmin {
         }
     }
         
-    public void sendInvitations(Events event, List<JCheckBox> checkedSections, SectionType type){
+    public void sendInvitations(Events event, HashMap<Sections, JCheckBox> eventSections, SectionType type){
         ParticipantManager pm = new ParticipantManager(tem.getEntityManager());
-        for(int i = 0; i < type.getSections().size(); i++){
-            pm.processNewInvitation(type.getSections().get(i), event, checkedSections.get(i).isSelected());            
-        }   
+        eventSections.forEach((section, checkBox) -> {
+            pm.processNewInvitation(section, event, checkBox.isSelected());
+        });
+        
     }   
 
-    public void checkSections(Events event, List<JCheckBox> sections, SectionType type) {
+    public List<Sections> getInvitedSectionsForEvent(Events event) throws EventAdminException {
         ParticipantManager pm = new ParticipantManager(tem.getEntityManager());
-        List<Sections> eventSections = pm.getEventSections(event);
-        for(int i = 0; i < type.getSections().size(); i++){
-            sections.get(i).setSelected(
-                eventSections.contains(type.getSections().get(i))
-            );
-        }        
+        List<Sections> sections = pm.getEventSections(event);
+        if(sections.isEmpty()){
+            throw new EventAdminException("Sekci pro událost " + event + " nebyly nalezeny.");
+        }
+        return sections;
     }
     
     public void invitePlayerToEvents(Player player) throws Exception{

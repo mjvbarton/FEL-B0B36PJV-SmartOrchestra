@@ -25,6 +25,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -164,13 +165,15 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
            
     public class SectionGroup extends JPanel{
         private JButton caption;
-        private List<JCheckBox> sections;
+        private HashMap<Sections, JCheckBox> sections;
         private JPanel content;
+        private SectionType type;
                         
         public SectionGroup(SectionType sectionType, EventSettings controller){
-            sections = new ArrayList();
+            sections = new HashMap();
             setLayout(new BorderLayout());
             caption = new JButton();
+            type = sectionType;
             caption.setText(sectionType.toString(true));
             caption.addActionListener(new ActionListener(){
                 @Override
@@ -191,22 +194,30 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
             for(Sections section : sections){
                 JCheckBox checkBox = new JCheckBox();
                 checkBox.setText(section.getSectionname());
-                this.sections.add(checkBox);
+                this.sections.put(section, checkBox);
                 content.add(checkBox);
             }
         }
         
-        public List<JCheckBox> getSections(){
+        public HashMap<Sections, JCheckBox> getSections(){
             return sections;
         }
         
-        public void checkSections(boolean isSelected) {
-            for(JCheckBox section : sections){
-                section.setSelected(isSelected);
+        public void checkSections(List<Sections> activeSections) {
+            for(Sections section : activeSections){
+                if(section.getSectiontype() == type){
+                    sections.get(section).setSelected(true);
+                }
             }
-        }        
+        }
+        
+        private void checkSections(boolean isChecked){
+            sections.forEach((section, checkBox) -> {
+                checkBox.setSelected(isChecked);
+            });
+        }
     }
-    
+
     private void loadComponents(){
         /* COMMON TAB */
         

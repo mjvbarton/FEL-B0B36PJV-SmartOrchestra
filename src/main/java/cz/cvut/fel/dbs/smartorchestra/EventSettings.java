@@ -9,10 +9,13 @@ import cz.cvut.fel.dbs.smartorchestra.exceptions.WrongInputException;
 import cz.cvut.fel.dbs.smartorchestra.gui.EventDetails;
 import cz.cvut.fel.dbs.smartorchestra.model.EventAdmin;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.EventHandler;
+import cz.cvut.fel.dbs.smartorchestra.model.dao.ParticipantManager;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.SectionType;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -60,10 +63,11 @@ public class EventSettings implements UIController<EventDetails>{
             controled.getGroupWinds().loadSections(SectionType.WINDS.getSections());
             controled.getGroupOther().loadSections(SectionType.OTHER.getSections());
             Logger.getLogger(EventSettings.class.getName()).log(Level.INFO, "Loaded sections to SectionType enum.");
-            ea.checkSections(event, controled.getGroupStrings().getSections(), SectionType.STRINGS);
-            ea.checkSections(event, controled.getGroupWinds().getSections(), SectionType.WINDS);
-            ea.checkSections(event, controled.getGroupOther().getSections(), SectionType.OTHER);
-            
+            ParticipantManager pm = new ParticipantManager(SmartOrchestra.getInstance().getEntityManager());
+            List<Sections> activeSections = pm.getEventSections(event);
+            controled.getGroupStrings().checkSections(activeSections);
+            controled.getGroupWinds().checkSections(activeSections);
+            controled.getGroupOther().checkSections(activeSections);           
         } catch (Exception ex) {
             Logger.getLogger(EventSettings.class.getName()).log(Level.SEVERE, "Cannot read sections.", ex);
             JOptionPane.showMessageDialog(controled, "Chyba při běhu programu: " + ex.getMessage(),
