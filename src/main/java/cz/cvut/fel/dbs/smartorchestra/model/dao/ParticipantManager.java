@@ -141,4 +141,20 @@ public class ParticipantManager extends DAOThreadSafe{
             throw ex;
         }
     }
+
+    public Participants getParticipant(Users user, Events event) {
+        return em.find(Participants.class, new ParticipantsPK(user, event));
+    }
+
+    public void updateParticipant(Participants part) {
+        try{
+            em.getTransaction().begin();
+            em.persist(part);
+            em.getTransaction().commit();
+        } catch (Exception ex){
+            em.getTransaction().rollback();
+            throw ex;
+        }
+        
+    }
 }

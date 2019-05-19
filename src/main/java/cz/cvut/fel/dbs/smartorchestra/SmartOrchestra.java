@@ -14,6 +14,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +31,7 @@ import org.hibernate.service.spi.ServiceException;
 public class SmartOrchestra implements ThreadEntityManager{
     private static SmartOrchestra singleton;
     public static final String DATE_FORMAT = "dd.MM.yyyy";
+    private static final double TIME_BLOCK_RATIO = 1.5;
     
     private EntityManager em;
     private static EntityManagerFactory emf;
@@ -78,13 +80,13 @@ public class SmartOrchestra implements ThreadEntityManager{
             Logger.getLogger(SmartOrchestra.class.getName()).log(Level.SEVERE, "Database connection failed.", err);
             JOptionPane.showMessageDialog(null, "Připojení k databázi selhalo.", 
                     "SmartOrchestra", JOptionPane.ERROR_MESSAGE);
-            return;
+            
             
         } catch(Exception err){
             Logger.getLogger(SmartOrchestra.class.getName()).log(Level.SEVERE, "Cannot run SmartOrchestra", err);
             JOptionPane.showMessageDialog(null, "Chyba při běhu programu: Pro více informací zkontrolujte log.", 
                     "SmartOrchestra", JOptionPane.ERROR_MESSAGE);
-            return;
+            
         }
     }
     
@@ -108,11 +110,22 @@ public class SmartOrchestra implements ThreadEntityManager{
         mainWin.addWindowListener(new WindowListener(){
             @Override
             public void windowOpened(WindowEvent e) {
-                getEventUpdater().setWaiting(false);
+                                
+                //getEventUpdater().setWaiting(false);
+                getEventUpdater().setBlockUpdate(false);
+                getEventUpdater().interrupt();
             }
 
             @Override
-            public void windowClosing(WindowEvent e) {}
+            public void windowClosing(WindowEvent e) {
+            getEventUpdater().getEntityManager().close();
+                Logger.getLogger(EventUpdater.class.getName()).log(Level.INFO, "Entity Manager closed.");
+                getEntityManager().close();
+                Logger.getLogger(SmartOrchestra.class.getName()).log(Level.INFO, "Entity Manager closed.");
+                emf.close();
+                Logger.getLogger(SmartOrchestra.class.getName()).log(Level.INFO, "Entity Manager Factory closed.");
+                Logger.getLogger(SmartOrchestra.class.getName()).log(Level.INFO, "Application quit.");
+            }
                 
             @Override
             public void windowClosed(WindowEvent e) {
@@ -127,12 +140,12 @@ public class SmartOrchestra implements ThreadEntityManager{
 
             @Override
             public void windowIconified(WindowEvent e) {
-                getEventUpdater().setWaiting(false);
+                //getEventUpdater().setWaiting(false);
             }
 
             @Override
             public void windowDeiconified(WindowEvent e) {
-                getEventUpdater().setWaiting(true);
+                //getEventUpdater().setWaiting(true);
             }
 
             @Override
@@ -205,6 +218,7 @@ public class SmartOrchestra implements ThreadEntityManager{
             synchronized(SmartOrchestra.class){
                 if(eventUpdater == null){
                     eventUpdater = new EventUpdater(events);
+                    eventUpdater.setBlockUpdate(true);
                     eventUpdater.start();
                     Logger.getLogger(SmartOrchestra.class.getName()).log(Level.INFO, "EventUpdater started.");
                 }
@@ -218,5 +232,10 @@ public class SmartOrchestra implements ThreadEntityManager{
 
     public EventUpdater getEventUpdater() {
         return eventUpdater;
+    }
+    
+    public Date getBlockDate(Date date){
+        Date x = new Date((long) (date.getTime() - TIME_BLOCK_RATIO * 3600 * 1000));
+        return x;
     }
 }

@@ -32,19 +32,21 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>, Th
     private EntityManager em;
     private final Object pauseLock = new Object();
     private volatile boolean waiting;
+    private volatile boolean loadingBlocked;
     
     public EventUpdater(ShowEvents controled){
         setControlled(controled);
         em = SmartOrchestra.getEntityManagerFactory().createEntityManager();
         tabbedPane = SmartOrchestra.getInstance().getMainWin().getContent();
         waiting = true;
+        loadingBlocked = false;
     }
     
     @Override
     public void run() {
         ea = new EventAdmin(EventUpdater.this);
         while(true){
-            if(waiting){
+            /*if(waiting){
                 synchronized(pauseLock){
                     if(waiting){
                         try {
@@ -56,23 +58,9 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>, Th
                         }
                     }
                 }
-            }
-            if(tabbedPane.getSelectedIndex() == Main.TAB_EVENTS){
-                try {
-                    List<Events> events = ea.loadEvents();
-                    Users activeUser = SmartOrchestra.getInstance().getActiveUser();
-                    if(events.isEmpty()){
-                        Logger.getLogger(ShowEvents.class.getName()).log(Level.INFO, "No events found.");
-                        /*JOptionPane.showMessageDialog(controled, "Seznam událostí je prázdný.",
-                        "Varování", JOptionPane.INFORMATION_MESSAGE);*/
-                        controled.loadEvents(events, new HashMap());
-                    }
-                    controled.loadEvents(events, ea.getParticipationMap(activeUser, events));
-                } catch (Exception ex) {
-                    Logger.getLogger(ShowEvents.class.getName()).log(Level.SEVERE, "Unable to load events.", ex);
-                    JOptionPane.showMessageDialog(controled, "Chyba v běhu programu: " + ex.getMessage(), 
-                            "Chyba", JOptionPane.ERROR_MESSAGE);
-                }
+            }*/
+            if(tabbedPane.getSelectedIndex() == Main.TAB_EVENTS && !loadingBlocked){
+                updateEvents();
                 try {
                     sleep(1000 * 10);
                 } catch (InterruptedException ex) {
@@ -87,16 +75,44 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>, Th
         this.controled = controled;
     }
 
+    public ShowEvents getControled() {
+        return controled;
+    }
+
     public void setWaiting(boolean waiting) {
         this.waiting = waiting;
         if(!waiting){
             synchronized(pauseLock){
                 Logger.getLogger(EventUpdater.class.getName()).log(Level.INFO, "EventUpdater resumed");
+                controled.repaint();
                 pauseLock.notifyAll();
             }    
             interrupt();
         }   
-    } 
+    }
+    
+    public synchronized void setBlockUpdate(boolean isBlocked){
+        loadingBlocked = isBlocked;
+        Logger.getLogger(EventUpdater.class.getName()).log(Level.INFO, "EventUpdater updateBlocked: {0}", isBlocked);
+    }
+    
+    public void updateEvents(){
+        try {
+            List<Events> events = ea.loadEvents();
+            Users activeUser = SmartOrchestra.getInstance().getActiveUser();
+            if(events.isEmpty()){
+                Logger.getLogger(ShowEvents.class.getName()).log(Level.INFO, "No events found.");
+                /*JOptionPane.showMessageDialog(controled, "Seznam událostí je prázdný.",
+                    "Varování", JOptionPane.INFORMATION_MESSAGE);*/
+                controled.loadEvents(events, new HashMap());
+            }
+            controled.loadEvents(events, ea.getParticipationMap(activeUser, events));
+        } catch (Exception ex) {
+            Logger.getLogger(ShowEvents.class.getName()).log(Level.SEVERE, "Unable to load events.", ex);
+            JOptionPane.showMessageDialog(controled, "Chyba v běhu programu: " + ex.getMessage(), 
+                    "Chyba", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     @Override
     public EntityManager getEntityManager() {

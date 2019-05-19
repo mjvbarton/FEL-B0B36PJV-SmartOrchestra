@@ -51,6 +51,7 @@ public class EventHandler extends DAOThreadSafe {
         List<Events> e = em.createQuery("SELECT e FROM Events e WHERE e.begins >= :date AND e.active = TRUE ORDER BY e.begins, e.eventname", Events.class)                    
                 .setParameter("date", date).getResultList();
         em.getTransaction().commit();
+        
         return e;        
     }
         
@@ -67,6 +68,7 @@ public class EventHandler extends DAOThreadSafe {
         List<Events> e = em.createQuery("SELECT e FROM Events e WHERE e.begins >= :date AND e.active = TRUE AND e.evid IN :evids ORDER BY e.begins, e.eventname", Events.class)
                 .setParameter("date", date).setParameter("evids", userEvids).getResultList();
         em.getTransaction().commit();
+        
         return e;
     } 
     
@@ -83,6 +85,7 @@ public class EventHandler extends DAOThreadSafe {
         List<Events> e = em.createQuery("SELECT e FROM Events e WHERE e.begins >= :date AND e.active = TRUE AND e.evid IN :evids ORDER BY e.begins, e.eventname", Events.class)
                 .setParameter("date", date).setParameter("evids", userEvids).getResultList();
         em.getTransaction().commit();
+        
         return e;
     }
 }

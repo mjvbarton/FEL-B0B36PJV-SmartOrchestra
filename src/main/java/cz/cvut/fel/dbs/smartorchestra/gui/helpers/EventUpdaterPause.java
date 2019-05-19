@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 public class EventUpdaterPause implements ActionListener{        
     @Override
     public void actionPerformed(ActionEvent e) {
-        SmartOrchestra.getInstance().getEventUpdater().setWaiting(true);
+        //SmartOrchestra.getInstance().getEventUpdater().setWaiting(true);
+        SmartOrchestra.getInstance().getEventUpdater().setBlockUpdate(true);
     }
 }

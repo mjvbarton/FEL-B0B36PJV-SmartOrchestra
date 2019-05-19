@@ -35,7 +35,7 @@ public class EventUpdaterResume implements WindowListener{
         
         @Override
         public synchronized void windowClosed(WindowEvent e) {
-            SmartOrchestra.getInstance().getEventUpdater().setWaiting(false);
-            //SmartOrchestra.getInstance().getEventUpdater().notify();
+            SmartOrchestra.getInstance().getEventUpdater().interrupt();
+            SmartOrchestra.getInstance().getEventUpdater().setBlockUpdate(false);
         }
     }

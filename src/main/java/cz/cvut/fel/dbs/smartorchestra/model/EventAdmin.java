@@ -137,4 +137,12 @@ public class EventAdmin {
         }
         return map;
     }
+
+    public void updateParticipation(Events event, ParticipantState state, String message) {
+        ParticipantManager pm = new ParticipantManager(tem.getEntityManager());
+        Participants part = pm.getParticipant(SmartOrchestra.getInstance().getActiveUser(), event);
+        part.setActive(state.toBoolean());
+        part.setMessage(message);
+        pm.updateParticipant(part);
+    }
 }

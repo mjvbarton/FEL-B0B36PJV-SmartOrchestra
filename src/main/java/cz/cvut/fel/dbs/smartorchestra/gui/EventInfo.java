@@ -9,6 +9,9 @@ import cz.cvut.fel.dbs.smartorchestra.Participation;
 import cz.cvut.fel.dbs.smartorchestra.UIControlled;
 import cz.cvut.fel.dbs.smartorchestra.gui.helpers.EventUpdaterPause;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
+import cz.cvut.fel.dbs.smartorchestra.model.entities.ParticipantState;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import javax.swing.JComboBox;
@@ -19,6 +22,7 @@ import javax.swing.JComboBox;
  */
 public class EventInfo extends javax.swing.JPanel implements UIControlled<Participation>{
     private Participation controller;
+    private final ActionListener listenerParticipation;
         
     /**
      * Creates new form EventView
@@ -31,9 +35,18 @@ public class EventInfo extends javax.swing.JPanel implements UIControlled<Partic
         controller.setControlled(this);
         initComponents();
         updateEventInfo(event);
+        
+        listenerParticipation = new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.setParticipationState(ParticipantState.getParticipantState(fieldParticipation));
+            }
+        };
+        fieldParticipation.addActionListener(listenerParticipation);        
         btnShowDetails.addActionListener(new EventUpdaterPause());
         //btnShowParticipants.addActionListener(new EventUpdaterPause());
-    }
+    }   
+        
            
     public void updateEventInfo(Events event){
         DateFormat f = new SimpleDateFormat("dd.MM.yyyy");
@@ -86,11 +99,6 @@ public class EventInfo extends javax.swing.JPanel implements UIControlled<Partic
         eventPlace.setText("Gymnázium V. B. T. Slaný");
 
         fieldParticipation.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "zadat docházku", "Přijdu", "Nepřijdu" }));
-        fieldParticipation.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldParticipationActionPerformed(evt);
-            }
-        });
 
         btnShowParticipants.setText("Docházka");
         btnShowParticipants.addActionListener(new java.awt.event.ActionListener() {
@@ -172,10 +180,6 @@ public class EventInfo extends javax.swing.JPanel implements UIControlled<Partic
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void fieldParticipationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldParticipationActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fieldParticipationActionPerformed
-
     private void btnShowParticipantsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowParticipantsActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnShowParticipantsActionPerformed
@@ -211,6 +215,8 @@ public class EventInfo extends javax.swing.JPanel implements UIControlled<Partic
     public JComboBox<String> getFieldParticipation() {
         return fieldParticipation;
     }
-    
-    
+
+    public ActionListener getListenerParticipation() {
+        return listenerParticipation;
+    }    
 }

@@ -5,13 +5,18 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
+import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.ParticipantState;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Participants;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,6 +37,8 @@ public class ShowEvents extends javax.swing.JPanel {
         noEvents.setText("Seznam událostí je prázdný.");
         noEvents.setHorizontalAlignment(JLabel.CENTER);
         Font f = noEvents.getFont();
+        events = new ArrayList();
+        events.add(new Events());
     }
 
     /**
@@ -136,22 +143,24 @@ public class ShowEvents extends javax.swing.JPanel {
     }
     
     public void loadEvents(List<Events> events, Map<Events, ParticipantState> participations){
-        if(events.equals(this.events)){
+        /*if(events.equals(this.events)){
            return; 
-        }
-        this.events = events;
+        }*/
         content.removeAll();
-        content.repaint();
+        if(this.events.size() > events.size()){            
+            content.repaint();
+        }
         if(events.isEmpty()){
-            
-            content.add(noEvents);
-        } else {
+            content.add(noEvents);        
+        } else {                
             for(Events event : events){
                 EventInfo eventInfo = new EventInfo(event);
+                Date blockDate = SmartOrchestra.getInstance().getBlockDate(event.getBegins());
+                Date nowDate = new Date();
                 JComboBox<String> eventState = eventInfo.getFieldParticipation();
-            
+                eventState.removeActionListener(eventInfo.getListenerParticipation());            
                 switch(participations.get(event)){
-                    case NOT_INVITED:
+                    case NOT_INVITED:                        
                         eventState.setSelectedIndex(ParticipantState.NOT_INVITED.intVal());
                         eventState.setEnabled(false);
                         break;
@@ -160,18 +169,21 @@ public class ShowEvents extends javax.swing.JPanel {
                         eventState.setEnabled(true);
                         break;
                     case NOT_COMING:
-                        eventState.setSelectedIndex(ParticipantState.NOT_COMING.intVal());
-                        eventState.setEnabled(true);
+                        eventState.setSelectedIndex(ParticipantState.NOT_COMING.intVal());                        
+                        eventState.setEnabled(blockDate.after(nowDate));
                         break;
                     case COMING:
                         eventState.setSelectedIndex(ParticipantState.COMING.intVal());
-                        eventState.setEnabled(true);
+                        Logger.getLogger(ShowEvents.class.getName()).log(Level.FINE, "Event {0} begins: {1} Block date: {2}", 
+                                new Object[]{event, blockDate, nowDate});
+                        eventState.setEnabled(blockDate.after(nowDate));
                         break;
                 }
+                eventState.addActionListener(eventInfo.getListenerParticipation());
                 content.add(eventInfo);
             }
-        }
-        
+            this.events = events;
+        }        
     }
     
     public List<Events> getEvents(){

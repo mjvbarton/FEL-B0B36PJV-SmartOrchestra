@@ -5,6 +5,9 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.model.entities;
 
+import java.util.InputMismatchException;
+import javax.swing.JComboBox;
+
 /**
  *
  * @author Matěj Bartoň
@@ -23,5 +26,33 @@ public enum ParticipantState {
     
     public int intVal(){
         return comboBoxIndex;
+    }
+    
+    public Boolean toBoolean(){
+        switch(comboBoxIndex){
+            case 0:
+                return null;                
+            case 1:
+                return true;    
+            case 2:
+                return false; 
+            default:
+                throw new InputMismatchException("Wrong ParticipantState comboBoxIndex value.");
+        }
+        
+    }
+    
+    public static ParticipantState getParticipantState(JComboBox box){
+        int index = box.getSelectedIndex();
+        switch(index){
+            case 0:
+                return NOT_FILLED;
+            case 1:
+                return COMING;
+            case 2:
+                return NOT_COMING;
+            default:
+                throw new InputMismatchException("The ComboBox index must under go ParticipantState enum int values");
+        }
     }
 }

@@ -26,6 +26,11 @@ public class ParticipantsPK implements Serializable {
 
     public ParticipantsPK() {
     }
+    
+    public ParticipantsPK(Users user, Events event){
+        this.uid = user.getUid().intValue();
+        this.evid = event.getEvid();
+    }
 
     public ParticipantsPK(int uid, int evid) {
         this.uid = uid;
