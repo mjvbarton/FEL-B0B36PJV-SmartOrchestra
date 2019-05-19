@@ -195,4 +195,23 @@ public class EventSettings implements UIController<EventDetails>{
             controled.dispose();
         }
     }
+    
+    public void deleteEvent(){
+            int confirmDeletion = JOptionPane.showConfirmDialog(controled
+                    , "Opravdu chcete trvale smazat událost?"
+                            + "\nToto už nelze vrátit.", "Potvrdit smazání", JOptionPane.YES_NO_OPTION);
+            if(confirmDeletion == JOptionPane.YES_OPTION){
+                EventAdmin ea = new EventAdmin(SmartOrchestra.getInstance());
+                try{
+                    ea.deleteEvent(event);
+                    JOptionPane.showMessageDialog(controled, "Událost byla odstraněna.", "Smazat událost", JOptionPane.INFORMATION_MESSAGE);
+                } catch(Exception ex){
+                    Logger.getLogger(EventSettings.class.getName()).log(Level.SEVERE, "Unable to remove event: " + event, ex);
+                    JOptionPane.showMessageDialog(controled, "Smazání události se nezdařilo. \nPro více informací zkontrolujte log.",
+                    controled.getTitle(), JOptionPane.ERROR_MESSAGE);
+                } finally {
+                    controled.dispose();
+                }
+            }
+    }
 }

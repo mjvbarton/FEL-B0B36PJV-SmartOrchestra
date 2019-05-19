@@ -164,4 +164,8 @@ public class EventAdmin {
     public List<Participants> getParticipants(Events event){
         return new ParticipantManager(tem.getEntityManager()).getParticipants(event);        
     }
+    
+    public void deleteEvent(Events event){
+        new EventHandler(tem.getEntityManager()).deleteEvent(event);
+    }
 }

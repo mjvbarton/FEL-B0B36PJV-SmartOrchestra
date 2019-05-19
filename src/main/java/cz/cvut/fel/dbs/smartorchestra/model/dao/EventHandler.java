@@ -142,5 +142,18 @@ public class EventHandler extends DAOThreadSafe {
                 .setParameter("date", date).setParameter("evids", userEvids).getResultList();
         em.getTransaction().commit();
         return e;
-    }   
+    } 
+    
+    public void deleteEvent(Events event){
+        em.clear();
+        try {
+            em.getTransaction().begin();
+            Events deleteEvent = em.find(Events.class, event.getEvid());
+            em.remove(deleteEvent);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            em.getTransaction().rollback();
+            throw ex;
+        }
+    }
 }

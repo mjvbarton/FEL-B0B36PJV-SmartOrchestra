@@ -432,7 +432,7 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
     }
     
     protected void btnDeleteEventClicked(ActionEvent e){
-        Logger.getLogger(EventDetails.class.getName()).info("Delete event initiated");
+        controller.deleteEvent();
     }
 
     public JTextField getFieldName() {
