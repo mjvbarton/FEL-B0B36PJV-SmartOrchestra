@@ -19,6 +19,7 @@ public enum ParticipantState {
     COMING(1);
     
     private final int comboBoxIndex;
+    private final String tableValue;
     
     private ParticipantState(int comboBoxIndex){
         this.comboBoxIndex = comboBoxIndex;
@@ -40,6 +41,16 @@ public enum ParticipantState {
                 throw new InputMismatchException("Wrong ParticipantState comboBoxIndex value.");
         }
         
+    }
+    
+    public static ParticipantState fromBoolean(Boolean state){
+        if(state == null){
+            return NOT_FILLED;
+        } else if(state) {
+            return COMING;
+        } else {
+            return NOT_COMING;
+        }        
     }
     
     public static ParticipantState getParticipantState(JComboBox box){
