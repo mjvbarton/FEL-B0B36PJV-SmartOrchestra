@@ -1,8 +1,12 @@
+/*
+ * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
+ * (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
+ */
 package cz.cvut.fel.dbs.smartorchestra;
 
 /**
  * This interface represents UI element of <code>View</code>. The element is controlled by <code>Controller</code>.
- * @author Matěj Bartoň
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  * @param <UIController> - Class of the <b>controller</b> element
  */
 public interface UIControlled<UIController> {
