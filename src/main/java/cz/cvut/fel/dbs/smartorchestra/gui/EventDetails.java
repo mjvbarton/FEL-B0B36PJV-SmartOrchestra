@@ -285,9 +285,12 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
                 
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(fieldEndsDate.getText().isEmpty()){
+                if(fieldEndsDate.getText().isEmpty() && fieldBeginsDate.getText().isEmpty()){
                     DateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-                    fieldEndsDate.setText(f.format(new Date()));
+                    fieldBeginsDate.setText(f.format(new Date()));
+                }
+                if(fieldEndsDate.getText().isEmpty()){
+                    fieldEndsDate.setText(fieldBeginsDate.getText());
                 }
             }
         });
@@ -522,5 +525,9 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
 
     public SectionGroup getGroupOther() {
         return groupOther;
-    }   
+    }
+
+    public JButton getBtnDeleteEvent() {
+        return btnDeleteEvent;
+    }
 }

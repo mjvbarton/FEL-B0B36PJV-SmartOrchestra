@@ -100,6 +100,7 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>, Th
                 /*JOptionPane.showMessageDialog(controled, "Seznam událostí je prázdný.",
                     "Varování", JOptionPane.INFORMATION_MESSAGE);*/
                 controled.loadEvents(events, new HashMap(), filter);
+                return;
             }
             controled.loadEvents(events, ea.getParticipationMap(activeUser, events), filter);
         } catch (Exception ex) {

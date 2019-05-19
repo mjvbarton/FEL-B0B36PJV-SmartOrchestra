@@ -38,6 +38,12 @@ public class EventSettings implements UIController<EventDetails>{
         this.controled = controled;
     }
     
+    public void loadEvent(){
+        Events e = new Events();
+        loadEvent(new Events());
+        controled.getBtnDeleteEvent().setVisible(false);
+    }
+    
     public void loadEvent(int evid){
         EventHandler eh = new EventHandler(SmartOrchestra.getInstance().getEntityManager());
         loadEvent(eh.getEvent(evid));
@@ -47,14 +53,26 @@ public class EventSettings implements UIController<EventDetails>{
         this.event = event;
         controled.getFieldName().setText(event.getEventname());
         DateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        controled.getFieldBeginsDate().setText(f.format(event.getBegins()));
-        controled.getFieldEndsDate().setText(f.format(event.getEnds()));
+        try{
+            controled.getFieldBeginsDate().setText(f.format(event.getBegins()));
+        } catch (NullPointerException ex){
+            controled.getFieldBeginsDate().setText("");
+        }
+        try {
+            controled.getFieldEndsDate().setText(f.format(event.getEnds()));
+        } catch (NullPointerException ex) {
+            controled.getFieldEndsDate().setText("");
+        }
         
         controled.getFieldAddrInstitution().setText(event.getAddrinstitution());
         controled.getFieldAddrStreet().setText(event.getAddrstreet());
         controled.getFieldAddrHouseNumber().setText(event.getAddrhousenumber());
         controled.getFieldAddrTown().setText(event.getAddrtown());
-        controled.getFieldAddrZipCode().setText(event.getAddrzipcode().toString());
+        try{
+            controled.getFieldAddrZipCode().setText(event.getAddrzipcode().toString());
+        } catch (NullPointerException ex){
+            controled.getFieldAddrZipCode().setText("");
+        }
         
         EventAdmin ea = new EventAdmin(SmartOrchestra.getInstance());
         try {
@@ -63,11 +81,13 @@ public class EventSettings implements UIController<EventDetails>{
             controled.getGroupWinds().loadSections(SectionType.WINDS.getSections());
             controled.getGroupOther().loadSections(SectionType.OTHER.getSections());
             Logger.getLogger(EventSettings.class.getName()).log(Level.INFO, "Loaded sections to SectionType enum.");
-            ParticipantManager pm = new ParticipantManager(SmartOrchestra.getInstance().getEntityManager());
-            List<Sections> activeSections = pm.getEventSections(event);
-            controled.getGroupStrings().checkSections(activeSections);
-            controled.getGroupWinds().checkSections(activeSections);
-            controled.getGroupOther().checkSections(activeSections);           
+            if(event.getEvid() != null){            
+                ParticipantManager pm = new ParticipantManager(SmartOrchestra.getInstance().getEntityManager());            
+                List<Sections> activeSections = pm.getEventSections(event);
+                controled.getGroupStrings().checkSections(activeSections);
+                controled.getGroupWinds().checkSections(activeSections);
+                controled.getGroupOther().checkSections(activeSections);
+            }
         } catch (Exception ex) {
             Logger.getLogger(EventSettings.class.getName()).log(Level.SEVERE, "Cannot read sections.", ex);
             JOptionPane.showMessageDialog(controled, "Chyba při běhu programu: " + ex.getMessage(),
@@ -117,6 +137,14 @@ public class EventSettings implements UIController<EventDetails>{
         } catch (WrongInputException ex) {
             Logger.getLogger(EventSettings.class.getName()).log(Level.FINE, "Validation of event.addrInstitution failed: {0}", ex.getMessage());
             controled.getInfoAddrInstitution().setText(ex.getMessage());
+            noFail = false;
+        }
+        
+        try {
+            event.setAddrhousenumber(controled.getFieldAddrHouseNumber().getText());
+        } catch (WrongInputException ex) {
+            Logger.getLogger(EventSettings.class.getName()).log(Level.FINE, "Validation of event.addrHouseNumber failed: {0}", ex.getMessage());
+            controled.getInfoAddrHouseNumber().setText(ex.getMessage());
             noFail = false;
         }
         

@@ -6,7 +6,9 @@
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
 import cz.cvut.fel.dbs.smartorchestra.AdminAccessible;
+import cz.cvut.fel.dbs.smartorchestra.EventSettings;
 import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
+import cz.cvut.fel.dbs.smartorchestra.gui.helpers.EventUpdaterResume;
 import cz.cvut.fel.dbs.smartorchestra.model.EventDateFilter;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.ParticipantState;
@@ -21,6 +23,7 @@ import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -132,6 +135,20 @@ public class ShowEvents extends javax.swing.JPanel implements AdminAccessible{
 
     private void btnAddEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddEventActionPerformed
         // TODO add your handling code here:
+        if(btnAddEvent.isEnabled()){
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    EventDetails dialog = new EventDetails(SmartOrchestra.getInstance().getMainWin());
+                    dialog.addWindowListener(new EventUpdaterResume());
+                    dialog.enableAdminAccess(SmartOrchestra.getInstance().isAdministrationActive());
+                    EventSettings es = new EventSettings(dialog);
+                    dialog.setUIController(es);
+                    es.loadEvent();                
+                    dialog.doModal();
+                }
+            });
+        }
     }//GEN-LAST:event_btnAddEventActionPerformed
 
     private void fieldFilterEventsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fieldFilterEventsItemStateChanged

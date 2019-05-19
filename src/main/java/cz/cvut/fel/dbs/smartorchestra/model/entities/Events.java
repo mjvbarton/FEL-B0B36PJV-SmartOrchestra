@@ -67,16 +67,19 @@ public class Events implements Serializable {
     private String addrtown;
     @Column(name = "addrzipcode")
     private Integer addrZipCode;
+    @Basic(optional = false)
     @Column(name = "active")
     private Boolean active;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "events")
     private Collection<Participants> participantsCollection;
 
     public Events() {
+        this.active = true;
     }
 
     public Events(Integer evid) {
         this.evid = evid;
+        this.active = true;
     }
 
     public Events(Integer evid, String eventname, Date begins, Date ends, String addrtown) {
@@ -85,6 +88,7 @@ public class Events implements Serializable {
         this.begins = begins;
         this.ends = ends;
         this.addrtown = addrtown;
+        this.active = true;
     }
 
     public Integer getEvid() {

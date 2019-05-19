@@ -24,11 +24,13 @@ public class EventHandler extends DAOThreadSafe {
         super(em);
     }
 
-    public void saveEvent(Events event) {        
+    public void saveEvent(Events event) {
+        
         try{
             em.getTransaction().begin();
             em.persist(event);
             em.getTransaction().commit();
+            em.clear();
         } catch(Exception ex){
             em.getTransaction().rollback();
             throw ex;
