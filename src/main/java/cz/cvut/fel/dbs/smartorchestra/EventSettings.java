@@ -106,6 +106,12 @@ public class EventSettings implements UIController<EventDetails>{
             noFail = false;
         }
         
+        if(event.getBegins().after(event.getEnds())){
+            Logger.getLogger(EventSettings.class.getName()).log(Level.FINE, "Event endsDate must be greater than beginsDate");
+            controled.getInfoEndsDate().setText("Neplatné datum");
+            noFail = false;
+        }
+        
         try {
             event.setAddrinstitution(controled.getFieldAddrInstitution().getText());
         } catch (WrongInputException ex) {
