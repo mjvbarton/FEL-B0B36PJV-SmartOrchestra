@@ -24,7 +24,8 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "Participants.findAll", query = "SELECT p FROM Participants p")
     , @NamedQuery(name = "Participants.findByUid", query = "SELECT p FROM Participants p WHERE p.participantsPK.uid = :uid")
-    , @NamedQuery(name = "Participants.findByEvid", query = "SELECT p FROM Participants p WHERE p.participantsPK.evid = :evid")
+    , @NamedQuery(name = "Participants.findByEvid", query = "SELECT p FROM Participants p WHERE p.participantsPK.evid = :evid "
+            + "ORDER BY p.users.familyName, p.users.firstName")
     , @NamedQuery(name = "Participants.getEvidsByUid", query = "SELECT p.participantsPK.evid FROM Participants p WHERE p.participantsPK.uid = :uid")
     , @NamedQuery(name = "Participants.getEvidsBySection", query = "SELECT DISTINCT p.participantsPK.evid FROM Participants p WHERE p.seid = :seid")
     , @NamedQuery(name = "Participants.findByMessage", query = "SELECT p FROM Participants p WHERE p.message = :message")

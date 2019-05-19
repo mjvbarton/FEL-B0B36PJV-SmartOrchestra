@@ -100,6 +100,20 @@ public class ParticipantManager extends DAOThreadSafe{
                 .setParameter("event", event).getResultList();  
     }
     
+    public List<Participants> getParticipants(Events event){
+        em.clear();
+        try{
+            return em.createNamedQuery("Participants.findByEvid", Participants.class)
+                .setParameter("evid", event.getEvid()).getResultList();
+        } catch (NoResultException ex){
+            Logger.getLogger(ParticipantManager.class.getName()).log(Level.INFO, "No participants found for event {0}", event);
+            return new ArrayList();
+        } catch (Exception ex){
+            Logger.getLogger(ParticipantManager.class.getName()).log(Level.WARNING, "Cannot read Participants for event: " + event , ex);
+            return new ArrayList();
+        }        
+    }
+    
     public List<Participants> getParticipants(Users user, List<Events> events){
         try {
             return em.createQuery("SELECT p FROM Participants p WHERE p.events IN :events "
@@ -143,6 +157,7 @@ public class ParticipantManager extends DAOThreadSafe{
     }
 
     public Participants getParticipant(Users user, Events event) {
+        em.clear();
         return em.find(Participants.class, new ParticipantsPK(user, event));
     }
 
@@ -155,6 +170,5 @@ public class ParticipantManager extends DAOThreadSafe{
             em.getTransaction().rollback();
             throw ex;
         }
-        
     }
 }

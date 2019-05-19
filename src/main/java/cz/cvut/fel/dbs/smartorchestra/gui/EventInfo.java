@@ -44,7 +44,7 @@ public class EventInfo extends javax.swing.JPanel implements UIControlled<Partic
         };
         fieldParticipation.addActionListener(listenerParticipation);        
         btnShowDetails.addActionListener(new EventUpdaterPause());
-        //btnShowParticipants.addActionListener(new EventUpdaterPause());
+        btnShowParticipants.addActionListener(new EventUpdaterPause());
     }   
         
            
@@ -182,6 +182,7 @@ public class EventInfo extends javax.swing.JPanel implements UIControlled<Partic
 
     private void btnShowParticipantsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowParticipantsActionPerformed
         // TODO add your handling code here:
+        controller.showParticipants();
     }//GEN-LAST:event_btnShowParticipantsActionPerformed
 
     private void btnShowDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnShowDetailsMouseClicked

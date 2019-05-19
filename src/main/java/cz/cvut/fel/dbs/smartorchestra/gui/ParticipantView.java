@@ -5,8 +5,17 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
+import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.ParticipantState;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Participants;
+import java.text.SimpleDateFormat;
+import java.util.InputMismatchException;
+import java.util.List;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,6 +26,8 @@ public class ParticipantView extends javax.swing.JDialog {
 
     /**
      * Creates new form ParticipantView
+     * @param parent
+     * @param modal
      */
     public ParticipantView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -49,7 +60,7 @@ public class ParticipantView extends javax.swing.JDialog {
         tableNotFilled = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("[Docházka] - ");
+        setTitle("Docházka");
         setMinimumSize(new java.awt.Dimension(345, 377));
         setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
 
@@ -116,7 +127,15 @@ public class ParticipantView extends javax.swing.JDialog {
             new String [] {
                 "Příjmení a jméno", "Sekce", "Důvod absence"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tableComing.setFillsViewportHeight(true);
         tableComing.setMinimumSize(new java.awt.Dimension(345, 240));
         tableComing.setUpdateSelectionOnSort(false);
@@ -191,88 +210,99 @@ public class ParticipantView extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+   
+    private final class ParticipantTable extends JTable{
+        private final String[] COLUMNS = new String[]{"Příjmení a jméno", "Sekce", "Důvod absence"};
+        private final int[] COLUMN_MIN_WIDTH = new int[]{150,80,120};
+        private final List<Participants> participants;
+        private final ParticipantState state;
+        
+        public ParticipantTable(JScrollPane tableView, JPanel parentTab, List<Participants> participants, ParticipantState state){
+            super();
+            this.participants = participants;
+            this.state = state;
+            parentTab.removeAll();
+            parentTab.setLayout(new javax.swing.BoxLayout(parentTab, javax.swing.BoxLayout.PAGE_AXIS));
+            this.setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
+            setAutoCreateRowSorter(true);
+            setModel();
+            
+            setFillsViewportHeight(true);
+            setMinimumSize(new java.awt.Dimension(345, 240));
+            setUpdateSelectionOnSort(false);
+            tableView.setViewportView(ParticipantTable.this);
+            for (int i = 0; i < getColumnModel().getColumnCount(); i++) {
+                getColumnModel().getColumn(i).setMinWidth(COLUMN_MIN_WIDTH[i]);
+                
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ParticipantView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ParticipantView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ParticipantView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ParticipantView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ParticipantView dialog = new ParticipantView(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
-    
-    private class ParticipantTable extends DefaultTableModel{
-
-        public ParticipantTable(Object[][] data, Object[] columnNames) {
-            super(new Object[][]{{}}, new String[]{
-                "Příjmení a jméno",
-                "Sekce",
-                "Důvod nepřítomnosti"
-            });            
+            parentTab.add(tableView);
         }
         
-        public void addRow(Participants participant, ParticipantState state){
-            String msg;
-            switch(state){
-                case COMING:
-                    msg = "---";
-                    break;
-                case NOT_FILLED:
-                    msg = "???";
-                    break;
-                default:
-                    msg = participant.getMessage();
+        private void setModel(){
+            DefaultTableModel model = new DefaultTableModel(
+                new Object [][] {},
+                COLUMNS
+            ){
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
-            super.addRow(new Object[] {
-                String.format("%s %s", 
-                        participant.getUsers().getFamilyName(), 
-                        participant.getUsers().getFirstName()),
+            };   
+            for(Participants participant : participants){
+                if(ParticipantState.fromBoolean(participant.getActive()) == state){
+                    model.addRow(new Object[]{
+                        String.format("%s %s", 
+                                participant.getUsers().getFamilyName(),
+                                participant.getUsers().getFirstName()),
                         participant.getSeid().getSectionname(),
-                        msg
-                
-            });
+                        getMsg(participant)
+                    });
+                }
+            }
+            setModel(model);
+        }
+        
+        private int countParticipants(){
+            int i = 0;
+            for(Participants part : participants){
+                if(ParticipantState.fromBoolean(part.getActive()) == state){ i++; }
+            }
+            return i;
+        }
+        
+        private String getMsg(Participants participant){
+            switch(ParticipantState.fromBoolean(participant.getActive())){
+                case NOT_FILLED:
+                    return "";
+                case NOT_COMING:
+                    return participant.getMessage();
+                case COMING:
+                    return "---";
+                default:
+                    throw new InputMismatchException("Invalid enum value.");
+            }
         }
 
         @Override
-        public void addRow(Object[] rowData) {
-            super.addRow(rowData); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        
-        
+        public String toString() {
+            switch(state){
+                case NOT_INVITED:
+                case NOT_FILLED:
+                return String.format("Neodpověděli (%s)", countParticipants());
+                
+                case NOT_COMING:
+                return String.format("Nezůčastní se (%s)", countParticipants());
+                
+                case COMING:
+                return String.format("Zůčastní se (%s)", countParticipants());
+                
+                default:
+                    throw new InputMismatchException("Invalid enum value.");                        
+            }
+        }  
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -292,10 +322,34 @@ public class ParticipantView extends javax.swing.JDialog {
     private javax.swing.JScrollPane viewNotComing;
     private javax.swing.JScrollPane viewNotFilled;
     // End of variables declaration//GEN-END:variables
+
+    public void loadParticipants(List<Participants> participants){
+        contentPane.removeAll();
+        tableComing = new ParticipantTable(viewComing, tabComing, participants, ParticipantState.COMING);
+        tabComing.setLayout(new BoxLayout(tabComing, BoxLayout.PAGE_AXIS));
+        tableNotComing = new ParticipantTable(viewNotComing, tabNotComing, participants, ParticipantState.NOT_COMING);
+        tableNotFilled = new ParticipantTable(viewNotFilled, tabNotFilled, participants, ParticipantState.NOT_FILLED);
+        
+        contentPane.add(tableComing.toString(), viewComing);
+        contentPane.add(tableNotComing.toString(), viewNotComing);
+        contentPane.add(tableNotFilled.toString(), viewNotFilled);
+    }
+    
+    public void loadEvent(Events event){
+        eventName.setText(event.getEventname());
+        eventPlace.setText(event.getAddrinstitution());
+        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH.mm");
+        eventDate.setText(dateFormat.format(event.getBegins()));
+        eventTime.setText(String.format("%s - %s",
+                timeFormat.format(event.getBegins()),
+                timeFormat.format(event.getEnds())));                
+    }
+    
+    public int doModal(){
+        return 0;
+    }
+    
+    
 }
-
-//public void loadParticipants(){}
-
-//private void fetchTable(JTable )
-
-

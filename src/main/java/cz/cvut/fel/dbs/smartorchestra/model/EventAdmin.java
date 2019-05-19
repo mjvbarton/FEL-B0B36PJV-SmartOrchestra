@@ -5,7 +5,6 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.model;
 
-import cz.cvut.fel.dbs.smartorchestra.EventUpdater;
 import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
 import cz.cvut.fel.dbs.smartorchestra.ThreadEntityManager;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.EventAdminException;
@@ -21,11 +20,8 @@ import cz.cvut.fel.dbs.smartorchestra.model.entities.SectionType;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -144,5 +140,9 @@ public class EventAdmin {
         part.setActive(state.toBoolean());
         part.setMessage(message);
         pm.updateParticipant(part);
+    }
+    
+    public List<Participants> getParticipants(Events event){
+        return new ParticipantManager(tem.getEntityManager()).getParticipants(event);        
     }
 }

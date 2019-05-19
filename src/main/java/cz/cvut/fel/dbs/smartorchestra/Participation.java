@@ -7,8 +7,10 @@ package cz.cvut.fel.dbs.smartorchestra;
 
 import cz.cvut.fel.dbs.smartorchestra.gui.EventDetails;
 import cz.cvut.fel.dbs.smartorchestra.gui.EventInfo;
+import cz.cvut.fel.dbs.smartorchestra.gui.ParticipantView;
 import cz.cvut.fel.dbs.smartorchestra.gui.UserDetails;
 import cz.cvut.fel.dbs.smartorchestra.gui.helpers.EventUpdaterResume;
+import cz.cvut.fel.dbs.smartorchestra.model.EventAdmin;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.ParticipantState;
 import static cz.cvut.fel.dbs.smartorchestra.model.entities.ParticipantState.*;
@@ -44,6 +46,21 @@ public class Participation implements UIController<EventInfo>{
 
                 }
                 //SmartOrchestra.getInstance().getMainWin().getUIController().loadEvents();
+            }
+        });
+    }
+    
+    public void showParticipants() {
+        EventAdmin ea = new EventAdmin(SmartOrchestra.getInstance());
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run() {
+                ParticipantView dialog = new ParticipantView(SmartOrchestra.getInstance().getMainWin(), true);
+                dialog.loadParticipants(ea.getParticipants(event));
+                dialog.loadEvent(event);
+                dialog.addWindowListener(new EventUpdaterResume());
+                dialog.setVisible(true);
+                dialog.doModal();
             }
         });
     }
@@ -92,6 +109,5 @@ public class Participation implements UIController<EventInfo>{
         }
         SmartOrchestra.getInstance().getEventUpdater().setBlockUpdate(false);
                 
-    }
-    
+    }        
 }
