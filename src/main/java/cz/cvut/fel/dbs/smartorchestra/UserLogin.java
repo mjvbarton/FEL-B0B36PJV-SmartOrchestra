@@ -15,31 +15,48 @@ import javax.swing.JTextField;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Matěj Bartoň
+ * This class implements the controller for login process.
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 public class UserLogin{
     private LoginScreen scr;
     
+    /**
+     * Initalize controller with given {@link LoginScreen} frame from GUI.
+     * @param scr - instance of {@link LoginScreen}
+     */
     public UserLogin(LoginScreen scr){
         this.scr = scr;
     }
     
+    /**
+     * Process user login with given <code>JTextField</code> values
+     * @param email - <code>JTextField</code> email from {@link LoginScreen}
+     * @param passwd - <code>JTextField</code> password from {@link LoginScreen} 
+     */
     public void login(JTextField email, JPasswordField passwd){
+        // Validation of fields
         if(email.getText().isEmpty() || passwd.getText().isEmpty()){
             JOptionPane.showMessageDialog(scr, "Prosím, vyplňte obě pole");
             return;
         }
         try{
             UserManager um = new UserManager();
+            
+            // Try login
             Users activeUser = um.login(email.getText(), passwd.getText());
+            Logger.getLogger(UserLogin.class.getName()).log(Level.INFO, "User {0} logon", email.getText());
+            
+            // Check and enable admin access
             boolean enableAdminAccess = um.checkAdministrator(activeUser);
             SmartOrchestra.getInstance().setAdministrationActive(enableAdminAccess);
-            Logger.getLogger(UserLogin.class.getName()).log(Level.INFO, "User {0} logon", email.getText());
             Logger.getLogger(UserLogin.class.getName()).log(Level.INFO, "Administrator usage for {0} enabled: {1}", new Object[]{email.getText(), enableAdminAccess});
+            
+            // Run application
             SmartOrchestra.getInstance().setActiveUser(activeUser);
             SmartOrchestra.getInstance().runMainWindow();
-            
+        
+        // Sanitization of exceptions occured during login
         } catch (NonExistingUserException err){
             Logger.getLogger(UserLogin.class.getName()).log(Level.WARNING, "Login failed for email: {0}", email.getText());
             JOptionPane.showMessageDialog(scr, "Špatné uživatelské jméno nebo heslo", "Přihlášení se nezdařilo",
