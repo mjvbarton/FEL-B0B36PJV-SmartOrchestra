@@ -5,6 +5,7 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
+import com.sun.istack.internal.logging.Logger;
 import cz.cvut.fel.dbs.smartorchestra.AdminAccessible;
 import cz.cvut.fel.dbs.smartorchestra.MainControl;
 import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
@@ -346,7 +347,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
 
     private void userTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTableMouseClicked
         // TODO add your handling code here:
-        System.out.println(userTable.rowAtPoint(evt.getPoint()));
+        Logger.getLogger(this.getClass()).fine("UserTable row toggled: " + userTable.rowAtPoint(evt.getPoint()));
         if(evt.getClickCount() == 2){
             controller.editUserFromTable(userTable.rowAtPoint(evt.getPoint()));
         }

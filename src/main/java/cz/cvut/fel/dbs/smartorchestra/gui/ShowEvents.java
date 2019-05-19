@@ -137,6 +137,8 @@ public class ShowEvents extends javax.swing.JPanel implements AdminAccessible{
     private void fieldFilterEventsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fieldFilterEventsItemStateChanged
         // TODO add your handling code here:
         if(evt.getStateChange() == ItemEvent.SELECTED){
+            content.removeAll();
+            content.add(noEvents);
             SmartOrchestra.getInstance().getEventUpdater().setFilter(
                     EventDateFilter.getFromComboBox(fieldFilterEvents)
             );
@@ -160,13 +162,12 @@ public class ShowEvents extends javax.swing.JPanel implements AdminAccessible{
     
     public void loadEvents(List<Events> events, Map<Events, ParticipantState> participations, EventDateFilter filter){
         content.removeAll();
-        if(this.events.size() > events.size() || filter != eventFilter){            
-            content.repaint();
-        }
+                
         if(events.isEmpty()){
-            content.add(noEvents);        
+            content.add(noEvents); 
         } else {                
             for(Events event : events){
+                content.remove(noEvents);
                 EventInfo eventInfo = new EventInfo(event);
                 eventInfo.enableAdminAccess(SmartOrchestra.getInstance().isAdministrationActive());
                 Date blockDate = SmartOrchestra.getInstance().getBlockDate(event.getBegins());
@@ -202,6 +203,7 @@ public class ShowEvents extends javax.swing.JPanel implements AdminAccessible{
             this.events = events;
         }
         eventFilter = filter;
+        content.updateUI();
     }
     
     public List<Events> getEvents(){

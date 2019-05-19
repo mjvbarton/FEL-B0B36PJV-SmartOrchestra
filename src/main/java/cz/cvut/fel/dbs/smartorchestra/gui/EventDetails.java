@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -145,6 +146,7 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
         fieldAddrTown.setEditable(isEnabled);
         fieldAddrZipCode.setEditable(isEnabled);
         content.setEnabledAt(1, isEnabled);
+        btnDeleteEvent.setEnabled(isEnabled);
     }
     
     private class Formfield<T>{
@@ -427,7 +429,7 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
     }
     
     protected void btnDeleteEventClicked(ActionEvent e){
-        
+        Logger.getLogger(EventDetails.class.getName()).info("Delete event initiated");
     }
 
     public JTextField getFieldName() {
@@ -520,8 +522,5 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
 
     public SectionGroup getGroupOther() {
         return groupOther;
-    }
-    
-    
-    
+    }   
 }
