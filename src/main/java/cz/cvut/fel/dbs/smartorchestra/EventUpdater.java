@@ -12,19 +12,17 @@ import cz.cvut.fel.dbs.smartorchestra.model.EventAdmin;
 import cz.cvut.fel.dbs.smartorchestra.model.EventDateFilter;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
 /**
- *
- * @author Matěj Bartoň
+ * This class is a EventUpdater thread for {@link ShowEvents}
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 public class EventUpdater extends Thread implements UIController<ShowEvents>, ThreadEntityManager{
     private ShowEvents controled;
@@ -36,6 +34,10 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>, Th
     private volatile boolean loadingBlocked;
     private volatile EventDateFilter filter;
     
+    /**
+     * Initalizes the thread with {@link ShowEvents} instance as {@link UIControlled} given.
+     * @param controled - an instance of {@link ShowEvents}
+     */
     public EventUpdater(ShowEvents controled){
         setControlled(controled);
         em = SmartOrchestra.getEntityManagerFactory().createEntityManager();
@@ -45,6 +47,9 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>, Th
         filter = EventDateFilter.NEXT;
     }
     
+    /**
+     * Loads events from database and update their values in GUI every 10 seconds.
+     */
     @Override
     public void run() {
         ea = new EventAdmin(EventUpdater.this);
@@ -60,16 +65,29 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>, Th
         }
     }
              
+    /**
+     * See {@link UIController}
+     * @param controled 
+     */
     @Override
     public void setControlled(ShowEvents controled) {
         this.controled = controled;
     }
-
+    
+    /**
+     * A pointer to controled element of this controller.
+     * @return - pointer to the instance of {@link ShowEvents}
+     */
     public ShowEvents getControled() {
         return controled;
     }
 
-    public void setWaiting(boolean waiting) {
+    /*
+     * <i>NOTE: THIS FEATURE IS DEPRECATED AND LEFT THERE FOR OPTIONAL DEVELOPING PURPOSES</i>
+     * Pauses the thread if {@code waiting} is {@code true} and
+     * @param waiting 
+     */
+    /*public void setWaiting(boolean waiting) {
         this.waiting = waiting;
         if(!waiting){
             synchronized(pauseLock){
@@ -79,18 +97,34 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>, Th
             }    
             interrupt();
         }   
-    }
+    }*/
     
+    /**
+     * Sets the flag {@code loadingBlocked} of the thread. 
+     * If {@code true} thread does not load any events.
+     * @param isBlocked - {@code boolean} value to be set on {@code loadingBlocked} flag
+     */
     public synchronized void setBlockUpdate(boolean isBlocked){
         loadingBlocked = isBlocked;
         Logger.getLogger(EventUpdater.class.getName()).log(Level.INFO, "EventUpdater updateBlocked: {0}", isBlocked);
     }
-
+    
+    /**
+     * Sets the filter of loaded events from enum {@link EventDateFilter}.
+     * For more information about how the filter works see: {@link EventAdmin}
+     * @param filter - enumerated filter flag, see: {@link EventDateFilter}
+     */
     public synchronized void setFilter(EventDateFilter filter) {
         this.filter = filter;
         interrupt();
     }   
-        
+    
+    /**
+     * This function updates events according to the set filter value via {@link EventUpdater} and
+     * loads them into the controled {@link ShowEvents}
+     * This function is being called by the method {@code run}, but it can be also 
+     * called directly from any other thread.
+     */
     public void updateEvents(){
         try {
             List<Events> events = ea.loadEvents(filter);
@@ -110,6 +144,10 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>, Th
         }
     }
 
+    /**
+     * See: {@link ThreadEntityManager} for further information.
+     * @return 
+     */
     @Override
     public EntityManager getEntityManager() {
         return em;
