@@ -21,34 +21,53 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author Matěj Bartoň
+ * This class implements {@link UIController} for {@link EventDetails}
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 public class EventSettings implements UIController<EventDetails>{
 
     private EventDetails controled;
     private Events event;
     
+    /**
+     * Initalize <code>EventSettings</code> with {@link EventDetails} implementing {@link UIControlled}
+     * @param controled - instance of {@link EventDetails} implementing {@link UIControlled}
+     */
     public EventSettings(EventDetails controled) {
         setControlled(controled);
     }
-
+    
+    /**
+     * See {@link UIController}
+     * @param controled 
+     */
     @Override
     public void setControlled(EventDetails controled) {
         this.controled = controled;
     }
     
+    /**
+     * Runs dialog for creating new events
+     */
     public void loadEvent(){
         Events e = new Events();
         loadEvent(new Events());
         controled.getBtnDeleteEvent().setVisible(false);
     }
     
+    /**
+     * Loads information as {@link Events} from database. Entity {@link Events} is searched for given {@code int evid}
+     * @param evid - {@code int} id value of event in the database
+     */
     public void loadEvent(int evid){
         EventHandler eh = new EventHandler(SmartOrchestra.getInstance().getEntityManager());
         loadEvent(eh.getEvent(evid));
     }
     
+    /**
+     * Loads information for given {@link Events} entity. Initializes property {@code EventSettings.event}
+     * @param event - {@link Events} entity
+     */
     public void loadEvent(Events event){
         this.event = event;
         controled.getFieldName().setText(event.getEventname());
@@ -74,6 +93,7 @@ public class EventSettings implements UIController<EventDetails>{
             controled.getFieldAddrZipCode().setText("");
         }
         
+        // Loading sections and participanting sections
         EventAdmin ea = new EventAdmin(SmartOrchestra.getInstance());
         try {
             ea.loadSections();
@@ -94,12 +114,18 @@ public class EventSettings implements UIController<EventDetails>{
                     controled.getTitle(), JOptionPane.ERROR_MESSAGE);
         }
     }
-           
+    
+    /**
+     * Saves the initalized event to the database.
+     */
     public void saveEvent(){
         saveEvent(event);
     }
     
-    public void saveEvent(Events event){
+    // Saves the given event to the database
+    private void saveEvent(Events event){
+        
+        // Validation
         controled.clearInfos();
         boolean noFail = true;
         try {
@@ -178,15 +204,20 @@ public class EventSettings implements UIController<EventDetails>{
             return;
         }
         
+        // Saving process
         EventAdmin ea = new EventAdmin(SmartOrchestra.getInstance());
         try{
             ea.saveEvent(event);
             Logger.getLogger(EventSettings.class.getName()).log(Level.INFO, "Event {0} was created.", event);
+            
+            // Inviting checked sections
             ea.sendInvitations(event, controled.getGroupStrings().getSections(), SectionType.STRINGS);
             ea.sendInvitations(event, controled.getGroupWinds().getSections(), SectionType.WINDS);
             ea.sendInvitations(event, controled.getGroupOther().getSections(), SectionType.OTHER);
             JOptionPane.showMessageDialog(controled, "Událost byla uložena.", 
                     controled.getTitle(), JOptionPane.INFORMATION_MESSAGE);
+            
+        // Sanitizing exceptions occured during the saving process
         } catch(Exception ex){
             Logger.getLogger(EventSettings.class.getName()).log(Level.SEVERE, "Unable to create event: " + event, ex);
             JOptionPane.showMessageDialog(controled, "Chyba při běhu programu: " + ex.getMessage(), 
@@ -196,6 +227,10 @@ public class EventSettings implements UIController<EventDetails>{
         }
     }
     
+    /**
+     * Removes the initalized event from the database. 
+     * Before the removal a confirm dialog is shown to prevent unwanted removal.
+     */
     public void deleteEvent(){
             int confirmDeletion = JOptionPane.showConfirmDialog(controled
                     , "Opravdu chcete trvale smazat událost?"
