@@ -1,16 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.cvut.fel.dbs.smartorchestra;
 
 /**
- *
+ * This interface represents UI element of <code>Controller</code>. The element controls by <code>View</code>.
  * @author Matěj Bartoň
- * @param <UIControlled>
+ * @param <UIControlled> - Class of the <b>controlled</b> element
  */
 public interface UIController<UIControlled> {
-    public void setControlled(UIControlled controled);
-    
+    /**
+     * This method establishes connection between <code>UIController</code> and <code>UIControlled</code> instances
+     * @param controled - <code>UIControlled</code> instance 
+     */
+    public void setControlled(UIControlled controled);    
 }
