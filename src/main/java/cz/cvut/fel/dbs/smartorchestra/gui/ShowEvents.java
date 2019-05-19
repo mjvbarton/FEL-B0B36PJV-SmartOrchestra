@@ -7,12 +7,12 @@ package cz.cvut.fel.dbs.smartorchestra.gui;
 
 import cz.cvut.fel.dbs.smartorchestra.AdminAccessible;
 import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
+import cz.cvut.fel.dbs.smartorchestra.model.EventDateFilter;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.ParticipantState;
-import cz.cvut.fel.dbs.smartorchestra.model.entities.Participants;
 import java.awt.Font;
+import java.awt.event.ItemEvent;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +30,7 @@ public class ShowEvents extends javax.swing.JPanel implements AdminAccessible{
     
     private List<Events> events;
     private final JLabel noEvents = new JLabel();
+    private EventDateFilter eventFilter = EventDateFilter.NEXT;
     /**
      * Creates new form ShowEvents
      */
@@ -74,6 +75,11 @@ public class ShowEvents extends javax.swing.JPanel implements AdminAccessible{
         labelFilterEvents.setText("Zobrazení událostí:");
 
         fieldFilterEvents.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nadcházející", "Uplynulé", "Všechny události" }));
+        fieldFilterEvents.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                fieldFilterEventsItemStateChanged(evt);
+            }
+        });
         fieldFilterEvents.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fieldFilterEventsActionPerformed(evt);
@@ -128,6 +134,15 @@ public class ShowEvents extends javax.swing.JPanel implements AdminAccessible{
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAddEventActionPerformed
 
+    private void fieldFilterEventsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fieldFilterEventsItemStateChanged
+        // TODO add your handling code here:
+        if(evt.getStateChange() == ItemEvent.SELECTED){
+            SmartOrchestra.getInstance().getEventUpdater().setFilter(
+                    EventDateFilter.getFromComboBox(fieldFilterEvents)
+            );
+        }
+    }//GEN-LAST:event_fieldFilterEventsItemStateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddEvent;
@@ -143,12 +158,9 @@ public class ShowEvents extends javax.swing.JPanel implements AdminAccessible{
         return content;
     }
     
-    public void loadEvents(List<Events> events, Map<Events, ParticipantState> participations){
-        /*if(events.equals(this.events)){
-           return; 
-        }*/
+    public void loadEvents(List<Events> events, Map<Events, ParticipantState> participations, EventDateFilter filter){
         content.removeAll();
-        if(this.events.size() > events.size()){            
+        if(this.events.size() > events.size() || filter != eventFilter){            
             content.repaint();
         }
         if(events.isEmpty()){
@@ -182,10 +194,14 @@ public class ShowEvents extends javax.swing.JPanel implements AdminAccessible{
                         break;
                 }
                 eventState.addActionListener(eventInfo.getListenerParticipation());
+                if(EventDateFilter.getFromEvent(event) == EventDateFilter.PAST){
+                    eventState.setEnabled(false);
+                }
                 content.add(eventInfo);
             }
             this.events = events;
-        }        
+        }
+        eventFilter = filter;
     }
     
     public List<Events> getEvents(){

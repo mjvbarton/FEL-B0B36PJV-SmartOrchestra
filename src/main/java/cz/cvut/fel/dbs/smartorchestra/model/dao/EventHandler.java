@@ -51,7 +51,6 @@ public class EventHandler extends DAOThreadSafe {
         List<Events> e = em.createQuery("SELECT e FROM Events e WHERE e.begins >= :date AND e.active = TRUE ORDER BY e.begins, e.eventname", Events.class)                    
                 .setParameter("date", date).getResultList();
         em.getTransaction().commit();
-        
         return e;        
     }
         
@@ -68,7 +67,6 @@ public class EventHandler extends DAOThreadSafe {
         List<Events> e = em.createQuery("SELECT e FROM Events e WHERE e.begins >= :date AND e.active = TRUE AND e.evid IN :evids ORDER BY e.begins, e.eventname", Events.class)
                 .setParameter("date", date).setParameter("evids", userEvids).getResultList();
         em.getTransaction().commit();
-        
         return e;
     } 
     
@@ -85,7 +83,62 @@ public class EventHandler extends DAOThreadSafe {
         List<Events> e = em.createQuery("SELECT e FROM Events e WHERE e.begins >= :date AND e.active = TRUE AND e.evid IN :evids ORDER BY e.begins, e.eventname", Events.class)
                 .setParameter("date", date).setParameter("evids", userEvids).getResultList();
         em.getTransaction().commit();
-        
+
         return e;
     }
+
+    public List<Events> getAllEvents() {
+        em.clear();
+        List<Events> e = new ArrayList();
+        try {
+            em.getTransaction().begin();
+            e = em.createQuery("SELECT e FROM Events e WHERE e.active = TRUE ORDER BY e.begins, e.eventname", Events.class)
+                    .getResultList();
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            em.getTransaction().rollback();
+            throw ex;
+        }        
+        return e;
+    }
+    
+    public List<Events> getAllEvents(Users user) {
+        em.clear();
+        em.getTransaction().begin();
+        List<Integer> userEvids = em.createNamedQuery("Participants.getEvidsByUid", Integer.class)
+                .setParameter("uid", user.getUid().intValue()).getResultList();
+        if(userEvids.isEmpty()){
+            em.getTransaction().rollback();
+            throw new NoResultException("User " + user + " has no events");
+        }
+        List<Events> e = em.createQuery("SELECT e FROM Events e WHERE e.active = TRUE AND e.evid IN :evids ORDER BY e.begins, e.eventname", Events.class)
+                .setParameter("evids", userEvids).getResultList();
+        em.getTransaction().commit();
+        return e;
+    }
+    
+    public List<Events> getPastEvents(Date date) {
+        em.clear();
+        em.getTransaction().begin();
+        List<Events> e = em.createQuery("SELECT e FROM Events e WHERE e.begins < :date AND e.active = TRUE ORDER BY e.begins, e.eventname", Events.class)                    
+                .setParameter("date", date).getResultList();
+        em.getTransaction().commit();
+        return e;
+    }
+
+    public List<Events> getPastEvents(Date date, Users user) {
+        em.clear();
+        List<Events> e = null; 
+        em.getTransaction().begin();
+        List<Integer> userEvids = em.createNamedQuery("Participants.getEvidsByUid", Integer.class)
+                .setParameter("uid", user.getUid().intValue()).getResultList();
+        if (userEvids.isEmpty()) {
+            em.getTransaction().rollback();
+            throw new NoResultException("User " + user + " has no events");
+        }
+        e = em.createQuery("SELECT e FROM Events e WHERE e.begins < :date AND e.active = TRUE AND e.evid IN :evids ORDER BY e.begins, e.eventname", Events.class)
+                .setParameter("date", date).setParameter("evids", userEvids).getResultList();
+        em.getTransaction().commit();
+        return e;
+    }   
 }

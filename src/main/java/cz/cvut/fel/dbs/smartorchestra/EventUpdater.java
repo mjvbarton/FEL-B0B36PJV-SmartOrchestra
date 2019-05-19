@@ -9,6 +9,7 @@ import cz.cvut.fel.dbs.smartorchestra.gui.Main;
 import cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents;
 
 import cz.cvut.fel.dbs.smartorchestra.model.EventAdmin;
+import cz.cvut.fel.dbs.smartorchestra.model.EventDateFilter;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>, Th
     private final Object pauseLock = new Object();
     private volatile boolean waiting;
     private volatile boolean loadingBlocked;
+    private volatile EventDateFilter filter;
     
     public EventUpdater(ShowEvents controled){
         setControlled(controled);
@@ -40,25 +42,13 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>, Th
         tabbedPane = SmartOrchestra.getInstance().getMainWin().getContent();
         waiting = true;
         loadingBlocked = false;
+        filter = EventDateFilter.NEXT;
     }
     
     @Override
     public void run() {
         ea = new EventAdmin(EventUpdater.this);
         while(true){
-            /*if(waiting){
-                synchronized(pauseLock){
-                    if(waiting){
-                        try {
-                            Logger.getLogger(EventUpdater.class.getName()).log(Level.INFO, "EventUpdater waiting");
-                            pauseLock.wait();
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(EventUpdater.class.getName()).log(Level.WARNING, "EventUpdater interrupted", ex);
-                            break;
-                        }
-                    }
-                }
-            }*/
             if(tabbedPane.getSelectedIndex() == Main.TAB_EVENTS && !loadingBlocked){
                 updateEvents();
                 try {
@@ -95,18 +85,23 @@ public class EventUpdater extends Thread implements UIController<ShowEvents>, Th
         loadingBlocked = isBlocked;
         Logger.getLogger(EventUpdater.class.getName()).log(Level.INFO, "EventUpdater updateBlocked: {0}", isBlocked);
     }
-    
+
+    public synchronized void setFilter(EventDateFilter filter) {
+        this.filter = filter;
+        interrupt();
+    }   
+        
     public void updateEvents(){
         try {
-            List<Events> events = ea.loadEvents();
+            List<Events> events = ea.loadEvents(filter);
             Users activeUser = SmartOrchestra.getInstance().getActiveUser();
             if(events.isEmpty()){
                 Logger.getLogger(ShowEvents.class.getName()).log(Level.INFO, "No events found.");
                 /*JOptionPane.showMessageDialog(controled, "Seznam událostí je prázdný.",
                     "Varování", JOptionPane.INFORMATION_MESSAGE);*/
-                controled.loadEvents(events, new HashMap());
+                controled.loadEvents(events, new HashMap(), filter);
             }
-            controled.loadEvents(events, ea.getParticipationMap(activeUser, events));
+            controled.loadEvents(events, ea.getParticipationMap(activeUser, events), filter);
         } catch (Exception ex) {
             Logger.getLogger(ShowEvents.class.getName()).log(Level.SEVERE, "Unable to load events.", ex);
             JOptionPane.showMessageDialog(controled, "Chyba v běhu programu: " + ex.getMessage(), 

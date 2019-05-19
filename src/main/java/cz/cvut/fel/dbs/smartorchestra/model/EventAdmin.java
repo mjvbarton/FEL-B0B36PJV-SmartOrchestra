@@ -22,6 +22,7 @@ import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,17 +53,35 @@ public class EventAdmin {
         eh.saveEvent(event);
     }
     
-    public List<Events> loadEvents() throws Exception{
-        return loadEvents(new Date());
+    public List<Events> loadEvents(EventDateFilter filter) throws Exception{
+        return loadEvents(filter, new Date());
     }
 
-    public List<Events> loadEvents(Date date) throws Exception{
+    public List<Events> loadEvents(EventDateFilter filter, Date date) throws Exception{
         EventHandler eh = new EventHandler(tem.getEntityManager());
         try{
             if(SmartOrchestra.getInstance().isAdministrationActive()){
-                return eh.getNextEvents(date);
+                switch(filter){
+                    case NEXT:
+                        return eh.getNextEvents(date);
+                    case PAST:
+                        return eh.getPastEvents(date);
+                    case ALL:
+                        return eh.getAllEvents();
+                    default:
+                        throw new InputMismatchException("Invalid enum value");
+                }
             } else {
-                return eh.getNextEvents(date, SmartOrchestra.getInstance().getActiveUser());
+                switch(filter){
+                    case NEXT:
+                        return eh.getNextEvents(date, SmartOrchestra.getInstance().getActiveUser());
+                    case PAST:
+                        return eh.getPastEvents(date, SmartOrchestra.getInstance().getActiveUser());
+                    case ALL:
+                        return eh.getAllEvents(SmartOrchestra.getInstance().getActiveUser());
+                    default:
+                        throw new InputMismatchException("Invalid enum value");
+                }                
             }
         } catch(NoResultException ex){
             return new ArrayList();
