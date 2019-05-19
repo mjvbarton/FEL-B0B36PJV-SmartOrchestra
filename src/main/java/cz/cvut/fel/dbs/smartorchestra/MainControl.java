@@ -35,6 +35,7 @@ public class MainControl implements UIController<Main>{
     
     public MainControl(Main mainWin){
         setControlled(mainWin);
+        mainWin.enableAdminAccess(SmartOrchestra.getInstance().isAdministrationActive());
         showEvents = controled.getEvents();
         ua = new UserAdmin();        
     }

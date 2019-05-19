@@ -5,6 +5,7 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
+import cz.cvut.fel.dbs.smartorchestra.AdminAccessible;
 import cz.cvut.fel.dbs.smartorchestra.MainControl;
 import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
 import cz.cvut.fel.dbs.smartorchestra.UIControlled;
@@ -29,7 +30,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Matěj Bartoň
  */
-public class Main extends javax.swing.JFrame implements UIControlled<MainControl>{
+public class Main extends javax.swing.JFrame implements UIControlled<MainControl>, AdminAccessible{
     public static final String[] USERS_COLUMN_NAMES = new String [] {
                 "Příjmení", "Jméno", "Datum narození:", "Bydliště:", "Telefon:", "Email:", "Sekce:"
             };
@@ -55,14 +56,9 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jToolBar1 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
         content = new javax.swing.JTabbedPane();
         events = new cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents();
-        jPanel1 = new javax.swing.JPanel();
+        users = new javax.swing.JPanel();
         userToolbar = new javax.swing.JToolBar();
         jPanel2 = new javax.swing.JPanel();
         labelSearchUser = new javax.swing.JLabel();
@@ -82,45 +78,12 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         fileSeparator2 = new javax.swing.JPopupMenu.Separator();
         fileQuit = new javax.swing.JMenuItem();
 
-        jToolBar1.setFloatable(false);
-        jToolBar1.setRollover(true);
-        jToolBar1.setMaximumSize(new java.awt.Dimension(18, 40));
-        jToolBar1.setMinimumSize(new java.awt.Dimension(18, 40));
-
-        jButton1.setText("Přidat událost");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jButton1);
-
-        jButton2.setText("Přidat uživatele");
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton2);
-
-        jButton3.setText("Můj profil");
-        jButton3.setFocusable(false);
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jButton3);
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SmartOrchestra");
         setIconImage(SmartOrchestra.getInstance().getIco());
-        setMinimumSize(new java.awt.Dimension(700, 535));
+        setMinimumSize(new java.awt.Dimension(720, 535));
         setName("SmartOrchestra"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(700, 535));
+        setPreferredSize(new java.awt.Dimension(800, 600));
 
         content.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -134,7 +97,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         });
         content.addTab("Přehled událostí", events);
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        users.setLayout(new java.awt.BorderLayout());
 
         userToolbar.setFloatable(false);
         userToolbar.setRollover(true);
@@ -178,13 +141,12 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
                 .add(fieldSearchUser, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 163, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(btnSearchUser)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 112, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 115, Short.MAX_VALUE)
                 .add(labelFilterSection)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(fieldFilterSection, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 120, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(btnAddUser)
-                .addContainerGap())
+                .add(btnAddUser, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 123, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -204,7 +166,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
 
         userToolbar.add(jPanel2);
 
-        jPanel1.add(userToolbar, java.awt.BorderLayout.PAGE_START);
+        users.add(userToolbar, java.awt.BorderLayout.PAGE_START);
 
         userContent.setMinimumSize(new Dimension(getWidth(), getHeight() - userToolbar.getHeight() - mainMenu.getHeight()));
 
@@ -286,9 +248,9 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
             userTable.getColumnModel().getColumn(6).setPreferredWidth(100);
         }
 
-        jPanel1.add(userContent, java.awt.BorderLayout.CENTER);
+        users.add(userContent, java.awt.BorderLayout.CENTER);
 
-        content.addTab("Přehled uživatelů", jPanel1);
+        content.addTab("Přehled uživatelů", users);
 
         getContentPane().add(content, java.awt.BorderLayout.CENTER);
 
@@ -350,16 +312,9 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void fileAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileAddUserActionPerformed
         // TODO add your handling code here:
+        controller.addNewUser();
     }//GEN-LAST:event_fileAddUserActionPerformed
 
     private void fileQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileQuitActionPerformed
@@ -464,19 +419,14 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
     private javax.swing.JPopupMenu.Separator fileSeparator1;
     private javax.swing.JPopupMenu.Separator fileSeparator2;
     private javax.swing.JMenuItem fileViewProfile;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel labelFilterSection;
     private javax.swing.JLabel labelSearchUser;
     private javax.swing.JMenuBar mainMenu;
     private javax.swing.JScrollPane userContent;
     private javax.swing.JTable userTable;
     private javax.swing.JToolBar userToolbar;
+    private javax.swing.JPanel users;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -554,5 +504,12 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         return activeUserName;
     }
     
+    @Override
+    public void enableAdminAccess(boolean isEnabled){
+        fileAddUser.setEnabled(isEnabled);
+        events.enableAdminAccess(isEnabled);
+        if(!isEnabled) { content.setSelectedIndex(0); }
+        content.setEnabledAt(1, isEnabled);
+    }
     
 }

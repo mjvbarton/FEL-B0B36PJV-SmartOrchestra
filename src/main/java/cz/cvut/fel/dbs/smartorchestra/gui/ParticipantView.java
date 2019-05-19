@@ -294,8 +294,8 @@ public class ParticipantView extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 }
 
-public void loadParticipants(){}
+//public void loadParticipants(){}
 
-private void fetchTable(JTable )
+//private void fetchTable(JTable )
 
 

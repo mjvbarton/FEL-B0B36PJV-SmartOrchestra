@@ -36,6 +36,7 @@ public class Participation implements UIController<EventInfo>{
             public void run() {
                 EventDetails dialog = new EventDetails(SmartOrchestra.getInstance().getMainWin());
                 dialog.addWindowListener(new EventUpdaterResume());
+                dialog.enableAdminAccess(SmartOrchestra.getInstance().isAdministrationActive());
                 EventSettings es = new EventSettings(dialog);
                 dialog.setUIController(es);
                 es.loadEvent(event.getEvid().intValue());                

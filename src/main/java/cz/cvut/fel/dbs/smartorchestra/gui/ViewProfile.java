@@ -8,6 +8,8 @@ package cz.cvut.fel.dbs.smartorchestra.gui;
 import cz.cvut.fel.dbs.smartorchestra.UIControlled;
 import cz.cvut.fel.dbs.smartorchestra.UserSettings;
 import java.awt.Frame;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 
 /**
  *
@@ -28,14 +30,25 @@ public final class ViewProfile extends UserDetails implements UIControlled<UserS
         fieldSection.setEnabled(false);
         fieldNoFunction.setEnabled(false);
         fieldConcertMaster.setEnabled(false);
+        for(MouseListener list : fieldConcertMaster.getMouseListeners()){
+            fieldConcertMaster.removeMouseListener(list);
+        }
         fieldCompConcertMaster.setEnabled(false);
+        for(MouseListener list : fieldCompConcertMaster.getMouseListeners()){
+            fieldCompConcertMaster.removeMouseListener(list);
+        }
+        fieldConcertMaster.removeAll();
         fieldCurrentPasswd.setEnabled(true);
         labelCurrentPasswd.setEnabled(true);
         
         fieldPermCommonAccount.setEnabled(false);
         fieldPermSpecialAccount.setEnabled(false);
         btnDeleteAccount.setEnabled(false);
+        for(MouseListener list : btnDeleteAccount.getListeners(MouseListener.class)){
+            btnDeleteAccount.removeMouseListener(list);
+        }
         setUIController(new UserSettings(ViewProfile.this));
+        
     }
     
     @Override
@@ -47,6 +60,12 @@ public final class ViewProfile extends UserDetails implements UIControlled<UserS
     public UserSettings getUIController() {
         return super.getUIController();
     }
-    
-    
+
+    @Override
+    public void setConcertMasterFlag(Boolean concertMasterFlag) {
+        super.setConcertMasterFlag(concertMasterFlag);
+        fieldConcertMaster.setEnabled(false);
+        fieldCompConcertMaster.setEnabled(false);
+        fieldNoFunction.setEnabled(false);
+    }
 }

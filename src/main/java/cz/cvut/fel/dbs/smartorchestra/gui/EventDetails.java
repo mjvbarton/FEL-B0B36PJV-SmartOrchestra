@@ -5,6 +5,7 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
+import cz.cvut.fel.dbs.smartorchestra.AdminAccessible;
 import cz.cvut.fel.dbs.smartorchestra.EventSettings;
 import cz.cvut.fel.dbs.smartorchestra.UIControlled;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.SectionType;
@@ -43,9 +44,10 @@ import javax.swing.SwingUtilities;
  *
  * @author Matěj Bartoň
  */
-public class EventDetails extends JDialog implements UIControlled<EventSettings>{
+public class EventDetails extends JDialog implements UIControlled<EventSettings>, AdminAccessible{
     private JLabel caption;
     private EventSettings controller;
+    private JTabbedPane content;
     
     /* Common - text fields */
     protected JTextField fieldName;
@@ -130,6 +132,19 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
         infoAddrHouseNumber.setText("");
         infoAddrTown.setText("");
         infoAddrZipCode.setText("");
+    }
+
+    @Override
+    public void enableAdminAccess(boolean isEnabled) {
+        fieldName.setEditable(isEnabled);
+        fieldBeginsDate.setEditable(isEnabled);
+        fieldEndsDate.setEditable(isEnabled);
+        fieldAddrInstitution.setEditable(isEnabled);
+        fieldAddrStreet.setEditable(isEnabled);
+        fieldAddrHouseNumber.setEditable(isEnabled);
+        fieldAddrTown.setEditable(isEnabled);
+        fieldAddrZipCode.setEditable(isEnabled);
+        content.setEnabledAt(1, isEnabled);
     }
     
     private class Formfield<T>{
@@ -335,7 +350,7 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
         tabSections.add(checkAllSections, BorderLayout.NORTH);
         tabSections.add(sectionGroups, BorderLayout.CENTER);
         
-        JTabbedPane content = new JTabbedPane();
+        content = new JTabbedPane();
         content.addTab("Obecné", tabCommon);
         content.addTab("Sekce", tabSections);
                 

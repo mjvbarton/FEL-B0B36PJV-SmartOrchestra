@@ -19,7 +19,6 @@ public enum ParticipantState {
     COMING(1);
     
     private final int comboBoxIndex;
-    private final String tableValue;
     
     private ParticipantState(int comboBoxIndex){
         this.comboBoxIndex = comboBoxIndex;

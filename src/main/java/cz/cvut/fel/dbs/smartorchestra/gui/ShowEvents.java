@@ -5,6 +5,7 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
+import cz.cvut.fel.dbs.smartorchestra.AdminAccessible;
 import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Events;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.ParticipantState;
@@ -25,7 +26,7 @@ import javax.swing.JPanel;
  *
  * @author Matěj Bartoň
  */
-public class ShowEvents extends javax.swing.JPanel {
+public class ShowEvents extends javax.swing.JPanel implements AdminAccessible{
     
     private List<Events> events;
     private final JLabel noEvents = new JLabel();
@@ -155,6 +156,7 @@ public class ShowEvents extends javax.swing.JPanel {
         } else {                
             for(Events event : events){
                 EventInfo eventInfo = new EventInfo(event);
+                eventInfo.enableAdminAccess(SmartOrchestra.getInstance().isAdministrationActive());
                 Date blockDate = SmartOrchestra.getInstance().getBlockDate(event.getBegins());
                 Date nowDate = new Date();
                 JComboBox<String> eventState = eventInfo.getFieldParticipation();
@@ -188,5 +190,10 @@ public class ShowEvents extends javax.swing.JPanel {
     
     public List<Events> getEvents(){
         return events;
+    }
+
+    @Override
+    public void enableAdminAccess(boolean enabled) {
+        btnAddEvent.setEnabled(enabled);
     }
 }

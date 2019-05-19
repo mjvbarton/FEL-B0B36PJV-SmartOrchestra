@@ -5,6 +5,7 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
+import cz.cvut.fel.dbs.smartorchestra.AdminAccessible;
 import cz.cvut.fel.dbs.smartorchestra.Participation;
 import cz.cvut.fel.dbs.smartorchestra.UIControlled;
 import cz.cvut.fel.dbs.smartorchestra.gui.helpers.EventUpdaterPause;
@@ -20,14 +21,13 @@ import javax.swing.JComboBox;
  *
  * @author Matěj Bartoň
  */
-public class EventInfo extends javax.swing.JPanel implements UIControlled<Participation>{
+public class EventInfo extends javax.swing.JPanel implements UIControlled<Participation>, AdminAccessible{
     private Participation controller;
     private final ActionListener listenerParticipation;
         
     /**
      * Creates new form EventView
      * @param event
-     * @param editParticipation
      */
    
     public EventInfo(Events event) {
@@ -219,4 +219,9 @@ public class EventInfo extends javax.swing.JPanel implements UIControlled<Partic
     public ActionListener getListenerParticipation() {
         return listenerParticipation;
     }    
+
+    @Override
+    public void enableAdminAccess(boolean isEnabled) {
+        btnShowParticipants.setEnabled(isEnabled);
+    }
 }
