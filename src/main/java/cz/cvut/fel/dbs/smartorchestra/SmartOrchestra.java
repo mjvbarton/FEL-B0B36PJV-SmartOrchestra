@@ -93,6 +93,7 @@ public class SmartOrchestra implements ThreadEntityManager{
             Logger.getLogger(SmartOrchestra.class.getName()).log(Level.SEVERE, "Cannot run SmartOrchestra", err);
             JOptionPane.showMessageDialog(null, "Chyba při běhu programu: Pro více informací zkontrolujte log.", 
                     "SmartOrchestra", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
         }
     }
     

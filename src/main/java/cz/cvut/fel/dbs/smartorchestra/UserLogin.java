@@ -69,6 +69,7 @@ public class UserLogin{
                     JOptionPane.ERROR_MESSAGE);
             email.setText("");
             passwd.setText("");
+            System.exit(1);
         }
     }   
 }

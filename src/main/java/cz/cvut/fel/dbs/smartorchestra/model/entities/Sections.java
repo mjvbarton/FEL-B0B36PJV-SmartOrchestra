@@ -26,7 +26,7 @@ import org.hibernate.annotations.TypeDef;
 
 /**
  * Represents an entity Sections from the database.
- * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
+ * @author Matěj Bartoň
  */
 @Entity
 @Table(name = "sections")
@@ -39,8 +39,8 @@ import org.hibernate.annotations.TypeDef;
     @NamedQuery(name = "Sections.findAll", query = "SELECT s FROM Sections s")
     , @NamedQuery(name = "Sections.findBySeid", query = "SELECT s FROM Sections s WHERE s.seid = :seid")
     , @NamedQuery(name = "Sections.findBySectionname", query = "SELECT s FROM Sections s WHERE s.sectionname = :sectionname")
-    , @NamedQuery(name = "Sections.findActiveBySectiontype", query = "SELECT s FROM Sections s WHERE s.sectiontype = :sectiontype AND s.aktivni = TRUE ORDER BY s.seid")
-    , @NamedQuery(name = "Sections.findByAktivni", query = "SELECT s FROM Sections s WHERE s.aktivni = :aktivni")})
+    , @NamedQuery(name = "Sections.findActiveBySectiontype", query = "SELECT s FROM Sections s WHERE s.sectiontype = :sectiontype AND s.active = TRUE ORDER BY s.seid")
+    , @NamedQuery(name = "Sections.findByActive", query = "SELECT s FROM Sections s WHERE s.active = :aktivni")})
 public class Sections implements Serializable {
 
     private static final long serialVersionUID = 1L;

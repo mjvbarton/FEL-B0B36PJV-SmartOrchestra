@@ -4,6 +4,7 @@
  */
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
+import com.sun.glass.events.MouseEvent;
 import com.sun.istack.internal.logging.Logger;
 import cz.cvut.fel.dbs.smartorchestra.AdminAccessible;
 import cz.cvut.fel.dbs.smartorchestra.MainControl;
@@ -40,7 +41,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
      * Initiates the main window and sets up the controller {@link MainControl}
      */
     public Main() {
-        initComponents();
+        initComponents();        
         setUIController(SmartOrchestra.getInstance().getController(this));
     }
 
@@ -335,13 +336,13 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         // TODO add your handling code here:
     }//GEN-LAST:event_fieldFilterSectionActionPerformed
     
-// Not in use As of SmartOrchestra 1.0. The method was left there for further development.
+    // Not in use As of SmartOrchestra 1.0. The method was left there for further development.
     @Deprecated
     private void btnSearchUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchUserActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSearchUserActionPerformed
     
-// Find user at the user table and show dialog to edit his/hers profile.
+    // Find user at the user table and show dialog to edit his/hers profile.
     private void userTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTableMouseClicked
         // TODO add your handling code here:
         Logger.getLogger(this.getClass()).fine("UserTable row toggled: " + userTable.rowAtPoint(evt.getPoint()));
@@ -356,11 +357,12 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
    
     // Loading users/events when changing tabs
     private void contentStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_contentStateChanged
-        // TODO add your handling code here:
-        if(content.getSelectedIndex() == 1){
-            controller.loadUsersToTable();
-        } else if(content.getSelectedIndex() == 0){
-            SmartOrchestra.getInstance().getEventUpdater().interrupt();
+        if(controller != null){
+            if(content.getSelectedIndex() == 1){
+                controller.loadUsersToTable();
+            } else if(content.getSelectedIndex() == 0){
+                SmartOrchestra.getInstance().getEventUpdater().interrupt();
+            }
         }
     }//GEN-LAST:event_contentStateChanged
 
@@ -507,6 +509,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
     @Override
     public void enableAdminAccess(boolean isEnabled){
         fileAddUser.setEnabled(isEnabled);
+        //fileAddEvent.setEnabled(isEnabled); TODO: next version
         events.enableAdminAccess(isEnabled);
         if(!isEnabled) { content.setSelectedIndex(0); }
         content.setEnabledAt(1, isEnabled);

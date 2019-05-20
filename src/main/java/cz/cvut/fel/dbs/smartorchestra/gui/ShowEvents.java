@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -239,6 +240,16 @@ public class ShowEvents extends javax.swing.JPanel implements AdminAccessible{
     public List<Events> getEvents(){
         return events;
     }
+
+    /**
+     * Gets pointer to the add events button
+     * @return {@code JButton} button for adding events
+     */
+    public JButton getBtnAddEvent() {
+        return btnAddEvent;
+    }
+    
+    
     
     /**
      * Enables/disables add new event button in the toolbar.
