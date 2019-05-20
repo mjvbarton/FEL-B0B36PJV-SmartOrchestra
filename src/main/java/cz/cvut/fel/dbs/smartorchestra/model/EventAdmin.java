@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
+ * COPYRIGHT (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  */
 package cz.cvut.fel.dbs.smartorchestra.model;
 
@@ -24,22 +23,28 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.NoResultException;
 import javax.swing.JCheckBox;
 
 /**
- *
- * @author Matěj Bartoň
+ * This class represents a model for manipulating with {@link Events} and {@link Participants}
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 public class EventAdmin {
     private ThreadEntityManager tem;
-        
+    
+    /**
+     * Creates new EventAdmin
+     * @param tem - pointer to the {@code EntityManager}
+     */
     public EventAdmin(ThreadEntityManager tem){
         this.tem = tem;
     }
     
+    /**
+     * Loads sections into {@link SectionType} enum
+     * @throws Exception when loading fails
+     */
     public void loadSections() throws Exception{
         SectionReader sr = new SectionReader();
         
@@ -48,15 +53,32 @@ public class EventAdmin {
         SectionType.OTHER.setSections(sr.getSectionsBySectionType(SectionType.OTHER));
     }
 
+    /**
+     * Saves the given event to the database.
+     * @param event - an {@link Events} entity
+     */
     public void saveEvent(Events event) {
         EventHandler eh = new EventHandler(tem.getEntityManager());
         eh.saveEvent(event);
     }
     
+    /**
+     * Loads events which undergo the filter condition given for date value of now.
+     * @param filter - a enum {@link EventDateFilter} value
+     * @return {@code List} of {@link Events} entities
+     * @throws Exception when the operation fails
+     */
     public List<Events> loadEvents(EventDateFilter filter) throws Exception{
         return loadEvents(filter, new Date());
     }
 
+    /**
+     * Loads events which undergo the filter condition compared to the date given.
+     * @param filter - a enum {@link EventDateFilter} value
+     * @param date - a {@code Date} object
+     * @return {@code List} of {@link Events} entities
+     * @throws Exception when the operation fails
+     */
     public List<Events> loadEvents(EventDateFilter filter, Date date) throws Exception{
         EventHandler eh = new EventHandler(tem.getEntityManager());
         try{
@@ -87,7 +109,13 @@ public class EventAdmin {
             return new ArrayList();
         }
     }
-        
+    
+    /**
+     * Sends the invitation to players based on the checked checkbox stored in the hash map.
+     * @param event - a {@link Events} entity
+     * @param eventSections - {@code HashMap} where {@link Sections} entity is the key an {@code JCheckBox} object the value
+     * @param type - an enum value of {@link SectionType}
+     */
     public void sendInvitations(Events event, HashMap<Sections, JCheckBox> eventSections, SectionType type){
         ParticipantManager pm = new ParticipantManager(tem.getEntityManager());
         eventSections.forEach((section, checkBox) -> {
@@ -95,7 +123,13 @@ public class EventAdmin {
         });
         
     }   
-
+    
+    /**
+     * Reads invited section for {@link Events} entity given.
+     * @param event - an {@link Events} entity
+     * @return - {@code List} of {@link Sections} entities
+     * @throws EventAdminException when there are no sections for given event
+     */
     public List<Sections> getInvitedSectionsForEvent(Events event) throws EventAdminException {
         ParticipantManager pm = new ParticipantManager(tem.getEntityManager());
         List<Sections> sections = pm.getEventSections(event);
@@ -105,6 +139,11 @@ public class EventAdmin {
         return sections;
     }
     
+    /**
+     * Invites the {@link Player} entity given to events related to his/hers section.
+     * @param player - a {@link Player} entity
+     * @throws Exception when the process fails
+     */
     public void invitePlayerToEvents(Player player) throws Exception{
         ParticipantManager pm = new ParticipantManager(tem.getEntityManager());
         UserReader ur = new UserReader();
@@ -119,9 +158,16 @@ public class EventAdmin {
             pm.inviteSingleUser(player.getSeid(), event, user);
         }
     }
-
+    
+    /**
+     * Creates a participatioin hash map of the {@link ParticipantState} for given user and events.
+     * @param user - an {@link Users} entity
+     * @param events - a {@code List} of {@link Events} entities
+     * @return a {@code HashMap} where {@link Events} entity is the key and {@link ParticipationState} is the value
+     */
     public HashMap<Events, ParticipantState> getParticipationMap(Users user, List<Events> events) {
         ParticipantManager pm = new ParticipantManager(tem.getEntityManager());
+        // Getting participants for given event
         List<Participants> participants;
         if(events.isEmpty()){
             participants = new ArrayList();
@@ -129,7 +175,7 @@ public class EventAdmin {
             participants = pm.getParticipants(user, events);
         }
         
-        
+        // Building the HashMap
         HashMap<Events, ParticipantState> map =  new HashMap();
         boolean partAdded;
         for(Events event : events){
@@ -153,6 +199,12 @@ public class EventAdmin {
         return map;
     }
 
+    /**
+     * Updates participation of active user for given event, state and message. 
+     * @param event - a {@link Events} entity
+     * @param state - a {@link ParticipantState} enum value
+     * @param message -  a {@code String} message connected to the participation (mainly the reason why the player is not coming)
+     */
     public void updateParticipation(Events event, ParticipantState state, String message) {
         ParticipantManager pm = new ParticipantManager(tem.getEntityManager());
         Participants part = pm.getParticipant(SmartOrchestra.getInstance().getActiveUser(), event);
@@ -161,10 +213,19 @@ public class EventAdmin {
         pm.updateParticipant(part);
     }
     
+    /**
+     * Gets participants for given event.
+     * @param event - an {@link Events} entity
+     * @return a {@code List} of {@link Participatns} entities
+     */
     public List<Participants> getParticipants(Events event){
         return new ParticipantManager(tem.getEntityManager()).getParticipants(event);        
     }
     
+    /**
+     * Deletes the given event from the database.
+     * @param event - an {@link Events} entity
+     */
     public void deleteEvent(Events event){
         new EventHandler(tem.getEntityManager()).deleteEvent(event);
     }
