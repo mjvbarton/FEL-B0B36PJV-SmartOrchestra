@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
+ * COPYRIGHT (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  */
 package cz.cvut.fel.dbs.smartorchestra.model.entities;
 
@@ -13,10 +12,19 @@ import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.EnumType;
 
 /**
- *
- * @author Matěj Bartoň
+ * This class is used for mapping an enum to PostgreSQL database enum
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 public class PostgreSQLEnumType extends EnumType{
+    /**
+     * See {@link org.hibernate.type.EnumType} for more information.
+     * @param st
+     * @param value
+     * @param index
+     * @param session
+     * @throws SQLException
+     * @throws HibernateException 
+     */
     @Override
     public void nullSafeSet(
             PreparedStatement st,

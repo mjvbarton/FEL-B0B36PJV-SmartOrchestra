@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
+ * COPYRIGHT (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  */
 package cz.cvut.fel.dbs.smartorchestra.model.entities;
 
@@ -16,8 +15,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
- * @author Matěj Bartoň
+ * This class represents the administrators entity in the database.
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 @Entity
 @Table(name = "administrators")
@@ -32,32 +31,55 @@ public class Administrators implements Serializable {
     @Basic(optional = false)
     @Column(name = "uid")
     private Long uid;
-
+    
+    /**
+     * Creates new entity.
+     */
     public Administrators() {
     }
 
+    /**
+     * Creates new entity with given uid.
+     * @param uid - {@code Long} number
+     */
     public Administrators(Long uid) {
         this.uid = uid;
     }
-
+    
+    /**
+     * Gets the uid.
+     * @return uid of the administrator
+     */
     public Long getUid() {
         return uid;
     }
-
+    
+    /**
+     * Sets the given uid to entity
+     * @param uid - {@code Long} number
+     */
     public synchronized void setUid(Long uid) {
         this.uid = uid;
     }
 
+    /**
+     * Creates hashCode for the object
+     * @return {@code int} as hashCode
+     */
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (uid != null ? uid.hashCode() : 0);
         return hash;
     }
-
+    
+    /**
+     * Comparable method of the object
+     * @param object
+     * @return {@code boolean} value according to the {@link Comparable} interface
+     */
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Administrators)) {
             return false;
         }
@@ -67,7 +89,11 @@ public class Administrators implements Serializable {
         }
         return true;
     }
-
+    
+    /**
+     * Converts entity to {@code String}
+     * @return a {@code String} object
+     */
     @Override
     public String toString() {
         return "cz.cvut.fel.dbs.smartorchestra.model.entities.Administrators[ uid=" + uid + " ]";

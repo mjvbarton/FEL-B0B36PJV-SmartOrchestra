@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
+ * COPYRIGHT (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  */
 package cz.cvut.fel.dbs.smartorchestra.model.entities;
 
@@ -16,8 +15,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
- *
- * @author Matěj Bartoň
+ * This class represents participants entity in the database.
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 @Entity
 @Table(name = "participants")
@@ -50,65 +49,129 @@ public class Participants implements Serializable {
     @ManyToOne(optional = false)
     private Users users;    
 
+    /**
+     * Creates new entity.
+     */
     public Participants() {
     }
 
+    /**
+     * Creates new entity with given primary key.
+     * @param participantsPK - an instance of {@link ParticipantsPK}
+     */
     public Participants(ParticipantsPK participantsPK) {
         this.participantsPK = participantsPK;
     }
-
+    
+    /**
+     * Creates new entity with specific given values to the primary key.
+     * @param uid {@code int} user ID (from {@link Users} entity)
+     * @param evid {@code int} event ID (from {@link Events} entity)
+     */
     public Participants(int uid, int evid) {
         this.participantsPK = new ParticipantsPK(uid, evid);
     }    
 
+    /**
+     * Gets the entity primary key
+     * @return an instance of {@link ParticipantsPk}
+     */
     public ParticipantsPK getParticipantsPK() {
         return participantsPK;
     }
 
+    /**
+     * Sets the entity primary key to the value given.
+     * @param participantsPK an instance of {@link ParticipantsPK}
+     */
     public synchronized void setParticipantsPK(ParticipantsPK participantsPK) {
         this.participantsPK = participantsPK;
     }
 
+    /**
+     * Gets the message of the participation. Used mainly for submitting the reason of not participating the event.
+     * @return {@code String} message
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * Sets the message of the participation. Used mainly for submitting the reason of not participating the event.
+     * @param message {@code String} the message
+     */
     public synchronized void setMessage(String message) {
         this.message = message;
     }
 
+    /**
+     * Gets the state of the participation. Follows rules described in {@link ParticipantState#toBoolean() } enum.
+     * @return {@code Boolean} ParticipantState that need to be converted to {@link PartcipantState} enum value
+     */
     public Boolean getActive() {
         return active;
     }
 
+    /**
+     * Gets the state of the participation. Follows rules described in {@link ParticipantState#toBoolean() } enum.
+     * @param active {@code Boolean} value from {@link ParticipantState}
+     */
     public synchronized void setActive(Boolean active) {
         this.active = active;
     }
 
+    /**
+     * Gets the related {@link Events} entity
+     * @return an {@link Events} entity
+     */
     public Events getEvents() {
         return events;
     }
-
+    
+    /**
+     * Sets the related {@link Events} entity
+     * @param events an {@link Events} entity
+     */
     public synchronized void setEvents(Events events) {
         this.events = events;
     }
 
+    /**
+     * Gets the related {@link Sections} entity
+     * @return a {@link Sections} entity
+     */
     public Sections getSeid() {
         return seid;
     }
 
+    /**
+     * Sets the related {@link Sections} entity
+     * @param seid an {@link Sections} entity
+     */
     public synchronized void setSeid(Sections seid) {
         this.seid = seid;
     }
 
+    /**
+     * Gets the related {@link Users} entity
+     * @return a {@link Users} entity
+     */
     public Users getUsers() {
         return users;
     }
 
+    /**
+     * Sets the related {@link Users} entity
+     * @param users an {@link Users} entity
+     */
     public synchronized void setUsers(Users users) {
         this.users = users;
     }
-       
+    
+    /**
+     * Creates hashCode for the object
+     * @return {@code int} as hashCode
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -116,9 +179,13 @@ public class Participants implements Serializable {
         return hash;
     }
 
+    /**
+     * Comparable method of the object
+     * @param object
+     * @return {@code boolean} value according to the {@link Comparable} interface
+     */
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Participants)) {
             return false;
         }
@@ -129,6 +196,10 @@ public class Participants implements Serializable {
         return true;
     }
 
+    /**
+     * Converts entity to {@code String}
+     * @return a {@code String} object
+     */
     @Override
     public String toString() {
         return "cz.cvut.fel.dbs.smartorchestra.model.entities.Participants[ participantsPK=" + participantsPK + " ]";

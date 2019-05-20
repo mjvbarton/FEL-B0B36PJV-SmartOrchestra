@@ -25,8 +25,8 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 /**
- *
- * @author Matěj Bartoň
+ * Represents an entity Sections from the database.
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 @Entity
 @Table(name = "sections")
@@ -62,62 +62,89 @@ public class Sections implements Serializable {
     private boolean active;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "seid")
     private Collection<Player> playerCollection;
-
+    
+    /**
+     * Creates new entity.
+     */
     public Sections() {
     }
 
+    /**
+     * Creates new entity with {@code seid} as section ID
+     * @param seid {@code Integer} as section ID
+     */
     public Sections(Integer seid) {
         this.seid = seid;
     }
-
-    public Sections(Integer seid, String sectionname, SectionType sectiontype, boolean aktivni) {
-        this.seid = seid;
-        this.sectionname = sectionname;
-        this.sectiontype = sectiontype;
-        this.active = aktivni;
-    }
-
+    
+    /**
+     * Gets the primary key of the entity
+     * @return section ID as {@code Integer}
+     */
     public Integer getSeid() {
         return seid;
     }
 
+    /**
+     * Sets the primary key of the entity
+     * @param seid section ID as {@code Integer}
+     */
     public synchronized void setSeid(Integer seid) {
         this.seid = seid;
     }
 
+    /**
+     * Gets the section name
+     * @return section name as {@code String}
+     */
     public String getSectionname() {
         return sectionname;
     }
 
+    /**
+     * Gets the section name
+     * @param sectionname section name as {@code String}
+     */
     public synchronized void setSectionname(String sectionname) {
         this.sectionname = sectionname;
     }
 
+    /**
+     * Gets the type of the section
+     * @return type of the section as {@link SectionType}
+     */
     public SectionType getSectiontype() {
         return sectiontype;
     }
 
+    /**
+     * Sets the type of the section
+     * @param sectiontype type of the section name {@link SectionType}
+     */
     public synchronized void setSectiontype(SectionType sectiontype) {
         this.sectiontype = sectiontype;
     }
 
+    /**
+     * Gets the {@code Boolean} value whether the section is active.
+     * @return section is active as {@code Boolean}
+     */
     public boolean getActive() {
         return active;
     }
 
-    public synchronized void setActive(boolean aktivni) {
-        this.active = aktivni;
+    /**
+     * Sets the {@code Boolean} value whether the section is active.
+     * @param active section is active as {@code Boolean}
+     */
+    public synchronized void setActive(boolean active) {
+        this.active = active;
     }
-
-    @XmlTransient
-    public Collection<Player> getPlayerCollection() {
-        return playerCollection;
-    }
-
-    public synchronized void setPlayerCollection(Collection<Player> playerCollection) {
-        this.playerCollection = playerCollection;
-    }
-
+    
+    /**
+     * Creates hashCode for the object
+     * @return {@code int} as hashCode
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -125,9 +152,13 @@ public class Sections implements Serializable {
         return hash;
     }
 
+    /**
+     * Comparable method of the object
+     * @param object
+     * @return {@code boolean} value according to the {@link Comparable} interface
+     */
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Sections)) {
             return false;
         }
@@ -137,7 +168,10 @@ public class Sections implements Serializable {
         }
         return true;
     }
-
+    /**
+     * Converts entity to {@code String}. Displaying the value of {@code Sections.sectionname}
+     * @return a {@code String} object
+     */
     @Override
     public String toString() {
         return sectionname;
