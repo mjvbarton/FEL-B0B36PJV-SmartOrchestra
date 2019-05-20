@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
+ * COPYRIGHT (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  */
 package cz.cvut.fel.dbs.smartorchestra.model.dao;
 
@@ -15,19 +14,32 @@ import javax.persistence.NoResultException;
 
 
 /**
- *
- * @author Matěj Bartoň
+ * Class for writing information for {@link Sections} entities from the database.
+ * <b>WARNING: This class cannot be used in multiple threads simultaneously!</b>
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 public class SectionReader extends DAO{   
+    /**
+     * Creates new SectionReader
+     */
     public SectionReader() {
         super();
     }
     
-    public synchronized List<Sections> getActiveSections(){
+    /**
+     * Gets all active sections from the database
+     * @return a {@code List} of {@link Sections} entities.
+     */
+    public List<Sections> getActiveSections(){
         return em.createQuery("SELECT s FROM Sections s WHERE s.aktivni = TRUE ORDER BY s.sectiontype, s.seid").getResultList();        
     }
     
-    public synchronized List<Sections> getSectionsBySectionType(SectionType type){
+    /**
+     * Gets all active sections of given type from the database.
+     * @param type - a {@link SectionType} enum value
+     * @return a {@code List} of {@link Sections} entities.
+     */
+    public List<Sections> getSectionsBySectionType(SectionType type){
         try{
             return em.createNamedQuery("Sections.findActiveBySectiontype", Sections.class)
                     .setParameter("sectiontype", type).getResultList();

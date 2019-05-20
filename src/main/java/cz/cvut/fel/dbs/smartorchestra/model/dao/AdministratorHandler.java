@@ -1,11 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
+ * COPYRIGHT (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  */
 package cz.cvut.fel.dbs.smartorchestra.model.dao;
 
-import cz.cvut.fel.dbs.smartorchestra.exceptions.UserAdminException;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Administrators;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.util.logging.Level;
@@ -13,11 +11,16 @@ import javax.persistence.NoResultException;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Matěj Bartoň
+ * This class access {@link Adminstrators} entities in the database.
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 public class AdministratorHandler extends DAO{
     
+    /**
+     * Checks if given user has relation to {@link Administrators} entity
+     * @param user - a {@link Users} entity
+     * @return {@code true} if given user has relation to {@link Administrators}, {@code false} if not
+     */
     public boolean getIsAdministrator(Users user){
         try{
             Administrators admin =
@@ -36,7 +39,12 @@ public class AdministratorHandler extends DAO{
         }
     }
 
-    public synchronized void remove(Users user) throws UserAdminException{
+    /**
+     * Removes {@link Administrators} entity with relation to the given user.
+     * @param user - a {@link Users} entity
+     * @throws Exception if the process fails
+     */
+    public synchronized void remove(Users user) throws Exception{
         try{
             em.getTransaction().begin();
             Administrators admin =
@@ -57,6 +65,11 @@ public class AdministratorHandler extends DAO{
         }
     }
     
+    /**
+     * Creates new {@link Administrators} entity with relation to the given user.
+     * @param user - a {@link Users} entity
+     * @throws Exception when the process fails
+     */
     public synchronized void newAdmin(Users user) throws Exception{
         try{
             em.getTransaction().begin();

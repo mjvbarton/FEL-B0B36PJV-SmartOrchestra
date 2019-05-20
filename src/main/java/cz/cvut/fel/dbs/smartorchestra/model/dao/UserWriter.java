@@ -1,30 +1,34 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
+ * COPYRIGHT (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  */
 package cz.cvut.fel.dbs.smartorchestra.model.dao;
 
-import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
 import cz.cvut.fel.dbs.smartorchestra.exceptions.UserManagerException;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.util.logging.Level;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Matěj Bartoň
+ * Class for reading information about {@link Users} entities from the database.
+ * <b>WARNING: This class cannot be used in multiple threads simultaneously!</b>
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
-public class UserWriter {
-    private EntityManager em;
+public class UserWriter extends DAO{
     
+    /**
+     * Creates new UserWriter
+     */
     public UserWriter() {
-        em = SmartOrchestra.getInstance().getEntityManager();
+        super();
     }
     
-    public synchronized void create(Users user){
+    /**
+     * Creates new user entity in database for given user entity.
+     * @param user - a {@link Users} entity
+     */
+    public void create(Users user){
         try {
             em.getTransaction().begin();
             em.persist(user);
@@ -36,13 +40,23 @@ public class UserWriter {
         }
     }
     
+    /**
+     * Updates given user to the database
+     * @param user -  a {@link Users entity}
+     */
     public synchronized void write(Users user){
         em.getTransaction().begin();
         em.persist(user);
         em.getTransaction().commit();
     }
-
-    public synchronized void removeUser(Users user) throws UserManagerException, Exception {
+    
+    /**
+     * Removes the given user from the database.
+     * @param user - a {@link Users} entity
+     * @throws UserManagerException if there is no user in database
+     * @throws Exception if the process fails
+     */
+    public void removeUser(Users user) throws UserManagerException, Exception {
         try{
             em.getTransaction().begin();
             em.remove(user);
