@@ -1,14 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
+ * COPYRIGHT (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  */
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
 import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
 import cz.cvut.fel.dbs.smartorchestra.UIControlled;
 import cz.cvut.fel.dbs.smartorchestra.UserSettings;
-import cz.cvut.fel.dbs.smartorchestra.gui.helpers.InputGroup;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.awt.event.ActionListener;

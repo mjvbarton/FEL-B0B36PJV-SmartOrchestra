@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
+ * COPYRIGHT (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  */
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
@@ -361,8 +360,8 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         // TODO add your handling code here:
         if(content.getSelectedIndex() == 1){
             controller.loadUsersToTable();
-        } else if(content.getSelectedIndex() == 1){
-            controller.loadEvents();
+        } else if(content.getSelectedIndex() == 0){
+            SmartOrchestra.getInstance().getEventUpdater().interrupt();
         }
     }//GEN-LAST:event_contentStateChanged
 
