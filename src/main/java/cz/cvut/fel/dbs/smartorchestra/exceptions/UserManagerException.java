@@ -1,13 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
+ * COPYRIGHT (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  */
 package cz.cvut.fel.dbs.smartorchestra.exceptions;
 
 /**
- *
- * @author Matěj Bartoň
+ * This exception is for communicating between {@link cz.cvut.fel.dbs.smartorchestra.model.UserManager} and its controllers.
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 public class UserManagerException extends Exception {
 
