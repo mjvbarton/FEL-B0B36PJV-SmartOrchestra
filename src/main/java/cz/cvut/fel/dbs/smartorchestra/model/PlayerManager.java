@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
+ * COPYRIGHT (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  */
 package cz.cvut.fel.dbs.smartorchestra.model;
 
@@ -15,32 +14,45 @@ import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
- * @author Matěj Bartoň
+ * This is model for accessing {@link Player} and {@link Sections} entities and the database.
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 public class PlayerManager {
     private List<Sections> activeSections;
     private PlayerWriter pw;
     private PlayerReader pr;
     
+    /**
+     * Creates new PlayerManager
+     * @throws PlayerManagerException if there was no section found in the database
+     */
     public PlayerManager() throws PlayerManagerException{
         SectionReader sr = new SectionReader();
         pw = new PlayerWriter();
         pr = new PlayerReader();
+        // Loading sections from the database
         activeSections = sr.getActiveSections();
         if(activeSections.isEmpty()){
             throw new PlayerManagerException("Nebyla nalezena žádná sekce");
         }
     }
 
+    /**
+     * Gets the active sections.
+     * @return a {@code List} of {@link Sections} entities
+     */
     public List<Sections> getActiveSections() {
         return activeSections;
     }
     
+    /**
+     * Gets the index of player's section in activeSections for given player.
+     * @param player - a {@link Player} entity
+     * @return {@code int} value of player's section index in {@code List} sections
+     * @throws PlayerManagerException if the section was not found
+     */
     public int getIndexOfPlayerSection(Player player) throws PlayerManagerException{
         int ret = activeSections.indexOf(player.getSeid());
         if(ret == -1){
@@ -49,6 +61,12 @@ public class PlayerManager {
         return ret;
     }
     
+    /**
+     * Gets player entity for user entity given.
+     * @param user - a {@link Users} entity
+     * @return {@link Player} entity from the dataabase
+     * @throws NotAPlayerException the user is not a player
+     */
     public Player getPlayerInfo(Users user) throws NotAPlayerException{
         Player player = pr.getPlayer(user.getUid());
         if(player == null){
@@ -57,11 +75,23 @@ public class PlayerManager {
         return player;
     }
 
+    /**
+     * Updates player entity given to the database.
+     * @param player - a {@link Player} entity
+     * @return {@Player} entity from the database
+     */
     public Player updatePlayerInfo(Player player){
         pw.write(player);
         return player;
     }
 
+    /**
+     * Creates new player relation in the database for user entity given.
+     * @param user - a {@link Users} entity
+     * @param activeSectionsIndex - a {@code int} value of index in {@code PlayerManagaer.activeSections}
+     * @param concertMasterFlag - a {@code Boolean} flag if the user will become concert master
+     * @return new {@link Player} entity
+     */
     public Player createNewPlayer(Users user, int activeSectionsIndex, Boolean concertMasterFlag) {
         Player player = new Player();
         player.setUid(user.getUid());
@@ -71,6 +101,12 @@ public class PlayerManager {
         return player;
     }
     
+    /**
+     * Removes player entity from database for user entity given.
+     * @param user - a {@link Users} entity
+     * @return the removed {@link Player} entity
+     * @throws NotAPlayerException when given user is not a player
+     */
     public Player removePlayer(Users user) throws NotAPlayerException{
         Player player = pr.getPlayer(user.getUid());
         if(player == null){
@@ -79,7 +115,12 @@ public class PlayerManager {
         pw.remove(player);
         return player;
     }
-
+    
+    /**
+     * Gets HashMap where {@code Users.uid} is the key and {@link Players} entity is the value.
+     * In fact it is a 'hash-mapped' query.
+     * @return 
+     */
     public HashMap<Long, Player> getPlayers() {
         List<Player> players = pr.getPlayers();
         HashMap<Long, Player> map = new HashMap();
