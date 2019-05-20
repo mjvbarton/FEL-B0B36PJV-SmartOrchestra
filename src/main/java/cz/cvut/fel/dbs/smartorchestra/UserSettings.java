@@ -97,7 +97,7 @@ public class UserSettings implements UIController<UserDetails>{
     public void loadSections(){
         try {
             PlayerManager pm = new PlayerManager();
-            controled.fetchSections(pm.getActiveSections(), 2);
+            controled.fetchSections(pm.getActiveSections());
             Player player = pm.getPlayerInfo(user);
             controled.getFieldSection().setSelectedIndex(pm.getIndexOfPlayerSection(player) + 1);
             controled.setConcertMasterFlag(player.getConcertmaster());

@@ -46,7 +46,7 @@ public class Registration extends UserSettings{
     public void loadSections() {
         try {
             PlayerManager pm = new PlayerManager();
-            controled.fetchSections(pm.getActiveSections(), 0);
+            controled.fetchSections(pm.getActiveSections());
         } catch (PlayerManagerException ex) {
             Logger.getLogger(Registration.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(controled, ex.getMessage(), controled.getTitle(), 
