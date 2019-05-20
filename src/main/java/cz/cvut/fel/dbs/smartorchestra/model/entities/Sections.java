@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
+ * COPYRIGHT (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  */
 package cz.cvut.fel.dbs.smartorchestra.model.entities;
 
@@ -60,7 +59,7 @@ public class Sections implements Serializable {
     private SectionType sectiontype;
     @Basic(optional = false)
     @Column(name = "aktivni")
-    private boolean aktivni;
+    private boolean active;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "seid")
     private Collection<Player> playerCollection;
 
@@ -75,7 +74,7 @@ public class Sections implements Serializable {
         this.seid = seid;
         this.sectionname = sectionname;
         this.sectiontype = sectiontype;
-        this.aktivni = aktivni;
+        this.active = aktivni;
     }
 
     public Integer getSeid() {
@@ -102,12 +101,12 @@ public class Sections implements Serializable {
         this.sectiontype = sectiontype;
     }
 
-    public boolean getAktivni() {
-        return aktivni;
+    public boolean getActive() {
+        return active;
     }
 
-    public synchronized void setAktivni(boolean aktivni) {
-        this.aktivni = aktivni;
+    public synchronized void setActive(boolean aktivni) {
+        this.active = aktivni;
     }
 
     @XmlTransient

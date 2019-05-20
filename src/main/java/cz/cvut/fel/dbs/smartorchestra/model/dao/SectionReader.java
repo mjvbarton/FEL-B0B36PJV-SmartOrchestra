@@ -31,7 +31,7 @@ public class SectionReader extends DAO{
      * @return a {@code List} of {@link Sections} entities.
      */
     public List<Sections> getActiveSections(){
-        return em.createQuery("SELECT s FROM Sections s WHERE s.aktivni = TRUE ORDER BY s.sectiontype, s.seid").getResultList();        
+        return em.createQuery("SELECT s FROM Sections s WHERE s.active = TRUE ORDER BY s.sectiontype, s.seid").getResultList();        
     }
     
     /**
