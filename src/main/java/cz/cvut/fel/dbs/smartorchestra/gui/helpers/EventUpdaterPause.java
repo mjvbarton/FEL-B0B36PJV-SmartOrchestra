@@ -9,13 +9,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- *
- * @author Matěj Bartoň
+ * This is an Action listener which stops {@link cz.cvut.fel.dbs.smartorchestra.EventUpdater} thread.
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 public class EventUpdaterPause implements ActionListener{        
     @Override
     public void actionPerformed(ActionEvent e) {
-        //SmartOrchestra.getInstance().getEventUpdater().setWaiting(true);
         SmartOrchestra.getInstance().getEventUpdater().setBlockUpdate(true);
     }
 }

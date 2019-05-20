@@ -9,8 +9,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 /**
- *
- * @author Matěj Bartoň
+ * This is an Window listener which repauses {@link cz.cvut.fel.dbs.smartorchestra.EventUpdater} thread on Window Closed.
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 public class EventUpdaterResume implements WindowListener{
 

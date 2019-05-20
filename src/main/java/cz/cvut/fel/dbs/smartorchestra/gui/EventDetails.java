@@ -23,11 +23,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -41,8 +39,9 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 /**
- *
- * @author Matěj Bartoň
+ * This class represents a GUI dialog for editing information about selected event.
+ * <b>GUI in this dialog was created from scratch without using Designer</b>
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 public class EventDetails extends JDialog implements UIControlled<EventSettings>, AdminAccessible{
     private JLabel caption;
@@ -86,43 +85,46 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
     private JButton btnDeleteEvent;
     
     /**
-     * @param args the command line arguments
+     * Initiates the class with a value of parent frame.
+     * See {@link JDialog} for more information
+     * @param owner - instance of {@code Frame}
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                EventDetails e = new EventDetails(null);
-                if(e.doModal() == UserDetails.SAVE_DETAILS) {
-
-                }
-            }
-        });
-    }
-
     public EventDetails(Frame owner) {
         super(owner, true);
         loadComponents();
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     }
-
+    
+    /**
+     * Modal runtime of the dialog
+     * @return - {@code int} exit code, in this case 0
+     */
     public int doModal() {
         setVisible(true);
         return 0;
     }
     
+    /**
+     * See {@link UIControlled} interface for more information.
+     * @return the controller
+     */
     @Override
     public EventSettings getUIController() {
         return controller;
     }
-
+    
+    /**
+     * See {@link UIControlled} interface for more information.
+     * @param controller 
+     */
     @Override
     public void setUIController(EventSettings controller) {
         this.controller = controller;
     }
 
+    /**
+     * Clear info JLabels. Used by the controller for clearing the dialog form before validation.
+     */
     public void clearInfos() {
         infoName.setText("");
         infoBeginsDate.setText("");
@@ -134,6 +136,10 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
         infoAddrZipCode.setText("");
     }
 
+    /**
+     * See {@link AdminAccessible} for more information.
+     * @param isEnabled {@code boolean}
+     */
     @Override
     public void enableAdminAccess(boolean isEnabled) {
         fieldName.setEditable(isEnabled);
@@ -148,11 +154,21 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
         btnDeleteEvent.setEnabled(isEnabled);
     }
     
+    /**
+     * This inner class represents formfield. It is used just for creation of the dialog. 
+     * @param <T> - class of the field
+     */
     private class Formfield<T>{
         JLabel label;
         JLabel info;
         T field;
         
+        /**
+         * Initializes formfiel
+         * @param parent - the {@code JPanel} that formfield belongs too
+         * @param fieldName - a {@code String} value that will be passed to the {@code Formfield.label}
+         * @param field - the field of selected class
+         */
         public Formfield(JPanel parent, String fieldName, T field){
             this.field = field;
                                     
@@ -178,13 +194,21 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
             parent.add(c);
         }
     }
-           
+    
+    /**
+     * This inner class represents group of sections (available groups are: strings, winds, other}.
+     */
     public class SectionGroup extends JPanel{
         private JButton caption;
         private HashMap<Sections, JCheckBox> sections;
         private JPanel content;
         private SectionType type;
-                        
+        
+        /**
+         * This method initializes this class with given attributes.
+         * @param sectionType - value of enum {@link SectionType}
+         * @param controller - an {@link EventSettings} controller of its parent
+         */
         public SectionGroup(SectionType sectionType, EventSettings controller){
             sections = new HashMap();
             setLayout(new BorderLayout());
@@ -206,6 +230,10 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
             add(new JScrollPane(content), BorderLayout.CENTER);
         }
         
+        /**
+         * Loads sections from given {@code List}.
+         * @param sections - list of sections {@code List<Sections>}
+         */
         public void loadSections(List<Sections> sections){
             for(Sections section : sections){
                 JCheckBox checkBox = new JCheckBox();
@@ -215,10 +243,19 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
             }
         }
         
+        /**
+         * Gives a hash map of sections and proper checkboxes.
+         * @return a {@code HashMap} with {@link Sections} as the key and {@code JCheckBox} as value
+         */
         public HashMap<Sections, JCheckBox> getSections(){
             return sections;
         }
         
+        /**
+         * Finds sections from given list in {@code SectionGroup.sections} and set their checkboxes selected {@code true} 
+         * if their type matches {@code SectionGroup.type} value.
+         * @param activeSections - {@code List} of given sections
+         */
         public void checkSections(List<Sections> activeSections) {
             for(Sections section : activeSections){
                 if(section.getSectiontype() == type){
@@ -227,13 +264,15 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
             }
         }
         
+        // Sets all sections in SectionGroup.sections the boolean value given
         private void checkSections(boolean isChecked){
             sections.forEach((section, checkBox) -> {
                 checkBox.setSelected(isChecked);
             });
         }
     }
-
+    
+    // Loads components into this class
     private void loadComponents(){
         /* COMMON TAB */
         
@@ -249,6 +288,8 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
         Formfield<JTextField> begins = new Formfield(tabCommon, "Začátek:", new JTextField(10));
         infoBeginsDate = begins.info;
         fieldBeginsDate = begins.field;
+        
+        // Sets the value of fieldBeginsDate if the field is empty
         fieldBeginsDate.addMouseListener(new MouseListener(){
             @Override
             public void mouseEntered(MouseEvent e) {}
@@ -282,6 +323,7 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
             @Override
             public void mouseExited(MouseEvent e) {}
                 
+            // Sets the value of fieldEndsDate if the field is empty
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(fieldEndsDate.getText().isEmpty() && fieldBeginsDate.getText().isEmpty()){
@@ -334,6 +376,8 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
         
         checkAllSections = new JButton();
         checkAllSections.setText("vyber všechny sekce");
+        
+        // Implementing checking all sections
         checkAllSections.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -369,6 +413,8 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
         getContentPane().add(caption, BorderLayout.NORTH);
         
         btnSubmit = new JButton("Uložit");
+        
+        // Connecting the action to class method
         btnSubmit.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -376,6 +422,8 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
             }
         });
         btnCancel = new JButton("Zrušit");
+        
+        // Connecting the action to class method
         btnCancel.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -383,6 +431,8 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
             }
         });
         btnDeleteEvent = new JButton("Smazat událost");
+        
+        // Connecting the action to class method
         btnDeleteEvent.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -399,133 +449,242 @@ public class EventDetails extends JDialog implements UIControlled<EventSettings>
         getContentPane().add(btnGroup, BorderLayout.SOUTH);       
         pack();
         setResizable(false);
-        setSize(new Dimension(480,410));
-        
-        // TEST DATA
-        /*List<Sections> secStrings = new ArrayList();
-        secStrings.add(new Sections(1, "I.housle", SectionType.STRINGS.toString(), true));
-        secStrings.add(new Sections(1, "II.housle", SectionType.STRINGS.toString(), true));
-        secStrings.add(new Sections(1, "Viola", SectionType.STRINGS.toString(), true));
-        groupStrings.loadSections(secStrings);
-        
-        List<Sections> secWinds = new ArrayList();
-        secWinds.add(new Sections(1, "Hoboj", SectionType.STRINGS.toString(), true));
-        secWinds.add(new Sections(1, "Flétna", SectionType.STRINGS.toString(), true));
-        secWinds.add(new Sections(1, "Trubka", SectionType.STRINGS.toString(), true));
-        groupWinds.loadSections(secWinds);
-        
-        List<Sections> secOther = new ArrayList();
-        secOther.add(new Sections(1, "Klavír", SectionType.STRINGS.toString(), true));
-        secOther.add(new Sections(1, "Sbor", SectionType.STRINGS.toString(), true));
-        secOther.add(new Sections(1, "Perkuse", SectionType.STRINGS.toString(), true));
-        groupOther.loadSections(secOther);*/
-        
+        setSize(new Dimension(480,410));        
     }
     
+    /**
+     * Method of {@code EventDetails.btnSubmit} actionListener. 
+     * Initiates saving process at the controller.
+     * @param e - {@code ActionEvent} object
+     */
     protected void btnSubmitClicked(ActionEvent e){
         controller.saveEvent();
     }
     
+    /**
+     * Method of {@code EventDetails.btnCancel} actionListener. 
+     * Closes the dialog.
+     * @param e - {@code ActionEvent} object
+     */
     protected void btnCancelClicked(ActionEvent e){
         dispose();
     }
     
+    /**
+     * Method of {@code EventDetails.btnDelete} actionListener.
+     * Initiates deletion process at the controller.
+     * @param e - {@code ActionEvent} object
+     */
     protected void btnDeleteEventClicked(ActionEvent e){
         controller.deleteEvent();
     }
 
+    /**
+     * Returns field of the event name.
+     * @return - a {@code JTextField} object
+     */
     public JTextField getFieldName() {
         return fieldName;
     }
 
+    /**
+     * Returns field of the event begginning date.
+     * @return - a {@code JTextField} object
+     */
     public JTextField getFieldBeginsDate() {
         return fieldBeginsDate;
     }
 
+    /**
+     * Returns field of the event beginning time.
+     * @return - a {@code JTextField} object
+     * @deprecated As of SmartOrchestra 1.0, because the string value of mixed date and time is used in {@link #getFieldBeginsDate()}. The method is left there for further development.
+     */
+    @Deprecated
     public JTextField getFieldBeginsTime() {
         return fieldBeginsTime;
     }
 
+    /**
+     * Returns field of the event end date.
+     * @return - a {@code JTextField} object
+     */
     public JTextField getFieldEndsDate() {
         return fieldEndsDate;
     }
 
+    /**
+     * Returns field of the event end time.
+     * @return - a {@code JTextField} object
+     * @deprecated As of SmartOrchestra 1.0, because the string value of mixed date and time is used in {@link #getFieldEndsDate()}. The method is left there for further development.
+     */
+    @Deprecated
     public JTextField getFieldEndsTime() {
         return fieldEndsTime;
     }
 
+    /**
+     * Returns field of the event address - institution (e. g. The Royal Albert Hall)
+     * @return - a {@code JTextField} object
+     */
     public JTextField getFieldAddrInstitution() {
         return fieldAddrInstitution;
     }
 
+    /**
+     * Returns field of the event address - street.
+     * @return - a {@code JTextField} object
+     */
     public JTextField getFieldAddrStreet() {
         return fieldAddrStreet;
     }
 
+    /**
+     * Returns field of the event address - house number.
+     * @return - a {@code JTextField} object
+     */
     public JTextField getFieldAddrHouseNumber() {
         return fieldAddrHouseNumber;
     }
 
+    /**
+     * Returns field of the event address - town.
+     * @return - a {@code JTextField} object
+     */
     public JTextField getFieldAddrTown() {
         return fieldAddrTown;
     }
 
+    /**
+     * Returns field of the event address - zipcode.
+     * @return - a {@code JTextField} object
+     */
     public JTextField getFieldAddrZipCode() {
         return fieldAddrZipCode;
     }
 
+    /**
+     * Returns info label for the event name field. This could be useful for passing error
+     * information during form validation.
+     * @return - a {@code JLabel} object
+     */
     public JLabel getInfoName() {
         return infoName;
     }
 
+    /**
+     * Returns info label for the event beginning date field. This could be useful for passing error
+     * information during form validation.
+     * @return - a {@code JLabel} object
+     */
     public JLabel getInfoBeginsDate() {
         return infoBeginsDate;
     }
 
+    /**
+     * Returns info label for the event beginning time field. This could be useful for passing error
+     * information during form validation.
+     * @return - a {@code JLabel} object
+     * @deprecated As of SmartOrchestra 1.0, because the string value of mixed date and time is used in {@link #getFieldBeginsDate()}. Use {@link #getInfoBeginsDate() } instead.
+     */
+    @Deprecated
     public JLabel getInfoBeginsTime() {
         return infoBeginsTime;
     }
 
+    /**
+     * Returns info label for the ends date field. This could be useful for passing error
+     * information during form validation.
+     * @return - a {@code JLabel} object
+     */
     public JLabel getInfoEndsDate() {
         return infoEndsDate;
     }
 
+    /**
+     * Returns info label for the event ends time field. This could be useful for passing error
+     * information during form validation.
+     * @return - a {@code JLabel} object
+     * @deprecated As of SmartOrchestra 1.0, because the string value of mixed date and time is used in {@link #getFieldEndsDate()}. Use {@link #getInfoEndsDate() } instead.
+     */
+    @Deprecated
     public JLabel getInfoEndsTime() {
         return infoEndsTime;
     }
 
+    /**
+     * Returns info label for the event address - instituion (e. g. value Royal Albert Hall) field. This could be useful for passing error
+     * information during form validation.
+     * @return - a {@code JLabel} object
+     */
     public JLabel getInfoAddrInstitution() {
         return infoAddrInstitution;
     }
 
+    /**
+     * Returns info label for the event address - street field. This could be useful for passing error
+     * information during form validation.
+     * @return - a {@code JLabel} object
+     */
     public JLabel getInfoAddrStreet() {
         return infoAddrStreet;
     }
 
+    /**
+     * Returns info label for the event address - house number field. This could be useful for passing error
+     * information during form validation.
+     * @return - a {@code JLabel} object
+     */
     public JLabel getInfoAddrHouseNumber() {
         return infoAddrHouseNumber;
     }
 
+    /**
+     * Returns info label for the event address - town field. This could be useful for passing error
+     * information during form validation.
+     * @return - a {@code JLabel} object
+     */
     public JLabel getInfoAddrTown() {
         return infoAddrTown;
     }
 
+    /**
+     * Returns info label for the event address - zipcode field. This could be useful for passing error
+     * information during form validation.
+     * @return - a {@code JLabel} object
+     */
     public JLabel getInfoAddrZipCode() {
         return infoAddrZipCode;
     }
 
+    /**
+     * Gets pointer to the section group of {@link SectionType#STRINGS}
+     * @return - a {@link SectionGroup} object
+     */
     public SectionGroup getGroupStrings() {
         return groupStrings;
     }
 
+    /**
+     * Gets pointer to the section group of {@link SectionType#WINDS}
+     * @return - a {@link SectionGroup} object
+     */
     public SectionGroup getGroupWinds() {
         return groupWinds;
     }
 
+    /**
+     * Gets pointer to the section group of {@link SectionType#OTHER}
+     * @return - a {@link SectionGroup} object
+     */
     public SectionGroup getGroupOther() {
         return groupOther;
     }
 
+    /**
+     * Gets the delete event button.
+     * @return - a {@code JButton} object
+     */
     public JButton getBtnDeleteEvent() {
         return btnDeleteEvent;
     }
