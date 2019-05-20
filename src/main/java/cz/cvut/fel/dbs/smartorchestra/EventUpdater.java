@@ -1,6 +1,6 @@
 /*
  * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
- * (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
+ * COPYRIGHT(c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  *
  */
 package cz.cvut.fel.dbs.smartorchestra;

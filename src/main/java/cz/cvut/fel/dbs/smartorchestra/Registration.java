@@ -1,6 +1,6 @@
 /*
  * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
- * (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
+ * COPYRIGHT (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  */
 package cz.cvut.fel.dbs.smartorchestra;
 
@@ -15,22 +15,33 @@ import javax.swing.JOptionPane;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
- *
- * @author Matěj Bartoň
+ * This class is an extension of {@link UserSettings}. It represents a special controller for {@link UserDetails}
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 public class Registration extends UserSettings{
     
+    /**
+     * See {@link UserSettings#UserSettings(cz.cvut.fel.dbs.smartorchestra.gui.UserDetails) for more information.
+     * @param controled - an instance of {@link UserDetails}
+     */
     public Registration(UserDetails controled) {
         super(controled);
         
     }
-
+    
+    /**
+     * Edits the method of {@link #super} for proper loading of an empty user
+     * @param activeUser - in this case an empty instance of {@link Users}
+     */
     @Override
     public void loadUser(Users activeUser) {
         user = activeUser;
         loadSections();
     }
-
+    
+    /**
+     * Loads sections into {@link UserDetails#fieldSection}
+     */
     @Override
     public void loadSections() {
         try {
@@ -43,7 +54,9 @@ public class Registration extends UserSettings{
         }
     }   
     
-
+    /**
+     * Saves the information about the new user. The diference between {@link UserSettings#saveUser() } is the password validation.
+     */
     @Override
     public void saveUser() {
         boolean failFlag = false;
@@ -77,7 +90,12 @@ public class Registration extends UserSettings{
         super.saveUser();
         
     }
-
+    
+    /**
+     * Checks if an entered email is yet stored in the database for certain user.
+     * @return - {@code true} if the checking was successful, {@code false} if the email is yet represented in database
+     * or the email field is empty
+     */
     @Override
     public boolean checkEmail() {
         boolean superChecked = super.checkEmail();
@@ -91,7 +109,11 @@ public class Registration extends UserSettings{
         }
         return superChecked;
     }
-
+    
+    /**
+     * See {@link UIController} for more information.
+     * @param controled - an instance of {@link UserDetails}
+     */
     @Override
     public void setControlled(UserDetails controled) {
         super.setControlled(controled);

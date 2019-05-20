@@ -1,6 +1,6 @@
 /*
  * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
- * (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
+ * COPYRIGHT (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  */
 package cz.cvut.fel.dbs.smartorchestra;
 
@@ -16,7 +16,6 @@ import cz.cvut.fel.dbs.smartorchestra.model.UserAdmin;
 import cz.cvut.fel.dbs.smartorchestra.model.UserManager;
 import cz.cvut.fel.dbs.smartorchestra.model.dao.UserWriter;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Player;
-import cz.cvut.fel.dbs.smartorchestra.model.entities.Sections;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,28 +25,41 @@ import javax.swing.JOptionPane;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
- *
- * @author Matěj Bartoň
+ * This class represents a controller for {@link UserSettings}.
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 public class UserSettings implements UIController<UserDetails>{
     public static final Boolean FUNC_NONE = null;
     public static final Boolean FUNC_COMP_CONCERTMASTER = false;
     public static final Boolean FUNC_CONCERTMASTER = true;
     
+    // Variables for ancestor classes
     protected UserDetails controled;
     protected Users user;
     protected DateFormat dateFormatter;
-
+    
+    /**
+     * Initalizes the controller with the {@link UIControlled} implementation as {@link UserDetails}
+     * @param controled - the controled {@link UserDetails}
+     */
     public UserSettings(UserDetails controled) {
         setControlled(controled);
         dateFormatter = new SimpleDateFormat(SmartOrchestra.DATE_FORMAT);        
     }
-          
+    
+    /**
+     * See {@link UIController} for more information.
+     * @param controled - an instance of {@link UIControlled}
+     */
     @Override
     public void setControlled(UserDetails controled) {
         this.controled = controled;
     }
 
+    /**
+     * Loads information about user into the {@link UserDetails} dialog.
+     * @param activeUser - a {@link Users} entity
+     */
     public void loadUser(Users activeUser) {
         user = activeUser;
         controled.loadUserDetail(user, dateFormatter);
@@ -62,7 +74,11 @@ public class UserSettings implements UIController<UserDetails>{
         }
         
     }
-      
+    
+    /**
+     * Checks if the {@link #user} email is yet represented in database.
+     * @return {@code true} if the email is not in database, {@code false} if the email is in database or if the email field is empty
+     */
     public boolean checkEmail(){
         UserAdmin ua = new UserAdmin();
         try {
@@ -75,6 +91,9 @@ public class UserSettings implements UIController<UserDetails>{
         }
     }
     
+    /**
+     * Loads sections into the {@link UserDetails#fieldSection}. This method also loads the information whether user belongs to some section.
+     */
     public void loadSections(){
         try {
             PlayerManager pm = new PlayerManager();
@@ -94,7 +113,11 @@ public class UserSettings implements UIController<UserDetails>{
         }
     }
     
+    /**
+     * Saves information about the user in the database.
+     */
     public void saveUser(){
+        // Validation
         boolean raisedException = false;
         try {
             user.setFirstName(controled.getFieldFirstName().getText());
@@ -151,6 +174,8 @@ public class UserSettings implements UIController<UserDetails>{
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
+        
+        // Writing user directly withou using model component
         UserWriter uw = new UserWriter();
         PlayerManager pm;
         try {
@@ -198,6 +223,7 @@ public class UserSettings implements UIController<UserDetails>{
         }
     }
     
+    // Invites the user to events (if the user does belong to some section)
     private void invitePlayerToEvents(Player player){
         EventAdmin ea = new EventAdmin(SmartOrchestra.getInstance());
         int invitePlayer = JOptionPane.showConfirmDialog(controled
@@ -215,7 +241,12 @@ public class UserSettings implements UIController<UserDetails>{
         }    
     }
     
+    /**
+     * Changes password for the user. <i>(UC03)</i>
+     */
     public void changePasswd(){
+        
+        // Reset of error display
         controled.getInfoCurrentPasswd().setText("");
         controled.getInfoNewPasswd().setText("");
         controled.getInfoConfirmPasswd().setText("");
@@ -224,9 +255,12 @@ public class UserSettings implements UIController<UserDetails>{
         String newPasswd = controled.getFieldNewPasswd().getText();
         String confirmPasswd = controled.getFieldConfirmPasswd().getText();
         
+        
         boolean emptyPasswd = false;
+        // Different validation when active user is administrator
         boolean adminAccessEnabled = SmartOrchestra.getInstance().isAdministrationActive();
         
+        // Validation
         if(currentPasswd.isEmpty() && !adminAccessEnabled){
             controled.getInfoCurrentPasswd().setText("Nevyplnili jste toto pole");
             emptyPasswd = true;                        
@@ -242,6 +276,7 @@ public class UserSettings implements UIController<UserDetails>{
             emptyPasswd = true;                        
         }
         
+        // Check current password
         if(!BCrypt.checkpw(currentPasswd, user.getPasswd()) && !emptyPasswd && !adminAccessEnabled){
             controled.getInfoCurrentPasswd().setText("Neplatné heslo");
             emptyPasswd = true;
@@ -260,12 +295,14 @@ public class UserSettings implements UIController<UserDetails>{
             return;
         }
         
+        // Updating the information to the database
         UserManager um = new UserManager();
         try {
             um.changePasswd(user, newPasswd);
             Logger.getLogger(UserSettings.class.getName()).log(Level.INFO, "Password changed for {0}", controled.getFieldEmail().getText());
             JOptionPane.showMessageDialog(controled, "Heslo bylo změněno!", controled.getTitle(), JOptionPane.INFORMATION_MESSAGE);
-                    
+        
+        // Sanitizing exception occured during the process
         } catch (UserManagerException ex) {
             Logger.getLogger(UserSettings.class.getName())
                     .log(Level.SEVERE, "Cannot change password for user " + controled.getFieldEmail().getText(), ex);
@@ -277,7 +314,10 @@ public class UserSettings implements UIController<UserDetails>{
             controled.getFieldConfirmPasswd().setText("");
         }
     }
-
+    
+    /**
+     * Deletes the selected user from the system. Before the process a confirm dialog is shown to prevent unwanted deletions.
+     */
     public void deleteUser() {
         int response = JOptionPane.showConfirmDialog(controled, 
                 "Opravdu si přejete smazat uživatele " + user.getEmail() + "?\n"

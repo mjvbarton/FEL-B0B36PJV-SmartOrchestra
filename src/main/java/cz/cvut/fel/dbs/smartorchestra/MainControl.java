@@ -1,6 +1,6 @@
 /*
  * SmartOrchestra - semestral project for B0B36PJV and B0B36DBS subject at CTU-FEE
- * (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
+ * COPYRIGHT (c) Matej Barton 2019 (bartom47@fel.cvut.cz)
  */
 package cz.cvut.fel.dbs.smartorchestra;
 
@@ -11,7 +11,6 @@ import cz.cvut.fel.dbs.smartorchestra.gui.ShowEvents;
 import cz.cvut.fel.dbs.smartorchestra.gui.UserDetails;
 import cz.cvut.fel.dbs.smartorchestra.gui.UserRegistration;
 import cz.cvut.fel.dbs.smartorchestra.gui.ViewProfile;
-import cz.cvut.fel.dbs.smartorchestra.model.EventAdmin;
 import cz.cvut.fel.dbs.smartorchestra.model.PlayerManager;
 import cz.cvut.fel.dbs.smartorchestra.model.UserAdmin;
 import cz.cvut.fel.dbs.smartorchestra.model.entities.Users;
@@ -19,11 +18,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.persistence.NoResultException;
 
 /**
- *
- * @author Matěj Bartoň
+ * This class represents the controller of the main window of the applicatiion (see: {@link Main}).
+ * @author Matěj Bartoň <i>(bartom47@fel.cvut.cz)</i>
  */
 public class MainControl implements UIController<Main>{
     private Main controled;
@@ -32,6 +30,11 @@ public class MainControl implements UIController<Main>{
     private ShowEvents showEvents;
     private UserAdmin ua;
     
+    /**
+     * Initalizes the class with the instance of the main window {@link Main}. 
+     * This instance is passed via {@link SmartOrchestra} singleton class.
+     * @param mainWin - an instance of {@link Main}
+     */
     public MainControl(Main mainWin){
         setControlled(mainWin);
         mainWin.enableAdminAccess(SmartOrchestra.getInstance().isAdministrationActive());
@@ -39,6 +42,9 @@ public class MainControl implements UIController<Main>{
         ua = new UserAdmin();        
     }
     
+    /**
+     * Shows a dialog with a profile of active user. <i>(UC02)</i>
+     */
     public void showUserProfile(){
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -52,16 +58,19 @@ public class MainControl implements UIController<Main>{
             }
         });
     }
-
+    
+    /**
+     * See {@link UIController} for more information.
+     * @param controled 
+     */
     @Override
     public void setControlled(Main controled) {
         this.controled = controled;
     }
     
-    public void loadEvents(){
-        Logger.getLogger(MainControl.class.getName()).log(Level.INFO, "Unnecessary function toggled");        
-    }
-    
+    /**
+     * Loads information about all user into user table. <i>(UC21)</i>
+     */
     public void loadUsersToTable(){
         ua = new UserAdmin();
         try {
@@ -76,7 +85,11 @@ public class MainControl implements UIController<Main>{
             JOptionPane.showMessageDialog(controled, ex.getMessage(), controled.getTitle(), JOptionPane.WARNING_MESSAGE);
         }
     }
-
+    
+    /**
+     * Shows dialog for editing the user from users table. <i>(UC22)</i>
+     * @param rowAtPoint - {@code int} row that was double-clicked in users table
+     */
     public void editUserFromTable(int rowAtPoint) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -94,6 +107,9 @@ public class MainControl implements UIController<Main>{
         
     }
 
+    /**
+     * Shows dialog for adding a new user to the system. <i>(UC23)</i>
+     */
     public void addNewUser() {
         SwingUtilities.invokeLater(new Runnable(){
             @Override
@@ -108,5 +124,4 @@ public class MainControl implements UIController<Main>{
             }            
         });
     }
-    
 }
