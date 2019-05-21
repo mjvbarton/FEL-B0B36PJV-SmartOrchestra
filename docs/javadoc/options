@@ -1,0 +1,24 @@
+-classpath
+'C:/Users/Matìj Bartoò/.m2/repository/org/swinglabs/swing-layout/1.0.3/swing-layout-1.0.3.jar;C:/Users/Matìj Bartoò/.m2/repository/org/jdesktop/beansbinding/1.2.1/beansbinding-1.2.1.jar;C:/Users/Matìj Bartoò/.m2/repository/org/hibernate/hibernate-core/5.2.6.Final/hibernate-core-5.2.6.Final.jar;C:/Users/Matìj Bartoò/.m2/repository/org/jboss/logging/jboss-logging/3.3.0.Final/jboss-logging-3.3.0.Final.jar;C:/Users/Matìj Bartoò/.m2/repository/org/javassist/javassist/3.20.0-GA/javassist-3.20.0-GA.jar;C:/Users/Matìj Bartoò/.m2/repository/antlr/antlr/2.7.7/antlr-2.7.7.jar;C:/Users/Matìj Bartoò/.m2/repository/org/apache/geronimo/specs/geronimo-jta_1.1_spec/1.1.1/geronimo-jta_1.1_spec-1.1.1.jar;C:/Users/Matìj Bartoò/.m2/repository/org/jboss/jandex/2.0.3.Final/jandex-2.0.3.Final.jar;C:/Users/Matìj Bartoò/.m2/repository/com/fasterxml/classmate/1.3.0/classmate-1.3.0.jar;C:/Users/Matìj Bartoò/.m2/repository/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar;C:/Users/Matìj Bartoò/.m2/repository/org/hibernate/common/hibernate-commons-annotations/5.0.1.Final/hibernate-commons-annotations-5.0.1.Final.jar;C:/Users/Matìj Bartoò/.m2/repository/javax/enterprise/cdi-api/1.1/cdi-api-1.1.jar;C:/Users/Matìj Bartoò/.m2/repository/javax/el/el-api/2.2/el-api-2.2.jar;C:/Users/Matìj Bartoò/.m2/repository/org/jboss/spec/javax/interceptor/jboss-interceptors-api_1.1_spec/1.0.0.Beta1/jboss-interceptors-api_1.1_spec-1.0.0.Beta1.jar;C:/Users/Matìj Bartoò/.m2/repository/javax/annotation/jsr250-api/1.0/jsr250-api-1.0.jar;C:/Users/Matìj Bartoò/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar;C:/Users/Matìj Bartoò/.m2/repository/org/hibernate/hibernate-jpamodelgen/5.2.6.Final/hibernate-jpamodelgen-5.2.6.Final.jar;C:/Users/Matìj Bartoò/.m2/repository/org/hibernate/javax/persistence/hibernate-jpa-2.1-api/1.0.2.Final/hibernate-jpa-2.1-api-1.0.2.Final.jar;C:/Users/Matìj Bartoò/.m2/repository/org/mindrot/jbcrypt/0.4/jbcrypt-0.4.jar;C:/Users/Matìj Bartoò/.m2/repository/org/postgresql/postgresql/42.2.5/postgresql-42.2.5.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'C:/Users/Matìj Bartoò/Documents/NetBeansProjects/SmartOrchestra/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2019. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/Matìj Bartoò/Documents/NetBeansProjects/SmartOrchestra/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'SmartOrchestra 1.0-SNAPSHOT API'
+-linkoffline
+'https://docs.oracle.com/javase/8/docs/api' 'C:/Users/Matìj Bartoò/Documents/NetBeansProjects/SmartOrchestra/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'SmartOrchestra 1.0-SNAPSHOT API'

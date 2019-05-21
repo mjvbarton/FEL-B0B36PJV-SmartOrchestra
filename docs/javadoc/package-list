@@ -1,0 +1,7 @@
+cz.cvut.fel.dbs.smartorchestra
+cz.cvut.fel.dbs.smartorchestra.exceptions
+cz.cvut.fel.dbs.smartorchestra.gui
+cz.cvut.fel.dbs.smartorchestra.gui.helpers
+cz.cvut.fel.dbs.smartorchestra.model
+cz.cvut.fel.dbs.smartorchestra.model.dao
+cz.cvut.fel.dbs.smartorchestra.model.entities
