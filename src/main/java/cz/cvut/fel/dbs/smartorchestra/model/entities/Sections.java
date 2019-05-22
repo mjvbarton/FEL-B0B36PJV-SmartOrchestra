@@ -58,7 +58,7 @@ public class Sections implements Serializable {
     @Type(type = "section_type")
     private SectionType sectiontype;
     @Basic(optional = false)
-    @Column(name = "aktivni")
+    @Column(name = "active")
     private boolean active;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "seid")
     private Collection<Player> playerCollection;

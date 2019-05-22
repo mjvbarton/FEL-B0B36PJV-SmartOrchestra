@@ -55,7 +55,7 @@ public class Events implements Serializable {
     @Column(name = "ends")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ends;
-    @Column(name = "addrinstition")
+    @Column(name = "addrinstitution")
     private String addrinstitution;
     @Column(name = "addrstreet")
     private String addrstreet;
