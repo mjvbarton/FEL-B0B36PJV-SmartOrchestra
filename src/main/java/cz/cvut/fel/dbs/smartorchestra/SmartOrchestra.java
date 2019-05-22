@@ -14,6 +14,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -51,7 +52,7 @@ public class SmartOrchestra implements ThreadEntityManager{
     // Constructor for singletonized class
     private SmartOrchestra(){
         try{
-            ico = ImageIO.read(new File("src/main/resources/img/orchestra.png"));
+            ico = ImageIO.read(getClass().getResourceAsStream("/img/orchestra.png"));
         } catch(IOException ex){
             Logger.getLogger(SmartOrchestra.class.getName()).log(Level.SEVERE, "Cannot get icon. ", ex);
             ico = null;
