@@ -61,7 +61,7 @@ public class UserManager {
             uw.write(user);
             
         } catch (Exception ex) {
-            throw new UserManagerException("Chyba v běhu programu: " + ex.getMessage());
+                    throw new UserManagerException("Chyba v běhu programu: " + ex.getMessage());
         }       
     }
     
