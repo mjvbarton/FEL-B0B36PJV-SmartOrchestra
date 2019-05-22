@@ -10,5 +10,5 @@ Without this configuration present, some functionality in the IDE may be limited
         <configurations>
             <configuration id="SmartOrchestra" profiles=""/>
         </configurations>
-    </config-data>
+    </config-data>  
 </project-shared-configuration>
