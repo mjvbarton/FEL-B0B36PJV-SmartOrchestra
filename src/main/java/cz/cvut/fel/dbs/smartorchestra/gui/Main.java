@@ -5,7 +5,7 @@
 package cz.cvut.fel.dbs.smartorchestra.gui;
 
 import com.sun.glass.events.MouseEvent;
-import com.sun.istack.internal.logging.Logger;
+import java.util.logging.Logger;
 import cz.cvut.fel.dbs.smartorchestra.AdminAccessible;
 import cz.cvut.fel.dbs.smartorchestra.MainControl;
 import cz.cvut.fel.dbs.smartorchestra.SmartOrchestra;
@@ -17,6 +17,7 @@ import java.awt.Font;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
@@ -100,10 +101,15 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         userToolbar.setPreferredSize(new java.awt.Dimension(40, 50));
 
         labelSearchUser.setText("Vyhledat uživatele:");
+        labelSearchUser.setEnabled(false);
+
+        fieldSearchUser.setEnabled(false);
 
         labelFilterSection.setText("Zobraz sekci:");
+        labelFilterSection.setEnabled(false);
 
         fieldFilterSection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "všechny", "1. Housle", "2. Housle", "Viola", "Violoncello", "Kontrabas" }));
+        fieldFilterSection.setEnabled(false);
         fieldFilterSection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fieldFilterSectionActionPerformed(evt);
@@ -111,6 +117,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
         });
 
         btnSearchUser.setText("Hledej");
+        btnSearchUser.setEnabled(false);
         btnSearchUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSearchUserActionPerformed(evt);
@@ -345,7 +352,7 @@ public class Main extends javax.swing.JFrame implements UIControlled<MainControl
     // Find user at the user table and show dialog to edit his/hers profile.
     private void userTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTableMouseClicked
         // TODO add your handling code here:
-        Logger.getLogger(this.getClass()).fine("UserTable row toggled: " + userTable.rowAtPoint(evt.getPoint()));
+        Logger.getLogger(this.getClass().getName()).log(Level.FINE, "UserTable row toggled: {0}", userTable.rowAtPoint(evt.getPoint()));
         if(evt.getClickCount() == 2){
             controller.editUserFromTable(userTable.rowAtPoint(evt.getPoint()));
         }
